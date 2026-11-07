@@ -67,11 +67,38 @@ li.it>div>div.dim{white-space:pre-wrap;max-height:9em;overflow:auto}
 #view-dlg[open]{display:flex;flex-direction:column;width:min(1000px,96vw);height:90vh}#vw-body{flex:1;min-height:0;overflow:auto;margin-top:10px}
 #vw-body iframe{width:100%;height:100%;border:0;background:#fff;border-radius:6px}#vw-body img{max-width:100%;display:block;margin:auto}.vw-pre{white-space:pre-wrap;line-height:1.55;font-size:var(--fs-md)}
 @media(max-width:760px){body{flex-direction:column-reverse}nav{width:100%;flex-direction:row;overflow-x:auto;padding:6px;border-right:0;border-top:1px solid var(--bd)}nav h2,nav .sp{display:none}nav button{white-space:nowrap;padding:8px 10px}main{padding:14px}.tt th,.tt td{font-size:var(--fs-xs);padding:5px 2px}}
+#auth{position:fixed;inset:0;z-index:1000;background:var(--bg);display:none;align-items:center;justify-content:center;padding:16px;overflow-y:auto}
+#auth .box{width:100%;max-width:400px;background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:28px 24px;margin:auto}
+#auth h1{color:var(--acc);font-size:var(--fs-2xl);text-align:center;margin-bottom:4px}
+#auth .sub{color:var(--dim);text-align:center;margin-bottom:20px;font-size:var(--fs-md)}
+#auth .tabs{display:flex;background:var(--side);border-radius:8px;padding:3px;margin-bottom:18px}
+#auth .tabs button{flex:1;background:none;border:0;color:var(--dim);padding:9px;border-radius:6px;font-size:var(--fs-md);font-weight:600;cursor:pointer}
+#auth .tabs button.on{background:#313244;color:var(--acc)}
+#auth .pw{position:relative}#auth .pw input{padding-right:78px}
+#auth .pw button{position:absolute;right:6px;top:5px;background:none;border:0;color:var(--dim);font-size:var(--fs-sm);padding:5px 8px;cursor:pointer}
+#auth .full{width:100%;padding:11px;margin-top:4px;font-size:var(--fs-lg)}
+#auth .lnk{background:none;border:0;color:var(--acc);cursor:pointer;font-size:var(--fs-md);padding:6px}
+#auth .mid{display:flex;justify-content:space-between;align-items:center;margin:2px 0 8px;min-height:30px}
+#auth .msg{min-height:1.2em;margin:10px 0 0;font-size:var(--fs-md);line-height:1.5;text-align:center}
+#auth .foot{border-top:1px solid var(--bd);margin-top:18px;padding-top:12px;text-align:center}
 </style></head><body>
+<div id="auth" role="dialog" aria-modal="true" aria-label="Anmeldung"><div class="box">
+<h1 id="au-name">Schul-Hub</h1><p class="sub" id="au-sub">Melde dich an, um deine Daten auf allen Geräten zu haben.</p>
+<form id="au-form" onsubmit="auSubmit(event)">
+<div class="tabs"><button type="button" id="au-t-in" class="on" onclick="auMode('in')">Anmelden</button><button type="button" id="au-t-reg" onclick="auMode('reg')">Registrieren</button></div>
+<label class="lbl" for="au-mail">E-Mail</label><input id="au-mail" type="email" autocomplete="username" placeholder="name@beispiel.at" required>
+<label class="lbl" for="au-pw">Passwort</label><div class="pw"><input id="au-pw" type="password" autocomplete="current-password" placeholder="mindestens 8 Zeichen" required><button type="button" onclick="auShow()" id="au-eye">Anzeigen</button></div>
+<div class="mid"><span></span><button type="button" class="lnk" id="au-forgot" onclick="auReset()">Passwort vergessen?</button></div>
+<button class="btn full" id="au-go" type="submit">Anmelden</button></form>
+<div id="au-np" style="display:none"><p class="sub">Wähle ein neues Passwort.</p><label class="lbl" for="au-np1">Neues Passwort</label><input id="au-np1" type="password" autocomplete="new-password" placeholder="mindestens 8 Zeichen"><button class="btn full" onclick="auNewPw()">Passwort speichern</button></div>
+<div id="au-nocfg" style="display:none" class="dim"><p style="line-height:1.5;margin-bottom:10px">Die Anmeldung ist noch nicht eingerichtet. Wer den Hub betreibt, trägt in den Einstellungen unter „Konto und Sync“ die Supabase-Daten ein.</p><button class="btn g full" onclick="auGuest(true)">Zu den Einstellungen</button></div>
+<p class="msg dim" id="au-msg" aria-live="polite"></p>
+<div class="foot"><button class="lnk" onclick="auGuest()">Ohne Konto fortfahren</button><p class="dim" style="font-size:var(--fs-sm);margin-top:2px">Deine Daten bleiben dann nur auf diesem Gerät.</p></div>
+</div></div>
 <nav>
 <h2>Schul-Hub</h2>
 <button data-v="dash" class="on">Start</button><button data-v="plan">Stundenplan</button><button data-v="todo">To-Dos</button><button data-v="test">Tests</button><button data-v="cal">Kalender</button><button data-v="grade">Noten</button><button data-v="note">Zusammenfassungen</button><button data-v="timer">Lerntimer</button><button data-v="ai">KI-Prompts</button><button data-v="links">Links</button>
-<div class="sp"></div><button data-v="set">Einstellungen</button>
+<div class="sp"></div><button data-v="set">Einstellungen</button><a href="#" id="nav-out" style="display:none" onclick="acOut();return false">Abmelden</a>
 </nav>
 <main>
 <section id="dash" class="view on"><h1 id="hello">Start</h1>
@@ -410,9 +437,9 @@ const run=tok=>method=='GET'?sbCall('/rest/v1/hub_data?select=data&limit=1',{tok
 let r;try{r=await run(tk)}catch(e){if(e.status==401)r=await run(await sbToken(true));else throw e}
 return method=='GET'?(r&&r.length?r[0].data:null):r}
 const acVal=()=>({e:$('#ac-mail').value.trim().toLowerCase(),p:$('#ac-pw').value});
-function acMsg(m,bad){const el=$('#ac-msg');el.textContent=m||'';el.className=bad?'red':'dim'}
+function acMsg(m,bad){const el=$('#ac-msg');el.textContent=m||'';el.className=bad?'red':'dim';const g=$('#au-msg');if(g){g.textContent=m||'';g.className='msg '+(bad?'red':'dim')}}
 function acCfg(){const u=$('#ac-url').value.trim().replace(/\/+$/,''),k=$('#ac-key').value.trim();if(u&&!/^(https:\/\/|http:\/\/(localhost|127\.0\.0\.1))\S+$/i.test(u)){acMsg('Die Projektadresse muss mit https:// beginnen.',1);return false}
-const b=S.sync.sb=S.sync.sb||{};if($('#ac-cfg').style.display!='none'){b.url=u;b.key=k}lsSave();return true}
+const b=S.sync.sb=S.sync.sb||{};if($('#ac-cfg').style.display!='none'){if(u)b.url=u;if(k)b.key=k}lsSave();return true}
 const redir=()=>/^https?:/i.test(location.protocol)?'?redirect_to='+encodeURIComponent(location.href.split('#')[0]):'';
 function loadCloud(rm){const lf=new Map(S.notes.filter(n=>n.file&&n.file.data).map(n=>[n.id,n.file]));S={...structuredClone(DEF),...rm,sup:S.sup,cals:S.cals,sync:S.sync};S.notes=S.notes.map(n=>{const f=lf.get(n.id);return n.file&&!n.file.data&&f&&f.name===n.file.name?{...n,file:f}:n});lastSnap=JSON.stringify(snap());fillSubjects();applySchool()}
 async function acFirstSync(){try{const rm=await syncReq('GET'),has=['todos','tests','notes','grades','cards','study'].some(k=>(S[k]||[]).length);
@@ -429,19 +456,32 @@ else acMsg('Fast geschafft: Wir haben dir eine Mail geschickt. Klicke dort auf d
 async function acReset(){if(!acCfg())return;const e=$('#ac-mail').value.trim().toLowerCase();if(!e)return acMsg('Trage oben deine E-Mail-Adresse ein.',1);
 try{await sbCall('/auth/v1/recover'+redir(),{method:'POST',body:{email:e}});acMsg('Wenn es ein Konto mit dieser Adresse gibt, ist eine Mail mit einem Link unterwegs.')}catch(x){acMsg(x.message,1)}}
 async function acNewPw(){const p=$('#ac-np1').value;if(p.length<8)return acMsg('Das Passwort braucht mindestens 8 Zeichen.',1);
-try{await sbCall('/auth/v1/user',{method:'PUT',token:await sbToken(),body:{password:p}});$('#ac-np1').value='';$('#ac-np').style.display='none';acMsg('Neues Passwort gespeichert.')}catch(x){acMsg(x.message,1)}}
+try{await sbCall('/auth/v1/user',{method:'PUT',token:await sbToken(),body:{password:p}});$('#ac-np1').value='';$('#ac-np').style.display='none';auRec=false;gateUpdate();acMsg('Neues Passwort gespeichert.')}catch(x){acMsg(x.message,1)}}
 async function acOut(){if(!confirm('Auf diesem Gerät abmelden? Die Daten bleiben hier erhalten.'))return;const b=S.sync.sb;try{await sbCall('/auth/v1/logout?scope=local',{method:'POST',token:b.access})}catch(e){}
-b.access='';b.refresh='';b.uid='';b.exp=0;lsSave();acMsg('');syncStat('');rAcct()}
+b.access='';b.refresh='';b.uid='';b.exp=0;lsSave();try{localStorage.removeItem('schulhub_guest')}catch(e){}acMsg('');syncStat('');rAcct()}
 async function acDelCloud(){if(!confirm('Alle in der Cloud gespeicherten Daten deines Kontos löschen? Die Daten auf diesem Gerät bleiben erhalten. Das Konto selbst kann nur der Betreiber des Projekts löschen.'))return;
 try{await sbCall('/rest/v1/hub_data?user_id=eq.'+S.sync.sb.uid,{method:'DELETE',token:await sbToken()});acMsg('Cloud-Daten gelöscht. Beim nächsten Abgleich werden die Daten dieses Geräts neu hochgeladen.')}catch(x){acMsg(x.message,1)}}
 async function acCopySql(){try{await navigator.clipboard.writeText($('#ac-sql').textContent);acMsg('SQL kopiert.')}catch(e){acMsg('Kopieren nicht möglich. Markiere den Text von Hand.',1)}}
-function rAcct(){if(!$('#ac-out'))return;const b=S.sync.sb||{},on=sbIn();$('#ac-out').style.display=on?'none':'';$('#ac-in').style.display=on?'':'none';$('#ac-who').textContent=b.email||'';
+function rAcct(){gateUpdate();if(!$('#ac-out'))return;const b=S.sync.sb||{},on=sbIn();$('#ac-out').style.display=on?'none':'';$('#ac-in').style.display=on?'':'none';$('#ac-who').textContent=b.email||'';
 if(!$('#ac-mail').value)$('#ac-mail').value=b.email||'';$('#ac-url').value=b.url||'';$('#ac-key').value=b.key||'';$('#ac-cfg').style.display=SB_DEFAULT.url&&SB_DEFAULT.key?'none':'';syncStat()}
+let auRec=false,auM='in';
+const guestOK=()=>{try{return localStorage.getItem('schulhub_guest')=='1'}catch(e){return false}};
+function gateUpdate(){const g=$('#auth');if(!g)return;const show=auRec||(!sbIn()&&!guestOK()),c=sbC(),cfg=!!(c.url&&c.key);
+if($('#ac-url')&&!$('#ac-url').value)$('#ac-url').value=(S.sync.sb&&S.sync.sb.url)||'';if($('#ac-key')&&!$('#ac-key').value)$('#ac-key').value=(S.sync.sb&&S.sync.sb.key)||'';
+g.style.display=show?'flex':'none';$('#au-name').textContent=(S.school&&S.school.name)||'Schul-Hub';
+$('#au-form').style.display=(auRec||!cfg)?'none':'';$('#au-np').style.display=auRec?'':'none';$('#au-nocfg').style.display=(!cfg&&!auRec)?'':'none';
+const o=$('#nav-out');if(o){o.style.display=sbIn()?'':'none';o.textContent='Abmelden ('+((S.sync.sb&&S.sync.sb.email)||'')+')'}}
+function auMode(m){auM=m;$('#au-t-in').className=m=='in'?'on':'';$('#au-t-reg').className=m=='reg'?'on':'';$('#au-go').textContent=m=='in'?'Anmelden':'Konto erstellen';$('#au-pw').autocomplete=m=='in'?'current-password':'new-password';$('#au-forgot').style.visibility=m=='in'?'':'hidden';acMsg('')}
+function auShow(){const i=$('#au-pw'),s=i.type=='password';i.type=s?'text':'password';$('#au-eye').textContent=s?'Verbergen':'Anzeigen'}
+async function auSubmit(ev){ev.preventDefault();$('#ac-mail').value=$('#au-mail').value;$('#ac-pw').value=$('#au-pw').value;if(auM=='in')await acLogin();else await acReg();if(sbIn())$('#au-pw').value=''}
+async function auReset(){$('#ac-mail').value=$('#au-mail').value;await acReset()}
+async function auNewPw(){$('#ac-np1').value=$('#au-np1').value;await acNewPw()}
+function auGuest(toSettings){try{localStorage.setItem('schulhub_guest','1')}catch(e){}gateUpdate();if(toSettings){const nb=document.querySelector('nav button[data-v="set"]');if(nb)nb.click()}}
 async function acHash(){const h=location.hash.slice(1);if(!/(access_token|error_description)=/.test(h))return;const p=new URLSearchParams(h);try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
 const nb=document.querySelector('nav button[data-v="set"]');if(nb)nb.click();
 if(p.get('error_description')){acMsg(p.get('error_description').replace(/\+/g,' '),1);return}
 try{const tok=p.get('access_token'),u=await sbCall('/auth/v1/user',{token:tok});sbSet({access_token:tok,refresh_token:p.get('refresh_token'),expires_in:+p.get('expires_in')||3600,user:u});rAcct();
-if(p.get('type')=='recovery'){$('#ac-np').style.display='';acMsg('Gib ein neues Passwort ein.')}else{acMsg('E-Mail bestätigt. Du bist angemeldet.');await acFirstSync()}}catch(e){acMsg(e.message,1)}}
+if(p.get('type')=='recovery'){auRec=true;gateUpdate();$('#ac-np').style.display='';acMsg('Gib ein neues Passwort ein.')}else{acMsg('E-Mail bestätigt. Du bist angemeldet.');await acFirstSync()}}catch(e){acMsg(e.message,1)}}
 function rSet(){rSchool();rSubj();rAcct();$('#sy-code').value=S.sync.code||'';syncStat();bkStat();aiFill();rDashCfg()}
 function resetSup(){S.sup={rows:[],ts:0};save();syncMsg='';render();fetchSup()}
 function setSync(m){if(!supOn()){const t='Supplierplan nicht eingerichtet. Adresse unter Einstellungen eintragen oder die Vorlage Abendgymnasium nutzen.';$('#sync').textContent=t;$('#sync2').textContent='';return}const old=S.sup.ts&&Date.now()-S.sup.ts>216e5?' – VERALTET, bitte aktualisieren':'',t=m||syncMsg||(S.sup.ts?`Supplierplan zuletzt geprüft: ${new Date(S.sup.ts).toLocaleString('de-AT',{weekday:'short',hour:'2-digit',minute:'2-digit'})} · ${S.sup.rows.length} Einträge · Quelle: ${S.sup.src||'alt/manuell'}${old}`:'Supplierplan noch nicht geladen');$('#sync').textContent=t;$('#sync2').textContent=t}
@@ -799,5 +839,5 @@ function bkStat(){const el=$('#bk-st');if(!el)return;const{t}=bkInfo(),m=t?'Letz
 function importData(i){const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!confirm('Aktuelle Daten durch Backup ersetzen?'))return;S={...structuredClone(DEF),...d,sync:S.sync,sup:S.sup,cals:S.cals};if(!d.school)S.school=structuredClone(LEGACY_SCHOOL);migCal();applySchool();save();fillSubjects();render()}catch(e){alert('Ungültige Datei.')}};r.readAsText(f);i.value=''}
 /* Render */
 function render(){const v=$('.view.on').id;({dash:rDash,plan:rPlan,todo:rTodos,test:rTests,note:rNotes,grade:()=>{rGrades();rSA()},links:rLinks,timer:rStats,cal:rCal,ai:rAi,set:rSet})[v]();setSync()}
-migCal();applySchool();try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}fillSubjects();tDraw();render();fetchSup();calFetch();acHash();syncNow();setInterval(()=>{fetchSup();calFetch()},30*60*1000);setInterval(syncNow,5*60*1000);setInterval(rNow,30000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)syncNow()});
+migCal();applySchool();gateUpdate();try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}fillSubjects();tDraw();render();fetchSup();calFetch();acHash();syncNow();setInterval(()=>{fetchSup();calFetch()},30*60*1000);setInterval(syncNow,5*60*1000);setInterval(rNow,30000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)syncNow()});
 </script></body></html>
