@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Schul-Hub</title>
+<style>
+:root{--bg:#1e1e2e;--side:#181825;--card:#2b2b3d;--acc:#89b4fa;--tx:#cdd6f4;--dim:#a6adc8;--red:#f38ba8;--grn:#a6e3a1;--yel:#f9e2af;--org:#fab387;--pur:#cba6f7;--bd:#45475a;
+--fs-xs:.72rem;--fs-sm:.8rem;--fs-md:.9rem;--fs-lg:1.05rem;--fs-xl:1.35rem;--fs-2xl:1.6rem;--fs-3xl:3.6rem;
+--gap:16px;--gap-s:8px;--pad:20px}
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif}
+body{background:var(--bg);color:var(--tx);display:flex;height:100vh;height:100dvh;overflow:hidden}
+nav{width:215px;background:var(--side);border-right:1px solid var(--bd);padding:18px 10px;display:flex;flex-direction:column;gap:3px;overflow-y:auto;flex-shrink:0}
+nav h2{color:var(--acc);font-size:var(--fs-lg);padding:0 10px 12px;margin-bottom:6px;border-bottom:1px solid var(--bd)}
+nav button{background:none;border:0;color:var(--dim);padding:9px 12px;border-radius:8px;text-align:left;font-size:var(--fs-md);cursor:pointer}
+nav button:hover,nav button.on{background:#313244;color:var(--acc)}
+nav .sp{flex:1}nav a{color:var(--dim);padding:9px 12px;border-radius:8px;font-size:var(--fs-md);text-decoration:none}nav a:hover{background:#313244;color:var(--acc)}
+main{flex:1;padding:26px;overflow-y:auto}
+.view{display:none}.view.on{display:block}
+h1{font-size:var(--fs-2xl);margin-bottom:20px;color:#fff}h3{color:var(--acc);margin-bottom:12px;font-size:var(--fs-lg)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(290px,100%),1fr));gap:var(--gap);align-items:start;margin-bottom:var(--gap)}
+.grid:last-child{margin-bottom:0}
+.grid>*{min-width:0}
+.sa-r{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:8px;align-items:end;background:var(--side);border-radius:8px;padding:10px 12px;margin-bottom:var(--gap-s);border-left:4px solid var(--acc)}
+.sa-r input{margin-bottom:0}.sa-r .lbl{margin-bottom:3px}
+.lk a{color:var(--tx);text-decoration:none;font-weight:600}.lk a:hover{color:var(--acc)}
+#dash .grid{align-items:stretch}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:var(--pad);margin-bottom:var(--gap);overflow-wrap:break-word}
+.grid>.card{margin-bottom:0}
+input,select,textarea{width:100%;padding:9px;margin-bottom:10px;background:var(--side);border:1px solid var(--bd);border-radius:6px;color:var(--tx);font-size:var(--fs-md)}
+textarea{min-height:80px;resize:vertical}
+.btn{background:var(--acc);color:#11111b;border:0;padding:9px 14px;border-radius:6px;font-weight:600;cursor:pointer;font-size:var(--fs-md)}
+.btn:hover{filter:brightness(1.1)}.btn.g{background:var(--bd);color:#fff}.btn.r{background:var(--red)}.btn.s{padding:4px 9px;font-size:var(--fs-sm)}
+.row{display:flex;gap:var(--gap-s);flex-wrap:wrap;align-items:center}.row>*{flex:1;min-width:110px}.row .btn{flex:0 0 auto}
+ul{list-style:none}
+li.it{background:var(--side);padding:11px 12px;border-radius:8px;margin-bottom:var(--gap-s);border-left:4px solid var(--acc);display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;justify-content:space-between;overflow-wrap:break-word}
+li.it>div{flex:1 1 9rem;min-width:0}
+li.it>.nm{flex:1 1 6rem;min-width:0;overflow-wrap:anywhere}
+li.it>.dt{flex:0 0 auto;text-align:right}
+li.it>.acts{flex:0 0 auto;margin-left:auto}
+.acts{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px}
+.acts .btn{white-space:nowrap;text-align:center}
+.acts.eq{display:grid;grid-template-columns:1fr 1fr}li.it.done{opacity:.45}li.it.done b{text-decoration:line-through}
+li.it.Hoch{border-color:var(--red)}li.it.Mittel{border-color:var(--yel)}li.it.Niedrig{border-color:var(--grn)}
+li.it input[type=checkbox]{width:auto;margin:0;flex:none}
+.bd{font-size:var(--fs-xs);padding:2px 7px;border-radius:4px;background:#313244;color:var(--dim);margin-right:5px;display:inline-block}
+.dim{color:var(--dim);font-size:var(--fs-sm)}.red{color:var(--red)}.yel{color:var(--yel)}.grn{color:var(--grn)}
+.tt{width:100%;min-width:560px;border-collapse:collapse;table-layout:fixed}
+.tt th,.tt td{border:1px solid var(--bd);padding:8px 5px;text-align:center;font-size:var(--fs-sm);vertical-align:top}
+.tt th{background:var(--side);color:var(--acc)}.tt th.today{background:#313244}
+.tt td.f{color:#585b70}.tt td.l{background:#2a2a40;font-weight:600}.tt.edit td{cursor:pointer;outline:1px dashed var(--bd)}
+.tt td small{display:block;font-weight:400;color:var(--dim);margin-top:2px}
+.tt td.e{background:#3e1f28;color:var(--red)}.tt td.e b{text-decoration:line-through}
+.tt td.s{background:#3d2f22}.tt td.v{background:#33283f}.tt td.r{background:#22333f}.tt td.sa{background:#3d3a22}
+.tag{display:block;font-size:var(--fs-xs);border-radius:3px;margin-top:3px;padding:1px 3px;font-weight:700;color:#111;background:var(--dim)}
+.e .tag{background:var(--red)}.s .tag{background:var(--org)}.v .tag{background:var(--pur)}.r .tag{background:var(--acc)}.sa .tag{background:var(--yel)}
+.blk{display:flex;flex-wrap:wrap;gap:4px 12px;justify-content:space-between;align-items:center;overflow-wrap:break-word;background:var(--side);border-radius:8px;padding:10px 12px;margin-bottom:var(--gap-s);border-left:4px solid var(--acc)}
+.blk>div{flex:1 1 8rem;min-width:0}.blk>span{flex:0 0 auto;margin-left:auto}
+.blk.e{border-color:var(--red)}.blk.e b{text-decoration:line-through;color:var(--red)}.blk.s,.blk.v{border-color:var(--org)}.blk.r{border-color:var(--acc)}
+.big{font-size:var(--fs-3xl);font-weight:700;text-align:center;color:var(--acc);font-variant-numeric:tabular-nums;margin:10px 0}
+.bar{height:10px;background:var(--acc);border-radius:5px;margin-top:4px}
+.fc{background:var(--side);border-radius:12px;padding:30px;text-align:center;font-size:var(--fs-lg);min-height:130px;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-bottom:10px}
+table.l{width:100%;border-collapse:collapse;font-size:var(--fs-sm)}table.l td,table.l th{padding:5px 7px;border-bottom:1px solid var(--bd);text-align:left}table.l tr.me{background:#3d2f22}
+dialog{background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:12px;padding:var(--pad);width:min(720px,94vw);max-height:90vh;margin:auto;overflow:auto}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+li.it>div>div.dim{white-space:pre-wrap;max-height:9em;overflow:auto}
+.lbl{display:block;font-size:var(--fs-sm);color:var(--dim);margin:0 0 4px}
+.help{background:#262637}.help ol{margin:8px 0 8px 20px;line-height:1.6;font-size:var(--fs-md)}
+.chip{display:inline-flex;gap:6px;align-items:center;background:#313244;border-radius:999px;padding:5px 11px;margin:0 6px 6px 0;font-size:var(--fs-sm);cursor:pointer}.chip input{width:auto;margin:0}
+.res{margin-top:12px;padding:12px;border-radius:8px;background:var(--side);line-height:1.5}.res:empty{display:none}
+#view-dlg[open]{display:flex;flex-direction:column;width:min(1000px,96vw);height:90vh}#vw-body{flex:1;min-height:0;overflow:auto;margin-top:10px}
+#vw-body iframe{width:100%;height:100%;border:0;background:#fff;border-radius:6px}#vw-body img{max-width:100%;display:block;margin:auto}.vw-pre{white-space:pre-wrap;line-height:1.55;font-size:var(--fs-md)}
+@media(max-width:760px){body{flex-direction:column-reverse}nav{width:100%;flex-direction:row;overflow-x:auto;padding:6px;border-right:0;border-top:1px solid var(--bd)}nav h2,nav .sp{display:none}nav button{white-space:nowrap;padding:8px 10px}main{padding:14px}.tt th,.tt td{font-size:var(--fs-xs);padding:5px 2px}}
+</style></head><body>
+<nav>
+<h2>Schul-Hub</h2>
+<button data-v="dash" class="on">Start</button><button data-v="plan">Stundenplan</button><button data-v="todo">To-Dos</button><button data-v="test">Tests</button><button data-v="cal">Kalender</button><button data-v="grade">Noten</button><button data-v="note">Zusammenfassungen</button><button data-v="timer">Lerntimer</button><button data-v="ai">KI-Prompts</button><button data-v="links">Links</button>
+<div class="sp"></div><button data-v="set">Einstellungen</button>
+</nav>
+<main>
+<section id="dash" class="view on"><h1 id="hello">Start</h1>
+<div class="card row"><span class="dim" id="sync">…</span><button class="btn s supb" onclick="fetchSup()">Supplierplan aktualisieren</button><button class="btn s g supb" onclick="resetSup()">Zurücksetzen &amp; neu laden</button><button class="btn s g" onclick="goView('set')">Start anpassen</button></div>
+<div class="card row" id="bk-hint" style="display:none"><span class="dim">Deine Daten liegen nur in diesem Browser und sind länger nicht gesichert.</span><button class="btn s" onclick="exportData()">Backup erstellen</button><button class="btn s g" onclick="bkLater()">Später</button></div>
+<div class="grid"><div class="card" data-t="now"><h3>Jetzt</h3><div id="d-now"></div></div>
+<div class="card" data-t="day"><h3 id="d-day">Nächster Schultag</h3><div id="d-lessons"></div></div>
+<div class="card" data-t="chg"><h3>Änderungen für dich</h3><div id="d-chg"></div></div>
+<div class="card" data-t="cal"><h3>Kalender</h3><div id="d-cal"></div></div>
+<div class="card" data-t="tests"><h3>Nächste Tests</h3><div id="d-tests"></div></div>
+<div class="card" data-t="todos"><h3>Offene To-Dos</h3><div id="d-todos"></div></div>
+<div class="card" data-t="study"><h3>Lernzeit diese Woche</h3><div id="d-study"></div></div></div>
+<p class="dim" id="dash-empty" style="display:none;margin-top:var(--gap)">Alle Kacheln sind ausgeblendet. Unter Einstellungen → „Startseite anpassen“ kannst du sie wieder einschalten.</p></section>
+
+<section id="plan" class="view"><h1>Stundenplan</h1>
+<div class="card"><div class="row" style="margin-bottom:10px"><span class="dim" id="sync2"></span><button class="btn s g" id="editbtn" onclick="toggleEdit()">Plan bearbeiten</button></div><div style="overflow-x:auto" id="tt"></div></div>
+<div class="card" id="lv-card" style="display:none"><h3 id="lv-h">Lehrveranstaltung hinzufügen</h3>
+<input id="lv-name" placeholder="Name (z. B. Analysis 1 VO)">
+<div class="row"><select id="lv-day"><option value="0">Montag</option><option value="1">Dienstag</option><option value="2">Mittwoch</option><option value="3">Donnerstag</option><option value="4">Freitag</option><option value="5">Samstag</option><option value="6">Sonntag</option></select><input type="time" id="lv-st" aria-label="Beginn"><input type="time" id="lv-en" aria-label="Ende"></div>
+<div class="row"><input id="lv-room" placeholder="Raum oder Hörsaal"><input id="lv-who" placeholder="Lehrende/r (optional)"></div>
+<div class="row"><div><label class="lbl" for="lv-from">Gilt ab (optional, z. B. Semesterbeginn)</label><input type="date" id="lv-from"></div><div><label class="lbl" for="lv-to">Gilt bis (optional, z. B. Semesterende)</label><input type="date" id="lv-to"></div></div>
+<p class="dim" style="margin-bottom:10px">Die Lehrveranstaltung wiederholt sich jede Woche am gewählten Tag.</p>
+<div class="row"><button class="btn" id="lv-btn" onclick="saveLv()">Hinzufügen</button><button class="btn g" id="lv-cancel" style="display:none" onclick="cancelLv()">Abbrechen</button></div></div>
+
+</section>
+
+<section id="cal" class="view"><h1>Kalender</h1>
+<div class="card"><h3>Meine Kalender</h3><p class="dim" id="cal-st" style="margin-bottom:8px"></p><ul id="cal-all"></ul></div>
+<div class="card"><h3>Kalender hinzufügen</h3><input id="cal-name" placeholder="Name (z. B. Schule, Privat)"><input id="cal-url" placeholder="iCal-Link (https://… oder webcal://…)"><div class="row"><button class="btn" onclick="calConnect()">Verbinden</button><label class="btn g" style="cursor:pointer">.ics-Datei importieren<input type="file" accept=".ics,text/calendar" hidden onchange="calFile(this)"></label><button class="btn g" onclick="calFetch()">Alle aktualisieren</button></div>
+<label class="dim" style="display:flex;gap:8px;align-items:center;margin-top:10px"><input type="checkbox" id="cal-hw" style="width:auto;margin:0" onchange="S.autoHw=this.checked;save()"> Abgaben und Hausübungen aus dem Kalender automatisch als To-Do übernehmen</label>
+<label class="dim" style="display:flex;gap:8px;align-items:center;margin-top:8px"><input type="checkbox" id="cal-tst" style="width:auto;margin:0" onchange="S.autoTest=this.checked;save()"> Einträge wie „D-SA“, „GWB-Test“ oder „INF-Test“ automatisch unter Tests eintragen</label>
+<details style="margin-top:10px"><summary class="dim">Wo finde ich den Link / die Datei?</summary><div class="dim" style="margin-top:6px;line-height:1.5"><b>Google:</b> Einstellungen → dein Kalender → „Geheime Adresse im iCal-Format“.<br><b>Apple (iCloud):</b> Kalender teilen → „Öffentlicher Kalender“ → Link kopieren (webcal://).<br><b>Outlook:</b> Einstellungen → Kalender → Freigegebene Kalender → Veröffentlichen → ICS-Link.<br><b>Eduvidual / Moodle:</b> Kalender → „Kalender importieren oder exportieren“ → „Kalender exportieren“ → „Kalender-URL holen“ (Bezeichnungen können je nach Version leicht abweichen).<br><b>Ohne Link:</b> Kalender als .ics exportieren und oben importieren (nicht automatisch aktuell).<br><b>Datenschutz:</b> Der Link wird ausschließlich über deinen eigenen Cloudflare-Worker geladen (per POST, nicht in der Adresszeile) und nie an öffentliche Proxy-Dienste weitergegeben. Ist der Worker nicht erreichbar, hilft der Datei-Import.</div></details></div>
+<div class="card"><h3>Nächste 30 Tage</h3><div id="cal-list"></div></div></section>
+
+<section id="todo" class="view"><h1>To-Dos</h1><div class="grid">
+<div class="card"><h3 id="t-h">Neue Aufgabe</h3><input id="t-title" placeholder="Titel (z. B. Mathe Übung S. 42 oder Wäsche waschen)"><select id="t-subj" class="ss" data-cat="1"></select>
+<div class="row"><input type="date" id="t-due"><select id="t-prio"><option>Hoch</option><option selected>Mittel</option><option>Niedrig</option></select></div>
+<textarea id="t-desc" placeholder="Beschreibung (optional)"></textarea><div class="row"><button class="btn" id="t-btn" onclick="saveTodo()">Hinzufügen</button><button class="btn g" id="t-cancel" style="display:none" onclick="cancelTodo()">Abbrechen</button></div></div>
+<div class="card"><h3>Aufgaben</h3><div class="row"><select id="f-st" onchange="rTodos()"><option value="open">Offen</option><option value="">Alle</option><option value="done">Erledigt</option></select><select id="f-sj" class="ss" data-all="1" data-cat="1" onchange="rTodos()"></select></div><ul id="todos"></ul>
+<button class="btn s g" onclick="clearDone()">Erledigte löschen</button></div></div></section>
+
+<section id="test" class="view"><h1>Tests & Prüfungen</h1><div class="grid">
+<div class="card"><h3 id="x-h">Neuer Termin</h3><select id="x-type"><option>Test</option><option>Schularbeit</option><option>Klausur</option><option>Präsentation</option><option>Mündliche Prüfung</option><option>Abgabe</option></select><select id="x-subj" class="ss"></select>
+<input id="x-topic" placeholder="Themengebiet"><input type="date" id="x-date"><div class="row"><button class="btn" id="x-btn" onclick="saveTest()">Speichern</button><button class="btn g" id="x-cancel" style="display:none" onclick="cancelTest()">Abbrechen</button></div></div>
+<div class="card"><h3>Kommende Termine</h3><ul id="tests"></ul><h3 style="margin-top:14px">Vergangen</h3><ul id="tests-old"></ul></div></div></section>
+
+<section id="note" class="view"><h1>Zusammenfassungen</h1><div class="grid">
+<div class="card"><h3 id="n-h">Neu ablegen</h3><input id="n-title" placeholder="Titel"><select id="n-subj" class="ss"></select><textarea id="n-text" placeholder="Notiz / Text (optional)"></textarea>
+<input type="file" id="n-file" accept=".pdf,image/*,.txt,.md,.doc,.docx"><p class="dim" style="margin-bottom:10px">Dateien bis 1,5 MB (werden lokal im Browser gespeichert). PDF, Bilder, Text und Word (.docx) kannst du später direkt hier ansehen, ohne sie herunterzuladen.</p><div class="row"><button class="btn" id="n-btn" onclick="saveNote()">Speichern</button><button class="btn g" id="n-cancel" style="display:none" onclick="cancelNote()">Abbrechen</button></div></div>
+<div class="card"><h3>Ablage</h3><div class="row"><input id="n-q" placeholder="Suchen…" oninput="rNotes()"><select id="n-f" class="ss" data-all="1" onchange="rNotes()"></select></div><ul id="notes"></ul></div></div></section>
+
+<section id="grade" class="view"><h1>Noten &amp; Wunschnote</h1>
+<div class="card help"><b>So funktioniert's</b><ol><li>Trage in Karte 1 jede Note ein, die du schon hast (Schularbeit, Test, Mitarbeit …).</li><li>Gib an, wie stark sie zählt (Gewicht). Zählen alle gleich viel, lass überall 1 stehen.</li><li>In Karte 2 siehst du, welche Note du bei der nächsten Prüfung höchstens schreiben darfst, um dein Ziel zu erreichen.</li></ol><p class="dim">Skala: 1 = sehr gut … 5 = nicht genügend. Je kleiner der Schnitt, desto besser.</p></div>
+<div class="grid">
+<div class="card"><h3 id="g-h">1 · Note eintragen</h3>
+<label class="lbl" for="g-subj">Fach</label><select id="g-subj" class="ss"></select>
+<label class="lbl" for="g-name">Wofür war die Note?</label><input id="g-name" placeholder="z. B. Schularbeit 1 oder Test Kapitel 3">
+<div class="row"><div><label class="lbl" for="g-val">Note (1–5)</label><input type="number" id="g-val" min="1" max="5" step="0.5" placeholder="z. B. 2"></div><div><label class="lbl" for="g-w">Gewicht</label><input type="number" id="g-w" min="0.1" step="0.1" value="1"></div></div>
+<p class="dim" id="g-whelp" style="margin-bottom:10px">Gewicht = wie stark die Note zählt, z. B. Schularbeit 2, Test 1, Mitarbeit 0,5.</p>
+<div class="row"><button class="btn" id="g-btn" onclick="saveGrade()">Speichern</button><button class="btn g" id="g-cancel" style="display:none" onclick="cancelGrade()">Abbrechen</button></div></div>
+<div class="card"><h3>2 · Wunschnote berechnen</h3>
+<label class="lbl" for="w-subj">Fach</label><select id="w-subj" class="ss"></select>
+<div class="row"><div><label class="lbl" for="w-t">Das will ich am Ende erreichen</label><select id="w-t"><option value="1">Sehr gut (1)</option><option value="2" selected>Gut (2)</option><option value="3">Befriedigend (3)</option><option value="4">Genügend (4)</option></select></div><div><label class="lbl" for="w-w">Gewicht der nächsten Note</label><input type="number" id="w-w" min="0.1" step="0.1" value="1"></div></div>
+<button class="btn" onclick="calcWish()">Berechnen</button><div id="w-res" class="res"></div>
+<p class="dim" style="margin-top:10px">Ein Ziel gilt als erreicht, wenn der Schnitt höchstens bis zur halben Note danach reicht (Ziel 2 = Schnitt bis 2,5). Nur ein Richtwert – die Note legt die Lehrkraft fest.</p></div></div>
+<div class="card"><h3>3 · Schularbeiten-Rechner</h3>
+<p class="dim" style="margin-bottom:10px;line-height:1.5">Für Englisch mit Listening, Reading, Language in Use und Writing, aber auch für jedes andere Fach mit Teilbereichen. Jeder Bereich hat ein Gewicht in Prozent und eine eigene Höchstpunktzahl. Wähle eine Vorlage oder stelle alles selbst ein. Die Voreinstellungen folgen den Beurteilungskriterien österreichischer Gymnasien (Oberstufe: vier Bereiche zu je 25 %, positiv ab 60 %, beide Gruppen Rezeptiv und Produktiv mindestens 50 %). Unterstufe: Bestehen ab 50 %. Gewichte, Punkte und Grenzen legt aber jede Lehrkraft selbst fest, vergleiche sie deshalb mit deinem Angabenblatt.</p>
+<div class="row" style="align-items:flex-end"><div><label class="lbl" for="sa-tpl">Vorlage</label><select id="sa-tpl" onchange="saSel(this.value)"></select></div><button class="btn g" style="margin-bottom:10px" onclick="saNew()">Neue Vorlage</button><button class="btn g" style="margin-bottom:10px" onclick="saDup()">Kopieren</button><button class="btn r" style="margin-bottom:10px" onclick="saDel()">Löschen</button></div>
+<div id="sa-box"></div>
+<span class="lbl" style="margin-top:14px">Ergebnis als Note übernehmen</span>
+<div class="row"><div><label class="lbl" for="sa-subj">Fach</label><select id="sa-subj" class="ss"></select></div><div><label class="lbl" for="sa-w">Gewicht</label><input type="number" id="sa-w" min="0.1" step="0.1" value="2"></div><button class="btn" style="margin-bottom:10px" onclick="saToGrade()">In Noten übernehmen</button></div>
+<p class="dim" id="sa-msg"></p></div>
+<div class="card"><h3>Übersicht</h3><div id="grades"></div></div></section>
+
+<section id="links" class="view"><h1>Nützliche Links</h1>
+<p class="dim" style="margin-bottom:var(--gap)">Füge hier die Seiten deiner Schule hinzu, zum Beispiel Lernplattform, Schulwebsite oder Supplierplan.</p>
+<div class="grid" id="lk-all"></div>
+<div class="card"><h3>Link hinzufügen</h3><input id="lk-name" placeholder="Name (z. B. Mathe-Videos)"><input id="lk-url" placeholder="Adresse (https://…)"><input id="lk-cat" list="lk-cats" placeholder="Gruppe (z. B. Schule)"><datalist id="lk-cats"></datalist><div class="row"><button class="btn" onclick="lkAdd()">Hinzufügen</button><button class="btn g" onclick="lkReset()">Standardlinks wiederherstellen</button></div></div></section>
+
+<section id="timer" class="view"><h1>Lerntimer</h1><div class="grid">
+<div class="card"><select id="tsubj" class="ss"></select><div class="big" id="tdisp">25:00</div><p class="dim" id="tmode" style="text-align:center">Lernphase</p>
+<div class="row" style="margin:12px 0"><input type="number" id="tw" value="25" min="1" title="Lernen (Min)" onchange="tReset()"><input type="number" id="tb" value="5" min="1" title="Pause (Min)"></div>
+<div class="row"><button class="btn" onclick="tStart()">Start</button><button class="btn g" onclick="T.run=false">Pause</button><button class="btn r" onclick="tReset()">Reset</button></div></div>
+<div class="card"><h3>Diese Woche</h3><div id="tstats"></div></div></div></section>
+
+
+
+<section id="ai" class="view"><h1>KI-Prompt-Generator</h1>
+<div class="grid">
+<div class="card"><h3>1 · Worum geht's?</h3>
+<label class="lbl" for="a-subj">Fach</label><select id="a-subj" class="ss" onchange="genPrompt()"></select>
+<label class="lbl" for="a-topic">Thema</label><input id="a-topic" placeholder="z. B. JOINs in SQL" oninput="genPrompt()">
+<label class="lbl" for="a-type">Was soll die KI machen?</label><select id="a-type" onchange="genPrompt()"><option value="ex">Übungsaufgaben mit Lösung</option><option value="exp">Einfach erklärt</option><option value="sum">Zusammenfassung &amp; Kontrollfragen</option><option value="quiz">Probetest</option><option value="plan">Lernplan bis zum Test</option><option value="cards">Karteikarten (für Knowt)</option><option value="tutor">Mich abfragen (Tutor-Modus)</option><option value="hint">Hilfe bei einer Aufgabe (nur Hinweise)</option><option value="check">Meine Lösung prüfen</option></select>
+<span class="lbl">Schnell übernehmen</span>
+<div class="row"><button class="btn g" onclick="nextTestPrompt()">Nächster Test</button><select id="a-todo" onchange="aiFromTodo(this.value)"></select><select id="a-note" onchange="aiFromNote(this.value)"></select></div>
+<p class="dim" id="a-when" style="display:none"></p></div>
+<div class="card"><h3>2 · Feinschliff</h3>
+<div class="row"><div><label class="lbl" for="a-lv">Mein Stand</label><select id="a-lv" onchange="genPrompt()"><option value="Einsteiger, ich fange bei null an">Einsteiger</option><option value="Grundlagen sitzen, ich möchte vertiefen" selected>Mittel</option><option value="Maturaniveau, ich brauche Prüfungsnähe">Matura</option><option value="Hochschulniveau, ich brauche Prüfungsnähe">Uni</option></select></div>
+<div><label class="lbl" for="a-n">Anzahl (Aufgaben/Fragen)</label><select id="a-n" onchange="genPrompt()"><option>3</option><option selected>5</option><option>8</option><option>10</option></select></div>
+<div><label class="lbl" for="a-lg">Sprache</label><select id="a-lg" onchange="genPrompt()"><option value="de" selected>Deutsch</option><option value="de-x">Deutsch + Fremdsprache</option><option value="en">Nur Englisch</option><option value="fr">Nur Französisch</option></select></div>
+<div><label class="lbl" for="a-tool">Für welche KI?</label><select id="a-tool" onchange="genPrompt()"><option value="any" selected>Egal (neutral)</option><option value="claude">Claude (mit XML-Struktur)</option><option value="gpt">ChatGPT / Copilot / Gemini</option></select></div></div>
+<span class="lbl">Zusätze</span><div><label class="chip"><input type="checkbox" class="a-opt" value="src" checked onchange="genPrompt()"> Ehrlich bei Unsicherheit</label><label class="chip"><input type="checkbox" class="a-opt" value="end" checked onchange="genPrompt()"> Lösungen erst am Ende</label><label class="chip"><input type="checkbox" class="a-opt" value="ask"  onchange="genPrompt()"> Rückfragen erlauben</label><label class="chip"><input type="checkbox" class="a-opt" value="mnem"  onchange="genPrompt()"> Eselsbrücken</label><label class="chip"><input type="checkbox" class="a-opt" value="real"  onchange="genPrompt()"> Alltagsbeispiele</label><label class="chip"><input type="checkbox" class="a-opt" value="mist"  onchange="genPrompt()"> Typische Fehler</label><label class="chip"><input type="checkbox" class="a-opt" value="short"  onchange="genPrompt()"> Kurz &amp; knapp</label><label class="chip"><input type="checkbox" class="a-opt" value="table"  onchange="genPrompt()"> Tabellen</label></div>
+<label class="lbl" for="a-link" style="margin-top:10px">Link zum Material (optional)</label><input id="a-link" placeholder="https://… (Artikel, Skript, Aufgabenblatt)" oninput="genPrompt()">
+<label class="lbl" for="a-mat">Eingefügter Text: Aufgabentext, Material oder deine Lösung (optional)</label><textarea id="a-mat" placeholder="Hier Text, Aufgabenstellung oder deine Lösung einfügen" oninput="genPrompt()" style="min-height:110px"></textarea>
+<p class="dim" style="margin-bottom:10px">Link und Text lassen sich kombinieren. Kann die KI den Link nicht öffnen, sagt sie das und stützt sich auf deinen Text.</p>
+<label class="lbl" for="a-tried">Was habe ich schon versucht, wo hänge ich? (optional)</label><textarea id="a-tried" placeholder="z. B. Ich habe LEFT JOIN und INNER JOIN verwechselt" oninput="genPrompt()" style="min-height:70px"></textarea></div></div>
+<div class="card"><h3>3 · Dein Prompt</h3><textarea id="a-out" oninput="aiCount()" style="min-height:220px"></textarea>
+<p class="dim" style="margin-bottom:10px"><span id="a-cnt"></span> · Wenn du oben etwas änderst, wird der Text neu erzeugt.</p>
+<div class="row"><button class="btn" onclick="copyPrompt()">Kopieren</button><button class="btn g" onclick="copyPrompt('https://copilot.microsoft.com/')">Kopieren &amp; Copilot</button><button class="btn g" onclick="copyPrompt('https://chatgpt.com/')">Kopieren &amp; ChatGPT</button><button class="btn g" onclick="copyPrompt('https://claude.ai/new')">Kopieren &amp; Claude</button><button class="btn g" onclick="copyPrompt('https://gemini.google.com/app')">Kopieren &amp; Gemini</button></div>
+<p class="dim" id="a-msg" style="margin-top:8px"></p></div></section>
+
+<section id="set" class="view"><h1>Einstellungen</h1><div class="grid">
+<div class="card"><h3>Schule und Unterrichtszeiten</h3>
+<label class="lbl" for="sch-name">Name der Schule (optional)</label><input id="sch-name" placeholder="z. B. BG Musterstadt" onchange="schSet('name',this.value)">
+<label class="lbl" for="sch-mode">Art der Einrichtung</label><select id="sch-mode" onchange="schMode(this.value)"><option value="school">Schule (feste Unterrichtseinheiten)</option><option value="uni">Uni oder Hochschule (freie Zeiten, ECTS)</option></select>
+<label class="lbl" for="sch-level">Ausbildung für KI-Prompts</label><input id="sch-level" placeholder="z. B. AHS Oberstufe in Österreich oder Universität, Bachelor Informatik" onchange="schSet('level',this.value)">
+<div id="sch-sbox"><span class="lbl">Unterrichtseinheiten (Beginn und Ende)</span><div id="sch-times"></div>
+<div class="row"><button class="btn s g" onclick="schAdd()">Einheit hinzufügen</button><button class="btn s g" onclick="schPreset('tag')">Vorlage Tagesschule</button><button class="btn s g" onclick="schPreset('abend')">Vorlage Abendschule</button></div>
+<p class="dim" style="margin:8px 0 14px;line-height:1.5">Der Stundenplan passt sich an. Fächer und Räume trägst du unter „Stundenplan“ mit „Plan bearbeiten“ ein.</p>
+<label class="lbl" for="sch-sup">Supplierplan-Seite (optional)</label><input id="sch-sup" placeholder="https://… (leer lassen, wenn es keinen gibt)" onchange="schSet('supUrl',this.value)">
+<p class="dim" style="margin-bottom:14px;line-height:1.5">Das Auslesen klappt, wenn dort eine Tabelle mit Datum, Einheiten, Fach und Art der Änderung (Entfall, Supplierung, Raumänderung) steht. Ohne Adresse werden Supplierplan-Anzeigen ausgeblendet.</p></div>
+<label class="lbl" for="sch-wk">Worker-Adresse (optional)</label><input id="sch-wk" placeholder="https://…workers.dev" onchange="schSet('worker',this.value)">
+<p class="dim" style="line-height:1.5">Für Kalender-Links per Webadresse und für den Sync mit Code wird ein eigener kostenloser Cloudflare-Worker gebraucht. Ohne Adresse läuft alles andere, Kalender kommen dann per .ics-Datei.</p></div>
+<div class="card"><h3>Fächer / Module</h3><ul id="subjs"></ul><div class="row"><input id="s-new" placeholder="z. B. PH2g"><button class="btn" onclick="addName('subjects','s-new')">Hinzufügen</button></div></div>
+<div class="card"><h3>Kategorien (für To-Dos)</h3><ul id="cats"></ul><div class="row"><input id="c-new" placeholder="z. B. Sport"><button class="btn" onclick="addName('cats','c-new')">Hinzufügen</button></div></div>
+<div class="card"><h3>Konto und Sync</h3><p class="dim" id="sy-st" style="margin-bottom:10px"></p>
+<div id="ac-out"><label class="lbl" for="ac-mail">E-Mail</label><input id="ac-mail" type="email" autocomplete="username" placeholder="name@beispiel.at">
+<label class="lbl" for="ac-pw">Passwort</label><input id="ac-pw" type="password" autocomplete="current-password" placeholder="mindestens 8 Zeichen" onkeydown="if(event.key=='Enter')acLogin()">
+<div class="row"><button class="btn" onclick="acLogin()">Anmelden</button><button class="btn g" onclick="acReg()">Registrieren</button><button class="btn g" onclick="acReset()">Passwort vergessen</button></div></div>
+<div id="ac-in" style="display:none"><p style="margin-bottom:10px">Angemeldet als <b id="ac-who"></b></p><div class="row"><button class="btn" onclick="syncNow()">Jetzt abgleichen</button><button class="btn g" onclick="acOut()">Abmelden</button><button class="btn r" onclick="acDelCloud()">Cloud-Daten löschen</button></div></div>
+<div id="ac-np" style="display:none;margin-top:10px"><label class="lbl" for="ac-np1">Neues Passwort</label><input id="ac-np1" type="password" autocomplete="new-password" placeholder="mindestens 8 Zeichen"><button class="btn" onclick="acNewPw()">Passwort speichern</button></div>
+<p class="dim" id="ac-msg" style="margin-top:8px;line-height:1.5"></p>
+<p class="dim" style="margin-top:8px;line-height:1.5">Mit deinem Konto bleiben To-Dos, Tests, Noten, Zusammenfassungen und Einstellungen auf allen Geräten gleich. Änderungen von mehreren Geräten werden pro Eintrag zusammengeführt. Hochgeladene Dateien bleiben auf dem jeweiligen Gerät. Supplierplan und Kalender-Links gelten pro Gerät.</p>
+<details id="ac-cfg" style="margin-top:12px"><summary class="dim" style="cursor:pointer">Einrichtung (einmalig, für den Betreiber)</summary>
+<ol class="dim" style="margin:10px 0 10px 18px;line-height:1.6"><li>Auf supabase.com ein kostenloses Projekt anlegen.</li><li>Im Projekt unter „SQL Editor“ das folgende SQL ausführen.</li><li>Unter „Project Settings“ die Project URL und den öffentlichen Schlüssel (anon oder publishable key) kopieren und unten eintragen. Den geheimen service_role Schlüssel niemals eintragen.</li><li>Unter „Authentication“ und „URL Configuration“ die Adresse eintragen, unter der der Hub liegt (Site URL). Ohne sie führen die Links in den Mails ins Leere. Wer keine Bestätigungsmail will, schaltet unter „Sign In / Providers“ bei E-Mail „Confirm email“ aus.</li></ol>
+<pre id="ac-sql" style="white-space:pre-wrap;font-size:.8rem;background:var(--side);padding:10px;border-radius:8px;margin-bottom:10px">create table if not exists public.hub_data (
+  user_id uuid primary key default auth.uid() references auth.users(id) on delete cascade,
+  data jsonb not null,
+  updated_at timestamptz not null default now()
+);
+alter table public.hub_data enable row level security;
+create policy "hub_select" on public.hub_data for select to authenticated using (auth.uid() = user_id);
+create policy "hub_insert" on public.hub_data for insert to authenticated with check (auth.uid() = user_id);
+create policy "hub_update" on public.hub_data for update to authenticated using (auth.uid() = user_id) with check (auth.uid() = user_id);
+create policy "hub_delete" on public.hub_data for delete to authenticated using (auth.uid() = user_id);</pre>
+<button class="btn s g" style="margin-bottom:10px" onclick="acCopySql()">SQL kopieren</button>
+<label class="lbl" for="ac-url">Project URL</label><input id="ac-url" placeholder="https://abcdxyz.supabase.co">
+<label class="lbl" for="ac-key">Öffentlicher Schlüssel (anon oder publishable)</label><input id="ac-key" placeholder="eyJ… oder sb_publishable_…">
+<p class="dim" style="line-height:1.5">Der öffentliche Schlüssel darf sichtbar sein. Die Daten schützen die Regeln aus dem SQL: Jeder sieht nur die eigene Zeile. Mails verschickt das kostenlose Supabase nur in kleiner Zahl. Für größere Gruppen lässt sich unter „Authentication“ ein eigener Mailserver (SMTP) eintragen.</p></details>
+<details style="margin-top:12px"><summary class="dim" style="cursor:pointer">Alternative: Sync-Code (ohne Konto)</summary>
+<p class="dim" style="margin:10px 0 8px;line-height:1.5">Der Code ersetzt Anmeldung und Passwort. Er läuft über den Cloudflare-Worker aus den Einstellungen oben. Ersten Code auf Gerät 1 erzeugen, dann auf allen anderen Geräten denselben Code eintragen. Der Code ist dein Passwort, bitte gut aufbewahren. Mit einem Konto auf diesem Gerät ist der Code nicht nutzbar.</p>
+<input id="sy-code" placeholder="Sync-Code (auf allen Geräten gleich)"><div class="row"><button class="btn g" onclick="syncGen()">Neuen Code erzeugen</button><button class="btn" onclick="syncConnect()">Verbinden</button><button class="btn g" onclick="syncNow()">Jetzt abgleichen</button><button class="btn g" onclick="syncOff()">Trennen</button></div></details></div>
+<div class="card"><h3>Startseite anpassen</h3><p class="dim" style="margin-bottom:8px">Wähle, welche Kacheln auf der Startseite erscheinen, und bring sie mit ↑ ↓ in die gewünschte Reihenfolge.</p><ul id="dashcfg"></ul><div class="row"><button class="btn g" onclick="dashReset()">Zurücksetzen</button></div></div>
+<div class="card"><h3>KI-Einstieg (optional)</h3><p class="dim" style="margin-bottom:8px">OpenAI-kompatibler Endpunkt, z. B. dein lokales FreeLLMAPI. Wird nur auf diesem Gerät gespeichert, nicht im Sync und nicht im Backup. Ohne Eintrag kopiert der Button den fertigen Prompt für den Chat deiner Wahl.</p><input id="ai-url" placeholder="Basis-URL (z. B. http://localhost:3001/v1)"><input id="ai-key" type="password" placeholder="API-Key (z. B. freellmapi-…)" autocomplete="off"><input id="ai-model" placeholder="Modell (z. B. auto)"><div class="row"><button class="btn" onclick="aiSaveCfg()">Speichern</button><button class="btn g" onclick="aiTest()">Testen</button></div><p class="dim" id="ai-cfg-st" style="margin-top:8px"></p></div>
+<div class="card"><h3>Backup</h3><p class="dim" style="margin-bottom:10px">Alle Daten liegen nur in diesem Browser. Sichere sie regelmäßig.</p><p class="dim" id="bk-st" style="margin-bottom:10px"></p><div class="row"><button class="btn" onclick="exportData()">Exportieren</button><button class="btn g" onclick="$('#imp').click()">Importieren</button></div><input type="file" id="imp" accept=".json" style="display:none" onchange="importData(this)"></div></div></section>
+</main>
+<dialog id="view-dlg"><div class="row" style="align-items:center"><h3 id="vw-h" style="flex:1 1 12rem;margin:0;overflow-wrap:anywhere"></h3><button class="btn s g" id="vw-tab" onclick="vwTab()">In neuem Tab</button><button class="btn s g" onclick="vwDl()">Herunterladen</button><button class="btn s" onclick="$('#view-dlg').close()">Schließen</button></div><div id="vw-body"></div></dialog>
+<dialog id="ai-dlg"><h3 id="ai-h">KI-Einstieg</h3><p class="dim" style="margin-bottom:8px">Die KI gibt dir nur einen Einstieg (Ansatz, Begriffe, erste Schritte). Die Lösung schreibst du selbst.</p><textarea id="ai-task" style="min-height:140px" placeholder="Aufgabentext hier einfügen…"></textarea><div class="row"><button class="btn" id="ai-go" onclick="aiRun()">KI-Einstieg erzeugen</button><button class="btn g" id="ai-cp" onclick="aiCopy()">Prompt kopieren</button><button class="btn g" onclick="$('#ai-dlg').close()">Schließen</button></div><p class="dim" id="ai-st" style="margin:8px 0"></p><div id="ai-out" style="white-space:pre-wrap;line-height:1.5"></div><div class="row" id="ai-save" style="display:none;margin-top:10px"><button class="btn g" onclick="aiToTodo()">In To-Do speichern</button><button class="btn g" onclick="aiCopyOut()">Antwort kopieren</button></div></dialog>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const DN=['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag'],DS=['Mo','Di','Mi','Do','Fr','Sa','So'];
+const TM_ABEND=[['17:00','17:45'],['17:45','18:30'],['18:45','19:30'],['19:30','20:15'],['20:30','21:15'],['21:15','22:00']];
+const TM_TAG=[['08:00','08:50'],['08:55','09:45'],['10:00','10:50'],['10:55','11:45'],['11:50','12:40'],['12:45','13:35'],['13:40','14:30'],['14:35','15:25']];
+let TM=TM_TAG;
+const LEG_SUP='https://www.abendgym.at/termine/supplierplan/';
+const LEGACY_SCHOOL={name:'Abendgymnasium',level:'Abendgymnasium in Österreich (Maturaniveau)',supUrl:LEG_SUP,worker:'https://supplierplan.trecka-peter123.workers.dev',times:TM_ABEND};
+const L=(s,t,r)=>({s,t,r});
+const SAA=(g,max)=>['Listening','Reading','Language in Use','Writing'].map((n,i)=>({n,g:g?(i<2?'Rezeptiv':'Produktiv'):'',w:25,max,p:''}));
+const SAD=()=>[{id:'e-ob',name:'Englisch Oberstufe',ns:[90,80,70,60],gmin:50,areas:SAA(true,20)},{id:'e-un',name:'Englisch Unterstufe',ns:[90,80,65,50],gmin:0,areas:SAA(false,20)}];
+const LKD=()=>[
+[5,'Knowt (Karteikarten)','https://knowt.com','Lernen'],[6,'Khan Academy','https://de.khanacademy.org','Lernen'],[7,'GeoGebra','https://www.geogebra.org','Lernen'],[8,'Wolfram Alpha','https://www.wolframalpha.com','Lernen'],[9,'Wikipedia','https://de.wikipedia.org','Lernen'],
+[10,'DeepL Übersetzer','https://www.deepl.com/translator','Sprachen'],[11,'dict.cc','https://www.dict.cc','Sprachen'],[12,'Linguee','https://www.linguee.de','Sprachen'],[13,'Duden','https://www.duden.de','Sprachen'],[14,'Cambridge Dictionary','https://dictionary.cambridge.org','Sprachen'],[15,'BBC Learning English','https://www.bbc.co.uk/learningenglish','Sprachen'],[16,'TV5Monde Français','https://apprendre.tv5monde.com/fr','Sprachen'],
+[17,'SQLBolt','https://sqlbolt.com','Informatik'],[18,'W3Schools SQL','https://www.w3schools.com/sql','Informatik'],
+[19,'Claude','https://claude.ai','KI'],[20,'ChatGPT','https://chatgpt.com','KI'],[21,'Copilot','https://copilot.microsoft.com','KI'],[22,'Gemini','https://gemini.google.com','KI'],[23,'Prompt-Master (Prompt-Vorlagen)','https://github.com/nidhinjs/prompt-master','KI']].map(([id,name,url,cat])=>({id,name,url,cat}));
+const DEF={cats:['Haushalt','Arbeit','Privat','Einkaufen','Sonstiges'],subjects:['GWB2f','GPB2','D5f','E3','INF3f','F4','M6'],
+tt:[[0,0,L('E3','SCH','301'),L('E3','SCH','301'),L('M6','EIB','205'),L('M6','EIB','205')],
+[L('GWB2f','STA','402'),L('GWB2f','STA','402'),L('INF3f','TEM','11'),L('INF3f','TEM','11'),L('F4','EBN','403'),L('F4','EBN','403')],
+[0,0,L('GPB2','STE','403'),L('GPB2','STE','403'),0,0],
+[L('GPB2','STE','403'),L('GPB2','STE','403'),L('F4','EBN','403'),L('F4','EBN','403'),0,0],
+[L('D5f','LAS','208'),L('D5f','LAS','208'),L('M6','EIB','205'),L('M6','EIB','205'),0,0]],
+dash:{order:['now','day','chg','cal','tests','todos','study'],hide:{}},sync:{},del:{},imp:{},autoHw:true,todos:[],tests:[],notes:[],grades:[],cards:[],study:[],sa:{sel:'e-ob',tpl:SAD()},links:LKD(),school:{mode:'school',name:'',level:'',supUrl:'',worker:'',times:TM_TAG},lv:[],sup:{rows:[],ts:0}};
+let S,RAW={};try{RAW=JSON.parse(localStorage.getItem('schulhub')||'{}')||{}}catch(e){}
+try{S={...structuredClone(DEF),...RAW}}catch(e){S=structuredClone(DEF)}
+/* Neue Nutzer starten neutral, bestehende Daten ohne Schuleinstellung behalten ihre bisherigen Werte */
+if(!Object.keys(RAW).length){S.subjects=['Deutsch','Englisch','Mathematik'];S.tt=[[],[],[],[],[]];S.school=structuredClone(DEF.school)}
+else if(!RAW.school)S.school=structuredClone(LEGACY_SCHOOL);
+if(!S.sync||typeof S.sync!=='object')S.sync={};
+let lastSnap=null,pt;const snap=()=>{const{sup,cal,cals,sync,_ts,...r}=S;return r};lastSnap=JSON.stringify(snap());
+const save=()=>{try{const j=JSON.stringify(snap());if(j!==lastSnap){lastSnap=j;S._ts=Date.now();schedPush()}localStorage.setItem('schulhub',JSON.stringify(S))}catch(e){alert('Speicher voll – bitte Dateien löschen oder Backup exportieren.')}};
+const uid=()=>Date.now()+Math.floor(Math.random()*999);
+const tomb=id=>{S.del=S.del||{};S.del[id]=Date.now()};
+const today0=()=>{const d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate())};
+const dUntil=d=>Math.round((new Date(d+'T00:00')-today0())/864e5);
+const dTxt=d=>{const n=dUntil(d);return n<0?`seit ${-n} T. überfällig`:n==0?'heute':n==1?'morgen':`in ${n} Tagen`};
+const fmtD=d=>d?new Date(d+'T00:00').toLocaleDateString('de-AT',{weekday:'short',day:'2-digit',month:'2-digit'}):'ohne Datum';
+function weekDates(){let d=today0();const wd=(d.getDay()+6)%7,n=nDays();d.setDate(d.getDate()+(wd>n-1?7-wd:-wd));return Array.from({length:n},(_,i)=>i).map(i=>{const x=new Date(d);x.setDate(d.getDate()+i);return x})}
+/* Navigation */
+$$('nav button').forEach(b=>b.onclick=()=>{$$('nav button').forEach(x=>x.classList.remove('on'));b.classList.add('on');$$('.view').forEach(v=>v.classList.remove('on'));$('#'+b.dataset.v).classList.add('on');$('main').scrollTop=0;render()});
+const E={};
+function setSel(el,v){if(v&&![...el.options].some(o=>o.value===v)){const o=document.createElement('option');o.textContent=v;el.appendChild(o)}el.value=v}
+function fillSubjects(){$$('.ss').forEach(s=>{const v=s.value,o=x=>`<option>${esc(x)}</option>`;let h=s.dataset.all?`<option value="">${s.dataset.cat?'Alles':'Alle Fächer'}</option>`:'';
+h+=s.dataset.cat?'<optgroup label="Fächer">'+S.subjects.map(o).join('')+'</optgroup><optgroup label="Kategorien">'+S.cats.map(o).join('')+'</optgroup>':S.subjects.map(o).join('');s.innerHTML=h;if(v)setSel(s,v)})}
+/* Supplierplan */
+const CH={E:['Entfällt','e'],S:['Supplierung','s'],V:['Verschoben','v'],T:['Tausch','v'],R:['Raumänderung','r'],SA:['Schularbeit','sa']};
+const chTxt=c=>(CH[c.x]||[c.x])[0]+(c.n?' ('+c.n+')':'')+(c.r?' · Raum '+c.r:'');
+const WD=/^(mo|di|mi|do|fr|sa|so|montag|dienstag|mittwoch|donnerstag|freitag)\.?$/i;
+const CW={entfall:'E',entfällt:'E',entfaellt:'E',supplierung:'S',verlegung:'V',verschoben:'V',tausch:'T',raumänderung:'R',raumaenderung:'R',schularbeit:'SA'};
+const TK=/(\d{1,2})\.(\d{1,2})\.?(\d{4})?(?!\d)|([A-Za-zÄÖÜäöü][\wäöüÄÖÜ]{0,9})[ \t]*\(([A-Za-zÄÖÜäöü][A-Za-zÄÖÜäöü\/,]{1,11})\)|\b(SA|S|E|V|T|R)\b(?:[ \t]*\(([^)]*)\))?|\b(Entfällt|Entfaellt|Entfall|Supplierung|Verlegung|Verschoben|Tausch|Raumänderung|Raumaenderung|Schularbeit)\b|([1-9](?!\d)\.?(?:\s*[+\-–,]\s*[1-9](?!\d)\.?)*)|(\S+)/g;
+function mkDate(d,m,y){const now=new Date();let Y=y?+y:now.getFullYear();if(!y){const t=new Date(Y,m-1,d);if(t-now>180*864e5)Y--;else if(now-t>180*864e5)Y++}return iso(new Date(Y,m-1,d))}
+function unitsOf(s){const o=[];s.replace(/(\d)\s*[-–]\s*(\d)/g,(a,x,y)=>{for(let i=+x;i<=+y;i++)o.push(i);return ' '});(s.match(/\d/g)||[]).forEach(x=>o.push(+x));return [...new Set(o)].sort()}
+/* Liest JEDES Format: HTML, Tabellen-Kopie, Markdown, reiner Text, auch ganze Seiten */
+function parseAny(raw){let t=String(raw||'').replace(/\u00a0/g,' ').replace(/\|/g,'\t');
+if(/<[a-z!][^>]*>/i.test(t)){t=t.replace(/<\/(td|th)>/gi,'\t').replace(/<\/(tr|p|div|li|h\d|table)>|<br\s*\/?>/gi,'\n');const doc=new DOMParser().parseFromString(t,'text/html');doc.querySelectorAll('script,style').forEach(x=>x.remove());t=doc.body.textContent}
+/* „(auch gültig am 12.11. und 19.11.)“ → Marker, damit die Daten darin nicht als neue Zeile gelten */
+t=t.replace(/\(\s*auch\s+gültig\s+am\s+([^)]*)\)/gi,(a,b)=>' ALSO{'+(b.match(/\d{1,2}\.\d{1,2}\./g)||[]).join(',')+'} ');
+const rows=[];let d=null,u=[],mod=null,last=null,lr=null,m;TK.lastIndex=0;
+while((m=TK.exec(t))){
+if(m[4]&&/^(SA|S|E|V|T|R)$/.test(m[4])){m[6]=m[4];m[7]=m[5];m[4]=undefined}
+if(m[10]&&/^ALSO\{/.test(m[10])){if(lr)(m[10].match(/\d{1,2}\.\d{1,2}\./g)||[]).forEach(s=>{const p=s.split('.');rows.push({...lr,d:mkDate(+p[0],+p[1])})});last=null}
+else if(m[1]){d=mkDate(+m[1],+m[2],m[3]);u=[];mod=null;last=null;lr=null}
+else if(m[4]){mod={c:m[4],t:(m[5]||'').trim()};last=null;lr=null}
+else if((m[6]||m[8])&&mod&&d){last={d,u,c:mod.c,t:mod.t,x:m[6]||CW[m[8].toLowerCase()],n:(m[7]||'').trim(),r:''};rows.push(last);lr=last;mod=null;u=[]}
+else if(m[9]){u=[...new Set([...u,...unitsOf(m[9])])];last=null}
+else if(m[10]&&last&&!WD.test(m[10])&&/^[\wÄÖÜäöü.\-\/]{1,10}$/.test(m[10])){last.r=m[10];last=null}
+else last=null}
+const seen=new Set();return rows.filter(r=>{const k=JSON.stringify(r);return seen.has(k)?0:seen.add(k)})}
+const parseSup=parseAny;
+let syncMsg='';
+const PX=[['https://api.allorigins.win/raw?url=',0],['https://corsproxy.io/?',0],['https://api.codetabs.com/v1/proxy?quest=',0],['https://api.allorigins.win/get?url=',1],['https://r.jina.ai/',2],['https://thingproxy.freeboard.io/fetch/',2]];
+async function getVia(p,j,url){const c=new AbortController(),t=setTimeout(()=>c.abort(),9000);try{const r=await fetch(p+(j==2?url:encodeURIComponent(url)),{cache:'no-store',signal:c.signal});if(!r.ok)throw new Error('HTTP '+r.status);const x=await r.text();return j==1?(JSON.parse(x).contents||''):x}finally{clearTimeout(t)}}
+function viaProxy(url,ok){return Promise.any(PX.map(([p,j])=>getVia(p,j,url).then(h=>{if(!ok(h))throw new Error('leer');return h}))).catch(()=>{throw new Error('alle Übertragungswege blockiert')})}
+let W='';
+const supOn=()=>!!(S.school&&S.school.supUrl);
+const UNI=()=>!!(S.school&&S.school.mode==='uni'),nDays=()=>UNI()?7:5;
+function schMode(v){S.school.mode=v;if(v=='uni'&&!S.sa.tpl.some(t=>t.id=='u-kl'))S.sa.tpl.push({id:'u-kl',name:'Uni Klausur (Punkte)',ns:[87.5,75,62.5,50],gmin:0,areas:[{n:'Klausur',g:'',w:100,max:100,p:''}]});applySchool();save();render()}
+/* Lehrveranstaltungen (Uni-Stundenplan mit freien Zeiten) */
+function uniBlocks(di,date){return S.lv.filter(l=>l.day==di&&(!l.from||date>=l.from)&&(!l.to||date<=l.to)).sort((a,b)=>a.st.localeCompare(b.st)).map(l=>({l:{s:l.name,t:l.who||'',r:l.room||''},c:null,from:0,to:0,st:l.st,en:l.en,k:l.id}))}
+function saveLv(){const name=$('#lv-name').value.trim(),st=$('#lv-st').value,en=$('#lv-en').value;if(!name||!st||!en)return alert('Bitte Name, Beginn und Ende eingeben.');if(en<=st)return alert('Das Ende muss nach dem Beginn liegen.');
+const o={name,day:+$('#lv-day').value,st,en,room:$('#lv-room').value.trim(),who:$('#lv-who').value.trim(),from:$('#lv-from').value,to:$('#lv-to').value};
+if(E.lv)Object.assign(S.lv.find(x=>x.id==E.lv),o);else S.lv.push({id:uid(),...o});save();cancelLv()}
+function cancelLv(){E.lv=null;['name','st','en','room','who','from','to'].forEach(k=>$('#lv-'+k).value='');$('#lv-btn').textContent='Hinzufügen';$('#lv-cancel').style.display='none';$('#lv-h').textContent='Lehrveranstaltung hinzufügen';render()}
+function editLv(id){const l=S.lv.find(x=>x.id==id);if(!l)return;E.lv=id;$('#lv-name').value=l.name;$('#lv-day').value=l.day;$('#lv-st').value=l.st;$('#lv-en').value=l.en;$('#lv-room').value=l.room||'';$('#lv-who').value=l.who||'';$('#lv-from').value=l.from||'';$('#lv-to').value=l.to||'';$('#lv-btn').textContent='Änderung speichern';$('#lv-cancel').style.display='';$('#lv-h').textContent='Lehrveranstaltung bearbeiten';$('main').scrollTop=0}
+const delLv=id=>{if(confirm('Lehrveranstaltung löschen?')){tomb(id);S.lv=S.lv.filter(x=>x.id!=id);if(E.lv==id)E.lv=null;save();render()}};
+function rPlanUni(){const wd=weekDates(),t=iso(new Date());
+$('#tt').innerHTML='<div class="grid">'+wd.map((d,di)=>{const b=blocks(di,iso(d));if(!b.length&&di>4)return'';
+return `<div class="card" style="${iso(d)==t?'border-color:var(--acc)':''}"><h3>${DN[di]} <span class="dim">${d.getDate()}.${d.getMonth()+1}.</span></h3>${b.map(x=>`<div class="blk"><div><b>${esc(x.l.s)}</b> <span class="dim">${esc(x.l.t)}${x.l.r?' · '+esc(x.l.r):''}</span></div><span class="dim" style="text-align:right">${x.st}–${x.en}</span><span class="acts" style="flex:0 0 100%">${bt('editLv('+x.k+')','Bearbeiten')}${bt('delLv('+x.k+')','Löschen','r')}</span></div>`).join('')||'<p class="dim">Frei</p>'}</div>`}).join('')+'</div>'}
+function fitUni(){const u=UNI();$('label[for="g-w"]').textContent=u?'ECTS-Punkte':'Gewicht';$('label[for="w-w"]').textContent=u?'ECTS-Punkte der nächsten Note':'Gewicht der nächsten Note';$('#g-val').step=u?'0.1':'0.5';$('#g-whelp').textContent=u?'ECTS-Punkte der Lehrveranstaltung: Je mehr ECTS, desto stärker zählt die Note im Schnitt. Nachkommastellen sind erlaubt, zum Beispiel 1,7.':'Gewicht = wie stark die Note zählt, z. B. Schularbeit 2, Test 1, Mitarbeit 0,5.'}
+function uniSum(){if(!UNI()||!S.grades.length)return'';const tw=S.grades.reduce((a,x)=>a+x.w,0),av=S.grades.reduce((a,x)=>a+x.g*x.w,0)/tw;return `<div class="blk" style="margin-bottom:16px"><div><b>Gesamtschnitt</b> <span class="dim">gewichtet nach ECTS</span></div><span><b>${av.toFixed(2).replace('.',',')}</b> · ${fp(tw)} ECTS</span></div>`}
+const addMin=(t,m)=>{const[h,mi]=t.split(':').map(Number),x=(h*60+mi+m)%1440;return String(Math.floor(x/60)).padStart(2,'0')+':'+String(x%60).padStart(2,'0')};
+function applySchool(){const s=S.school=S.school||structuredClone(DEF.school);TM=s.times&&s.times.length?s.times:TM_TAG;W=(s.worker||'').replace(/\/+$/,'');
+S.tt=Array.from({length:5},(_,d)=>Array.from({length:TM.length},(_,e)=>(S.tt&&S.tt[d]&&S.tt[d][e])||0));const h=$('nav h2');if(h)h.textContent=s.name||'Schul-Hub'}
+function schSet(k,v){v=v.trim();if((k=='supUrl'||k=='worker')&&v&&!/^https?:\/\//i.test(v))return alert('Die Adresse muss mit https:// beginnen.');if(k=='worker')v=v.replace(/\/+$/,'');S.school[k]=v;applySchool();save();render()}
+function schTime(i,j,v){if(!v)return;S.school.times[i][j]=v;applySchool();save();render()}
+function schAdd(){const t=S.school.times,e=t.length?t[t.length-1][1]:'08:00';t.push([addMin(e,5),addMin(e,50)]);applySchool();save();render()}
+function schRm(i){const t=S.school.times;if(t.length<2)return alert('Mindestens eine Einheit muss bleiben.');if(!confirm('Einheit '+(i+1)+' entfernen? Die Einträge dieser Einheit im Stundenplan gehen verloren.'))return;t.splice(i,1);S.tt.forEach(r=>r.splice(i,1));applySchool();save();render()}
+function schPreset(k){if(!confirm('Unterrichtszeiten durch die Vorlage ersetzen? Eingetragene Fächer bleiben, soweit Platz ist.'))return;S.school.times=structuredClone(k=='abend'?TM_ABEND:TM_TAG);applySchool();save();render()}
+function rSchool(){const s=S.school;$('#sch-mode').value=s.mode||'school';$('#sch-sbox').style.display=s.mode=='uni'?'none':'';$('#sch-name').value=s.name||'';$('#sch-level').value=s.level||'';$('#sch-sup').value=s.supUrl||'';$('#sch-wk').value=s.worker||'';
+$('#sch-times').innerHTML=s.times.map((t,i)=>`<div class="row" style="margin-bottom:6px"><b style="flex:0 0 2.2rem">${i+1}.</b><input type="time" value="${esc(t[0])}" onchange="schTime(${i},0,this.value)" style="margin:0"><input type="time" value="${esc(t[1])}" onchange="schTime(${i},1,this.value)" style="margin:0">${bt('schRm('+i+')','Entfernen','r')}</div>`).join('')}
+async function getWorker(){const c=new AbortController(),t=setTimeout(()=>c.abort(),10000);try{const r=await fetch(W,{cache:'no-store',signal:c.signal});if(!r.ok)throw new Error('HTTP '+r.status);return await r.text()}finally{clearTimeout(t)}}
+async function fetchSup(){const U=(S.school&&S.school.supUrl)||'';if(!U){setSync();return}setSync('Prüfe Supplierplan…');
+try{let h,src='Cloudflare-Worker';try{if(U!==LEG_SUP||!W)throw 0;h=await getWorker();if(!/Einheit/i.test(h))throw 0}catch(e){src='Proxy-Notweg';h=await viaProxy(U,x=>/Einheit|\d{1,2}\.\d{1,2}\./.test(x))}let rows=parseAny(h);
+if(!rows.length)for(const f of [...h.matchAll(/<iframe[^>]+src=["']([^"']+)/gi)].map(m=>m[1]).filter(s=>/^https?:/.test(s)).slice(0,3)){try{rows=parseAny(await viaProxy(f,x=>x.length>50));if(rows.length)break}catch(e){}}
+if(!rows.length&&!/Einheit/i.test(h))throw new Error('keine Tabelle erkannt');
+S.sup={rows:rows.filter(r=>dUntil(r.d)>=0),ts:Date.now(),src};save();syncMsg='';setSync();render()}
+catch(e){syncMsg='Supplierplan nicht automatisch ladbar ('+e.message+'). Letzter Stand: '+(S.sup.ts?new Date(S.sup.ts).toLocaleString('de-AT'):'keiner');setSync()}}
+/* Sync über Cloudflare */
+let syMsg='';
+function syncStat(m){if(m!==undefined)syMsg=m;const el=$('#sy-st');if(el)el.textContent=syMsg||(sbIn()?'Angemeldet: Daten werden automatisch abgeglichen.':S.sync.code?'Verbunden mit Sync-Code: Daten werden automatisch abgeglichen.':'Nicht verbunden.')}
+function schedPush(){clearTimeout(pt);if(syncOn())pt=setTimeout(syncNow,4000)}
+const syncOn=()=>sbIn()||!!(S.sync&&S.sync.code);
+async function workerReq(method,body){const r=await fetch(W+'/sync',{method,headers:{'X-Sync-Key':S.sync.code,...(body?{'Content-Type':'application/json'}:{})},body,cache:'no-store'});if(r.status==404)return null;if(!r.ok)throw new Error(r.status==400?'Sync-Code ungültig, bitte neuen Code erzeugen':r.status==429?'zu viele Anfragen':r.status==403?'Origin nicht erlaubt':'HTTP '+r.status);return method=='GET'?r.json():r.text()}
+const syncReq=(method,body)=>sbIn()?sbReq(method,body):workerReq(method,body);
+/* Dateien (Base64) bleiben auf dem Gerät und werden nicht in die Cloud geladen */
+const strip=o=>({...o,notes:(o.notes||[]).map(n=>n.file?{...n,file:{name:n.file.name}}:n)});
+const canon=o=>JSON.stringify(o,(k,v)=>v&&typeof v=='object'&&!Array.isArray(v)?Object.fromEntries(Object.entries(v).sort(([a],[b])=>a<b?-1:1)):v);
+const IDK=['todos','tests','notes','grades','links','lv'];
+/* Zusammenführen: Listen mit ID werden pro Eintrag vereinigt, Löschungen über Grabsteine (S.del), alles andere übernimmt die neuere Seite */
+function mergeData(a,b){const aN=(a._ts||0)>=(b._ts||0),nw=aN?a:b,od=aN?b:a,r={...od,...nw},del={...(od.del||{})};
+for(const k in (nw.del||{}))del[k]=Math.max(del[k]||0,nw.del[k]);const cut=Date.now()-60*864e5;for(const k in del)if(del[k]<cut)delete del[k];
+IDK.forEach(k=>{const m=new Map();(od[k]||[]).forEach(x=>m.set(x.id,x));(nw[k]||[]).forEach(x=>m.set(x.id,x));r[k]=[...m.values()].filter(x=>!del[x.id]).sort((x,y)=>x.id-y.id)});
+r.del=del;r.imp={...(od.imp||{}),...(nw.imp||{})};r._ts=Math.max(a._ts||0,b._ts||0);return r}
+const putRemote=()=>syncReq('PUT',JSON.stringify({...strip(snap()),_ts:S._ts}));
+let syBusy=false;
+async function syncNow(){if(!syncOn()||syBusy)return;if(!sbIn()&&!W){syncStat('Kein Worker eingetragen (Einstellungen, Schule und Unterrichtszeiten).');return}syBusy=true;syncStat('Synchronisiere…');
+try{const rm=await syncReq('GET');
+if(!rm){S._ts=S._ts||Date.now();await putRemote()}
+else if((rm._ts||0)!==(S._ts||0)){
+const lf=new Map(S.notes.filter(n=>n.file&&n.file.data).map(n=>[n.id,n.file])),m=mergeData({...snap(),_ts:S._ts||0},rm);
+m.notes=m.notes.map(n=>{if(n.file&&!n.file.data){const f=lf.get(n.id);if(f&&f.name===n.file.name)return{...n,file:f}}return n});
+const a={...strip(m),_ts:0},b={...strip(rm),_ts:0},same=canon(a)===canon(b);
+S={...structuredClone(DEF),...m,sup:S.sup,cals:S.cals,sync:S.sync};S._ts=same?rm._ts:Date.now();lastSnap=JSON.stringify(snap());
+try{localStorage.setItem('schulhub',JSON.stringify(S))}catch(e){}fillSubjects();applySchool();render();
+if(!same)await putRemote()}
+syncStat('Zuletzt abgeglichen: '+new Date().toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'}))}
+catch(e){syncStat(e.expired?e.message:'Sync-Fehler: '+(e.message||'Netzwerk'))}finally{syBusy=false}}
+/* ===== Sync-Code (ohne Konto) ===== */
+function syncGen(){const a=crypto.getRandomValues(new Uint8Array(20)),c='abcdefghjkmnpqrstuvwxyz23456789';$('#sy-code').value=[...a].map(x=>c[x%c.length]).join('').replace(/(.{5})(?=.)/g,'$1-')}
+async function syncConnect(){if(sbIn())return alert('Du bist mit einem Konto angemeldet. Melde dich zuerst ab, wenn du stattdessen einen Sync-Code nutzen willst.');const c=$('#sy-code').value.trim();
+if(!/^[a-hjkmnp-z2-9]{5}(-[a-hjkmnp-z2-9]{5}){3}$/.test(c))return alert('Der Code muss das Format xxxxx-xxxxx-xxxxx-xxxxx haben (Kleinbuchstaben und Ziffern). Am besten „Neuen Code erzeugen“.');
+if(!W)return alert('Trage zuerst unter Einstellungen bei „Schule und Unterrichtszeiten“ die Worker-Adresse ein.');S.sync.code=c;
+try{const rm=await workerReq('GET');if(rm){if(confirm('In der Cloud liegen schon Daten.\n\nOK = Cloud-Daten auf dieses Gerät laden (lokale Daten werden ersetzt)\nAbbrechen = beides zusammenführen (nichts geht verloren)'))loadCloud(rm);else S._ts=Date.now()}}
+catch(e){S.sync.code='';return syncStat('Sync-Fehler: '+(e.message||'Netzwerk'))}
+lsSave();syncNow()}
+function syncOff(){if(confirm('Sync mit Code auf diesem Gerät trennen? Die Daten bleiben hier erhalten.')){S.sync.code='';lsSave();$('#sy-code').value='';syncStat('')}}
+/* ===== Konto und Sync (Supabase) ===== */
+const SB_DEFAULT={url:'',key:''}; /* Wer den Hub für eine Klasse oder Schule bereitstellt, trägt hier Projektadresse und öffentlichen Schlüssel ein. Dann müssen Nutzer nur registrieren. */
+const lsSave=()=>{try{localStorage.setItem('schulhub',JSON.stringify(S))}catch(e){}};
+const sbC=()=>{const s=(S.sync&&S.sync.sb)||{};return{url:(s.url||SB_DEFAULT.url||'').replace(/\/+$/,''),key:s.key||SB_DEFAULT.key||''}};
+const sbIn=()=>!!(S.sync&&S.sync.sb&&S.sync.sb.refresh);
+function sbErr(j,st,path){const m=String((j&&(j.error_description||j.msg||j.message||j.error))||'');
+if(st==404&&/rest\/v1/.test(path||''))return 'Die Tabelle hub_data fehlt. Führe das SQL aus der Einrichtung in Supabase aus.';
+if(/invalid login/i.test(m))return 'E-Mail oder Passwort stimmt nicht.';
+if(/not confirmed/i.test(m))return 'Bitte bestätige zuerst deine E-Mail-Adresse über den Link in der Mail.';
+if(/already registered/i.test(m))return 'Diese E-Mail ist schon registriert. Bitte melde dich an.';
+if(/password should|weak/i.test(m))return 'Das Passwort ist zu schwach. Nimm mindestens 8 Zeichen.';
+if(/rate limit|too many|security purposes/i.test(m)||st==429)return 'Zu viele Versuche oder Mails. Bitte warte einige Minuten.';
+if(/invalid api key|no api key/i.test(m)||(st==401&&/apikey/i.test(m)))return 'Der Schlüssel ist ungültig. Bitte prüfe die Einrichtung.';
+return m||('Fehler '+st)}
+async function sbCall(path,o={}){const c=sbC();if(!c.url||!c.key)throw new Error('Supabase ist noch nicht eingerichtet. Trage Projektadresse und Schlüssel ein.');
+const hd={apikey:c.key,Authorization:'Bearer '+(o.token||c.key),...(o.body?{'Content-Type':'application/json'}:{}),...(o.headers||{})},ct=new AbortController(),t=setTimeout(()=>ct.abort(),15000);
+try{const r=await fetch(c.url+path,{method:o.method||'GET',headers:hd,body:o.body?JSON.stringify(o.body):undefined,cache:'no-store',signal:ct.signal}),tx=await r.text();let j=null;try{j=tx?JSON.parse(tx):null}catch(e){}
+if(!r.ok){const e=new Error(sbErr(j,r.status,path));e.status=r.status;throw e}return j}
+catch(e){if(e.name=='AbortError')throw new Error('Zeitüberschreitung. Der Server antwortet nicht.');if(e instanceof TypeError)throw new Error('Keine Verbindung zum Server. Stimmt die Projektadresse?');throw e}finally{clearTimeout(t)}}
+function sbSet(j,email){const b=S.sync.sb=S.sync.sb||{};b.access=j.access_token;b.refresh=j.refresh_token;b.exp=Date.now()+(j.expires_in||3600)*1000;b.uid=(j.user&&j.user.id)||b.uid;b.email=(j.user&&j.user.email)||email||b.email;S.sync.code='';lsSave()}
+let sbRef=null;
+async function sbToken(force){const b=S.sync.sb;if(!b||!b.refresh)throw Object.assign(new Error('Nicht angemeldet.'),{expired:true});
+if(!force&&b.access&&b.exp-Date.now()>60000)return b.access;
+if(!sbRef)sbRef=(async()=>{try{const j=await sbCall('/auth/v1/token?grant_type=refresh_token',{method:'POST',body:{refresh_token:b.refresh}});sbSet(j);return S.sync.sb.access}
+catch(e){if(e.status>=400&&e.status<500&&e.status!=429){b.access='';b.refresh='';b.exp=0;lsSave();e.expired=true;e.message='Die Anmeldung ist abgelaufen. Bitte melde dich in den Einstellungen neu an.'}throw e}finally{sbRef=null}})();
+return sbRef}
+async function sbReq(method,body){const tk=await sbToken(),uid=S.sync.sb.uid;
+const run=tok=>method=='GET'?sbCall('/rest/v1/hub_data?select=data&limit=1',{token:tok}):sbCall('/rest/v1/hub_data?on_conflict=user_id',{method:'POST',token:tok,headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:{user_id:uid,data:JSON.parse(body)}});
+let r;try{r=await run(tk)}catch(e){if(e.status==401)r=await run(await sbToken(true));else throw e}
+return method=='GET'?(r&&r.length?r[0].data:null):r}
+const acVal=()=>({e:$('#ac-mail').value.trim().toLowerCase(),p:$('#ac-pw').value});
+function acMsg(m,bad){const el=$('#ac-msg');el.textContent=m||'';el.className=bad?'red':'dim'}
+function acCfg(){const u=$('#ac-url').value.trim().replace(/\/+$/,''),k=$('#ac-key').value.trim();if(u&&!/^(https:\/\/|http:\/\/(localhost|127\.0\.0\.1))\S+$/i.test(u)){acMsg('Die Projektadresse muss mit https:// beginnen.',1);return false}
+const b=S.sync.sb=S.sync.sb||{};if($('#ac-cfg').style.display!='none'){b.url=u;b.key=k}lsSave();return true}
+const redir=()=>/^https?:/i.test(location.protocol)?'?redirect_to='+encodeURIComponent(location.href.split('#')[0]):'';
+function loadCloud(rm){const lf=new Map(S.notes.filter(n=>n.file&&n.file.data).map(n=>[n.id,n.file]));S={...structuredClone(DEF),...rm,sup:S.sup,cals:S.cals,sync:S.sync};S.notes=S.notes.map(n=>{const f=lf.get(n.id);return n.file&&!n.file.data&&f&&f.name===n.file.name?{...n,file:f}:n});lastSnap=JSON.stringify(snap());fillSubjects();applySchool()}
+async function acFirstSync(){try{const rm=await syncReq('GET'),has=['todos','tests','notes','grades','cards','study'].some(k=>(S[k]||[]).length);
+if(rm){if(!has||confirm('In deinem Konto liegen schon Daten.\n\nOK = Konto-Daten auf dieses Gerät laden (lokale Daten werden ersetzt)\nAbbrechen = beides zusammenführen (nichts geht verloren)'))loadCloud(rm);else S._ts=Date.now()}}
+catch(e){acMsg('Angemeldet, aber der Abgleich ist fehlgeschlagen: '+e.message,1);rAcct();return}
+lsSave();rAcct();render();syncNow()}
+const acCodeAsk=()=>!(S.sync.code&&!confirm('Auf diesem Gerät ist ein Sync-Code aktiv. Er wird durch das Konto ersetzt. Fortfahren?'));
+async function acLogin(){if(!acCfg())return;const{e,p}=acVal();if(!e||!p)return acMsg('Bitte E-Mail und Passwort eingeben.',1);if(!acCodeAsk())return;acMsg('Melde an…');
+try{const j=await sbCall('/auth/v1/token?grant_type=password',{method:'POST',body:{email:e,password:p}});sbSet(j,e);$('#ac-pw').value='';acMsg('');await acFirstSync()}catch(x){acMsg(x.message,1)}}
+async function acReg(){if(!acCfg())return;const{e,p}=acVal();if(!/^\S+@\S+\.\S+$/.test(e))return acMsg('Bitte eine gültige E-Mail-Adresse eingeben.',1);if(p.length<8)return acMsg('Das Passwort braucht mindestens 8 Zeichen.',1);if(!acCodeAsk())return;acMsg('Registriere…');
+try{const j=await sbCall('/auth/v1/signup'+redir(),{method:'POST',body:{email:e,password:p}});
+if(j&&j.access_token){sbSet(j,e);$('#ac-pw').value='';await acFirstSync();acMsg('Konto angelegt. Du bist angemeldet.')}
+else acMsg('Fast geschafft: Wir haben dir eine Mail geschickt. Klicke dort auf den Bestätigungslink und melde dich danach hier an.')}catch(x){acMsg(x.message,1)}}
+async function acReset(){if(!acCfg())return;const e=$('#ac-mail').value.trim().toLowerCase();if(!e)return acMsg('Trage oben deine E-Mail-Adresse ein.',1);
+try{await sbCall('/auth/v1/recover'+redir(),{method:'POST',body:{email:e}});acMsg('Wenn es ein Konto mit dieser Adresse gibt, ist eine Mail mit einem Link unterwegs.')}catch(x){acMsg(x.message,1)}}
+async function acNewPw(){const p=$('#ac-np1').value;if(p.length<8)return acMsg('Das Passwort braucht mindestens 8 Zeichen.',1);
+try{await sbCall('/auth/v1/user',{method:'PUT',token:await sbToken(),body:{password:p}});$('#ac-np1').value='';$('#ac-np').style.display='none';acMsg('Neues Passwort gespeichert.')}catch(x){acMsg(x.message,1)}}
+async function acOut(){if(!confirm('Auf diesem Gerät abmelden? Die Daten bleiben hier erhalten.'))return;const b=S.sync.sb;try{await sbCall('/auth/v1/logout?scope=local',{method:'POST',token:b.access})}catch(e){}
+b.access='';b.refresh='';b.uid='';b.exp=0;lsSave();acMsg('');syncStat('');rAcct()}
+async function acDelCloud(){if(!confirm('Alle in der Cloud gespeicherten Daten deines Kontos löschen? Die Daten auf diesem Gerät bleiben erhalten. Das Konto selbst kann nur der Betreiber des Projekts löschen.'))return;
+try{await sbCall('/rest/v1/hub_data?user_id=eq.'+S.sync.sb.uid,{method:'DELETE',token:await sbToken()});acMsg('Cloud-Daten gelöscht. Beim nächsten Abgleich werden die Daten dieses Geräts neu hochgeladen.')}catch(x){acMsg(x.message,1)}}
+async function acCopySql(){try{await navigator.clipboard.writeText($('#ac-sql').textContent);acMsg('SQL kopiert.')}catch(e){acMsg('Kopieren nicht möglich. Markiere den Text von Hand.',1)}}
+function rAcct(){if(!$('#ac-out'))return;const b=S.sync.sb||{},on=sbIn();$('#ac-out').style.display=on?'none':'';$('#ac-in').style.display=on?'':'none';$('#ac-who').textContent=b.email||'';
+if(!$('#ac-mail').value)$('#ac-mail').value=b.email||'';$('#ac-url').value=b.url||'';$('#ac-key').value=b.key||'';$('#ac-cfg').style.display=SB_DEFAULT.url&&SB_DEFAULT.key?'none':'';syncStat()}
+async function acHash(){const h=location.hash.slice(1);if(!/(access_token|error_description)=/.test(h))return;const p=new URLSearchParams(h);try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
+const nb=document.querySelector('nav button[data-v="set"]');if(nb)nb.click();
+if(p.get('error_description')){acMsg(p.get('error_description').replace(/\+/g,' '),1);return}
+try{const tok=p.get('access_token'),u=await sbCall('/auth/v1/user',{token:tok});sbSet({access_token:tok,refresh_token:p.get('refresh_token'),expires_in:+p.get('expires_in')||3600,user:u});rAcct();
+if(p.get('type')=='recovery'){$('#ac-np').style.display='';acMsg('Gib ein neues Passwort ein.')}else{acMsg('E-Mail bestätigt. Du bist angemeldet.');await acFirstSync()}}catch(e){acMsg(e.message,1)}}
+function rSet(){rSchool();rSubj();rAcct();$('#sy-code').value=S.sync.code||'';syncStat();bkStat();aiFill();rDashCfg()}
+function resetSup(){S.sup={rows:[],ts:0};save();syncMsg='';render();fetchSup()}
+function setSync(m){if(!supOn()){$('#sync').textContent='';$('#sync2').textContent='';return}const old=S.sup.ts&&Date.now()-S.sup.ts>216e5?' – VERALTET, bitte aktualisieren':'',t=m||syncMsg||(S.sup.ts?`Supplierplan zuletzt geprüft: ${new Date(S.sup.ts).toLocaleString('de-AT',{weekday:'short',hour:'2-digit',minute:'2-digit'})} · ${S.sup.rows.length} Einträge · Quelle: ${S.sup.src||'alt/manuell'}${old}`:'Supplierplan noch nicht geladen');$('#sync').textContent=t;$('#sync2').textContent=t}
+const findChg=(date,eh,s)=>dUntil(date)<0?undefined:S.sup.rows.find(r=>r.d===date&&r.u.includes(eh)&&r.c.toUpperCase()===s.toUpperCase());
+function blocks(di,date){if(UNI())return uniBlocks(di,date);const out=[];for(let e=0;e<TM.length;e++){const l=S.tt[di][e];if(!l)continue;const c=findChg(date,e+1,l.s),k=l.s+(c?c.x+c.n+c.r:''),p=out[out.length-1];
+if(p&&p.k===k&&p.to===e)p.to=e+1;else out.push({k,l,c,from:e+1,to:e+1})}return out}
+const blkHtml=b=>`<div class="blk ${b.c?(CH[b.c.x]||['','x'])[1]:''}"><div><b>${esc(b.l.s)}</b> <span class="dim">${esc(b.l.t)} · ${esc(b.c&&b.c.r?b.c.r:b.l.r)}</span>${b.c?`<div class="${b.c.x=='E'?'red':'yel'}" style="font-size:var(--fs-sm)">${esc(chTxt(b.c))}</div>`:''}</div><span class="dim" style="text-align:right">${b.st||TM[b.from-1][0]}–${b.en||TM[b.to-1][1]}${b.st?'':'<br>'+(b.from==b.to?b.from+'. EH':b.from+'.–'+b.to+'. EH')}</span></div>`;
+/* Stundenplan */
+let editMode=false;
+function toggleEdit(){editMode=!editMode;$('#editbtn').textContent=editMode?'Fertig':'Plan bearbeiten';rPlan()}
+function editCell(d,e){const l=S.tt[d][e],v=prompt('Fach, Lehrer, Raum – z. B. M6, EIB, 205 (leer = frei)',l?[l.s,l.t,l.r].join(', '):'');if(v===null)return;
+const p=v.split(',').map(x=>x.trim()),nl=p[0]?L(p[0],p[1]||'',p[2]||''):0;S.tt[d][e]=nl;
+if(nl&&!S.subjects.includes(nl.s))S.subjects.push(nl.s);
+if(e<TM.length-1&&confirm('Auch auf die folgende Einheit anwenden?'))S.tt[d][e+1]=nl?{...nl}:0;save();fillSubjects();render()}
+function rPlan(){$('#editbtn').style.display=UNI()?'none':'';$('#lv-card').style.display=UNI()?'':'none';if(UNI())return rPlanUni();const wd=weekDates(),t=iso(new Date());
+let h=`<table class="tt ${editMode?'edit':''}"><tr><th style="width:80px">EH</th>${wd.map((d,i)=>`<th class="${iso(d)==t?'today':''}">${DS[i]}<br><small>${d.getDate()}.${d.getMonth()+1}.</small></th>`).join('')}</tr>`;
+for(let e=0;e<TM.length;e++){h+=`<tr><td><b>${e+1}.</b><small style="display:block;color:var(--dim);font-size:var(--fs-xs);font-weight:400">${TM[e][0]}<br>${TM[e][1]}</small></td>`;for(let d=0;d<5;d++){const l=S.tt[d][e],c=l&&findChg(iso(wd[d]),e+1,l.s),cl=l?(c?(CH[c.x]||['','l'])[1]:'l'):'f';
+h+=`<td class="${cl}" ${editMode?`onclick="editCell(${d},${e})"`:''}>${l?`<b>${esc(l.s)}</b><small>${esc(l.t)} / ${esc(c&&c.r?c.r:l.r)}</small>${c?`<span class="tag">${esc(chTxt(c))}</span>`:''}`:'–'}</td>`}h+='</tr>';if(e<TM.length-1&&TM[e+1][0]>TM[e][1]){const a=[TM[e][1],TM[e+1][0]];h+=`<tr><td colspan="6" class="dim" style="padding:3px">Pause ${a[0]}–${a[1]}</td></tr>`}}
+$('#tt').innerHTML=h+'</table>';}
+/* Dashboard */
+/* Jetzt / als Nächstes */
+function rNow(){const el=$('#d-now');if(!el)return;const n=new Date(),wd=(n.getDay()+6)%7,mins=n.getHours()*60+n.getMinutes(),tm=s=>{const p=s.split(':');return +p[0]*60+ +p[1]};
+const b=wd>=nDays()?[]:blocks(wd,iso(n)).map(x=>({...x,s:tm(x.st||TM[x.from-1][0]),e:tm(x.en||TM[x.to-1][1])})),cur=b.find(x=>mins>=x.s&&mins<x.e),nxt=b.find(x=>x.s>mins),
+dur=m=>m>=60?Math.floor(m/60)+' Std.'+(m%60?' '+m%60+' Min.':''):m+' Min.';let t='';
+if(cur)t+=`<p class="${cur.c&&cur.c.x=='E'?'red':'dim'}" style="margin-bottom:6px">${cur.c&&cur.c.x=='E'?'Entfällt':'Läuft gerade'} · noch ${dur(cur.e-mins)}</p>`+blkHtml(cur);
+else if(nxt)t+=`<p class="dim" style="margin-bottom:6px">${b.some(x=>x.e<=mins)?'Pause':'Unterricht beginnt'} · nächste Stunde in ${dur(nxt.s-mins)}</p>`;
+if(nxt)t+=`<p class="dim" style="margin:8px 0 6px">${cur?'Danach':'Als Nächstes'}</p>`+blkHtml(nxt);
+if(!cur&&!nxt)t=`<p class="grn">${wd>=nDays()?'Wochenende – kein Unterricht':b.length?'Für heute ist Schluss':'Heute kein Unterricht'}</p>`;
+el.innerHTML=t}
+function rDash(){rNow();const h=new Date().getHours();$('#hello').textContent=(h<11?'Guten Morgen':h<18?'Hallo':'Guten Abend')+' ';bkHint();applyDash();
+let found=0;for(let i=0;i<8&&!found;i++){const d=new Date(today0());d.setDate(d.getDate()+i);const wd=(d.getDay()+6)%7;if(wd>=nDays())continue;const b=blocks(wd,iso(d));
+if(b.length){found=1;$('#d-day').textContent=(i==0?'Heute':i==1?'Morgen':DN[wd])+' · '+d.getDate()+'.'+(d.getMonth()+1)+'.';$('#d-lessons').innerHTML=b.map(blkHtml).join('')}}
+if(!found){$('#d-day').textContent='Nächster Schultag';$('#d-lessons').innerHTML='<p class="dim">Kein Unterricht eingetragen.</p>'}
+const wd=weekDates(),ch=[];wd.forEach((d,di)=>blocks(di,iso(d)).forEach(b=>{if(b.c&&dUntil(iso(d))>=0)ch.push(`<div class="blk ${(CH[b.c.x]||['','x'])[1]}"><div><b>${esc(b.l.s)}</b> <span class="dim">${DS[di]} ${b.from}.${b.to>b.from?'–'+b.to+'.':''} EH, ${TM[b.from-1][0]}–${TM[b.to-1][1]}</span><div class="${b.c.x=='E'?'red':'yel'}" style="font-size:var(--fs-sm)">${esc(chTxt(b.c))}</div></div></div>`)}));
+$('#d-chg').innerHTML=ch.length?ch.join(''):'<p class="grn">Keine Ausfälle oder Änderungen in dieser Woche </p>';
+const ts=S.tests.filter(t=>dUntil(t.date)>=0).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,3);
+$('#d-tests').innerHTML=ts.length?ts.map(t=>`<div class="blk"><div><b>${esc(t.type)} ${esc(t.subj)}</b><div class="dim">${esc(t.topic)}</div></div><span class="${dUntil(t.date)<=3?'red':'dim'}">${dTxt(t.date)}</span></div>`).join(''):'<p class="dim">Keine Termine.</p>';
+const td=S.todos.filter(t=>!t.done).sort((a,b)=>(a.due||'9').localeCompare(b.due||'9')).slice(0,5);
+$('#d-todos').innerHTML=td.length?td.map(t=>`<div class="blk"><div><b>${esc(t.title)}</b> <span class="bd">${esc(t.subj)}</span></div><span class="${t.due&&dUntil(t.due)<0?'red':'dim'}">${t.due?dTxt(t.due):''}</span></div>`).join(''):'<p class="grn">Alles erledigt </p>';
+const ce=calEv(c=>c.home!==false).filter(x=>dUntil(x.d)>=0).slice(0,5);$('#d-cal').innerHTML=ce.length?calLi(ce):'<p class="dim">Keine Termine – unter „Kalender“ hinzufügen.</p>';
+const st=weekStats(),tot=Object.values(st).reduce((a,b)=>a+b,0);$('#d-study').innerHTML=`<p style="font-size:var(--fs-xl);font-weight:700">${Math.floor(tot/60)} Std. ${tot%60} Min.</p>`}
+/* To-Dos */
+const bt=(f,l,c)=>`<button class="btn s ${c||'g'}" onclick="${f}">${l}</button>`;
+function saveTodo(){const title=$('#t-title').value.trim();if(!title)return;const o={title,subj:$('#t-subj').value,due:$('#t-due').value,prio:$('#t-prio').value,desc:$('#t-desc').value};
+if(E.todo)Object.assign(S.todos.find(x=>x.id==E.todo),o);else S.todos.push({id:uid(),done:false,...o});save();cancelTodo()}
+function cancelTodo(){E.todo=null;$('#t-title').value=$('#t-desc').value=$('#t-due').value='';$('#t-prio').value='Mittel';$('#t-btn').textContent='Hinzufügen';$('#t-cancel').style.display='none';$('#t-h').textContent='Neue Aufgabe';render()}
+function editTodo(id){const t=S.todos.find(x=>x.id==id);E.todo=id;$('#t-title').value=t.title;setSel($('#t-subj'),t.subj);$('#t-due').value=t.due||'';$('#t-prio').value=t.prio;$('#t-desc').value=t.desc||'';$('#t-btn').textContent='Änderung speichern';$('#t-cancel').style.display='';$('#t-h').textContent='Aufgabe bearbeiten';$('main').scrollTop=0}
+function rTodos(){const st=$('#f-st').value,sj=$('#f-sj').value,P={Hoch:0,Mittel:1,Niedrig:2};
+const l=S.todos.filter(t=>(!st||(st=='open')==!t.done)&&(!sj||t.subj==sj)).sort((a,b)=>(a.done-b.done)||(a.due||'9').localeCompare(b.due||'9')||P[a.prio]-P[b.prio]);
+$('#todos').innerHTML=l.map(t=>`<li class="it ${t.prio} ${t.done?'done':''}"><input type="checkbox" ${t.done?'checked':''} onchange="togTodo(${t.id})"><div><b>${esc(t.title)}</b><br><span class="bd">${esc(t.subj)}</span><span class="bd">${t.prio}</span><span class="${!t.done&&t.due&&dUntil(t.due)<0?'red':'dim'}">${t.due?fmtD(t.due)+' · '+dTxt(t.due):''}</span>${t.desc?`<div class="dim">${esc(t.desc)}</div>`:''}</div><div class="acts">${S.subjects.includes(t.subj)?bt('aiTodo('+t.id+')','KI-Einstieg','a'):''}${bt('editTodo('+t.id+')','Bearbeiten')}${bt('delTodo('+t.id+')','Löschen','r')}</div></li>`).join('')||'<p class="dim">Nichts gefunden.</p>'}
+const togTodo=id=>{const t=S.todos.find(x=>x.id==id);t.done=!t.done;save();render()},delTodo=id=>{if(confirm('Aufgabe löschen?')){tomb(id);S.todos=S.todos.filter(x=>x.id!=id);if(E.todo==id)E.todo=null;save();render()}},clearDone=()=>{if(confirm('Alle erledigten Aufgaben löschen?')){S.todos.filter(t=>t.done).forEach(t=>tomb(t.id));S.todos=S.todos.filter(t=>!t.done);save();render()}};
+/* Tests */
+function saveTest(){const date=$('#x-date').value;if(!date)return alert('Bitte Datum wählen.');const o={type:$('#x-type').value,subj:$('#x-subj').value,topic:$('#x-topic').value,date};
+if(E.test)Object.assign(S.tests.find(x=>x.id==E.test),o);else S.tests.push({id:uid(),...o});save();cancelTest()}
+function cancelTest(){E.test=null;$('#x-topic').value=$('#x-date').value='';$('#x-btn').textContent='Speichern';$('#x-cancel').style.display='none';$('#x-h').textContent='Neuer Termin';render()}
+function editTest(id){const t=S.tests.find(x=>x.id==id);E.test=id;setSel($('#x-type'),t.type);setSel($('#x-subj'),t.subj);$('#x-topic').value=t.topic||'';$('#x-date').value=t.date;$('#x-btn').textContent='Änderung speichern';$('#x-cancel').style.display='';$('#x-h').textContent='Termin bearbeiten';$('main').scrollTop=0}
+function rTests(){const li=t=>`<li class="it"><div><b>${esc(t.type)} · ${esc(t.subj)}</b><br><span class="dim">${esc(t.topic)}</span></div><div class="dt"><span class="${dUntil(t.date)>=0&&dUntil(t.date)<=3?'red':'dim'}">${fmtD(t.date)}<br>${dTxt(t.date)}</span></div><div class="acts">${bt('editTest('+t.id+')','Bearbeiten')}${bt('delTest('+t.id+')','Löschen','r')}</div></li>`;
+const a=[...S.tests].sort((x,y)=>x.date.localeCompare(y.date));$('#tests').innerHTML=a.filter(t=>dUntil(t.date)>=0).map(li).join('')||'<p class="dim">Keine Termine</p>';$('#tests-old').innerHTML=a.filter(t=>dUntil(t.date)<0).reverse().slice(0,10).map(li).join('')}
+const delTest=id=>{if(confirm('Termin löschen?')){tomb(id);S.tests=S.tests.filter(x=>x.id!=id);if(E.test==id)E.test=null;save();render()}};
+/* Zusammenfassungen */
+function saveNote(){const title=$('#n-title').value.trim(),f=$('#n-file').files[0];if(!title)return alert('Bitte Titel eingeben.');
+const done=file=>{const o={title,subj:$('#n-subj').value,text:$('#n-text').value};if(E.note){const n=S.notes.find(x=>x.id==E.note);Object.assign(n,o);if(file)n.file=file}else S.notes.push({id:uid(),file:file||null,d:iso(new Date()),...o});save();cancelNote()};
+if(!f)return done(null);if(f.size>1.5e6)return alert('Datei ist größer als 1,5 MB.');const r=new FileReader();r.onload=()=>done({name:f.name,data:r.result});r.readAsDataURL(f)}
+function cancelNote(){E.note=null;$('#n-title').value=$('#n-text').value=$('#n-file').value='';$('#n-btn').textContent='Speichern';$('#n-cancel').style.display='none';$('#n-h').textContent='Neu ablegen';render()}
+function editNote(id){const n=S.notes.find(x=>x.id==id);E.note=id;$('#n-title').value=n.title;setSel($('#n-subj'),n.subj);$('#n-text').value=n.text||'';$('#n-file').value='';$('#n-btn').textContent='Änderung speichern';$('#n-cancel').style.display='';$('#n-h').textContent='Zusammenfassung bearbeiten (neue Datei wählen = ersetzen)';$('main').scrollTop=0}
+function rNotes(){const q=$('#n-q').value.toLowerCase(),sj=$('#n-f').value;
+$('#notes').innerHTML=S.notes.filter(n=>(!sj||n.subj==sj)&&(n.title+n.text+n.subj).toLowerCase().includes(q)).reverse().map(n=>`<li class="it"><div><b>${esc(n.title)}</b> <span class="bd">${esc(n.subj)}</span>${n.text?`<details><summary class="dim">Text anzeigen</summary><div style="white-space:pre-wrap;margin-top:6px">${esc(n.text)}</div></details>`:''}${n.file?(n.file.data?`<br><b>${esc(n.file.name)}</b> ${bt('viewNote('+n.id+')','Ansehen','a')} <a style="color:var(--acc);font-size:var(--fs-sm)" href="${n.file.data}" download="${esc(n.file.name)}">Herunterladen</a> ${bt('rmFile('+n.id+')','Datei entfernen')}`:`<br><span class="dim">${esc(n.file.name)} – Datei liegt nur auf dem Gerät, auf dem sie hochgeladen wurde</span> ${bt('rmFile('+n.id+')','Verweis entfernen')}`):''}</div><div class="acts">${bt('editNote('+n.id+')','Bearbeiten')}${bt('delNote('+n.id+')','Löschen','r')}</div></li>`).join('')||'<p class="dim">Nichts gefunden.</p>'}
+const delNote=id=>{if(confirm('Zusammenfassung löschen?')){tomb(id);S.notes=S.notes.filter(x=>x.id!=id);if(E.note==id)E.note=null;save();render()}},rmFile=id=>{if(confirm('Datei entfernen?')){S.notes.find(x=>x.id==id).file=null;save();render()}};
+/* Noten */
+function saveGrade(){const g=parseFloat($('#g-val').value),w=parseFloat($('#g-w').value)||1;if(!(g>=1&&g<=5))return alert('Note zwischen 1 und 5.');const o={subj:$('#g-subj').value,name:$('#g-name').value||'Note',g,w};
+if(E.grade)Object.assign(S.grades.find(x=>x.id==E.grade),o);else S.grades.push({id:uid(),...o});save();cancelGrade()}
+function cancelGrade(){E.grade=null;$('#g-name').value=$('#g-val').value='';$('#g-w').value=1;$('#g-btn').textContent='Speichern';$('#g-cancel').style.display='none';$('#g-h').textContent='Note eintragen';render()}
+function editGrade(id){const x=S.grades.find(y=>y.id==id);E.grade=id;setSel($('#g-subj'),x.subj);$('#g-name').value=x.name;$('#g-val').value=x.g;$('#g-w').value=x.w;$('#g-btn').textContent='Änderung speichern';$('#g-cancel').style.display='';$('#g-h').textContent='Note bearbeiten';$('main').scrollTop=0}
+const gStat=s=>{const l=S.grades.filter(x=>x.subj==s),W=l.reduce((a,x)=>a+x.w,0),sum=l.reduce((a,x)=>a+x.g*x.w,0);return{l,W,sum,avg:W?sum/W:null}};
+
+const delGrade=id=>{if(confirm('Note löschen?')){tomb(id);S.grades=S.grades.filter(x=>x.id!=id);if(E.grade==id)E.grade=null;save();render()}};
+/* Timer */
+const T={mode:'work',left:1500,run:false,last:0,acc:0};
+function logStudy(){const m=Math.round(T.acc/60);if(m>=1){S.study.push({d:iso(new Date()),s:$('#tsubj').value,m});save()}T.acc=0}
+function tStart(){if(!T.run){T.run=true;T.last=Date.now()}}
+function tReset(){if(T.mode=='work')logStudy();T.run=false;T.mode='work';T.left=(+$('#tw').value||25)*60;tDraw();rStats()}
+function beep(){try{const a=new AudioContext(),o=a.createOscillator();o.connect(a.destination);o.frequency.value=880;o.start();o.stop(a.currentTime+.4)}catch(e){}}
+function tTick(){if(!T.run)return;const n=Date.now(),dt=(n-T.last)/1000;T.last=n;T.left-=dt;if(T.mode=='work')T.acc+=dt;
+if(T.left<=0){beep();if(T.mode=='work'){logStudy();T.mode='break';T.left=(+$('#tb').value||5)*60}else{T.mode='work';T.left=(+$('#tw').value||25)*60}T.run=false;rStats()}tDraw()}
+function tDraw(){const s=Math.max(0,Math.round(T.left));$('#tdisp').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');$('#tmode').textContent=T.mode=='work'?'Lernphase ':'Pause ';if(T.run)document.title=$('#tdisp').textContent+' · Schul-Hub'; else document.title='Schul-Hub'}
+setInterval(tTick,500);
+function weekStats(){const d=today0();d.setDate(d.getDate()-((d.getDay()+6)%7));const m=iso(d),o={};S.study.filter(x=>x.d>=m).forEach(x=>o[x.s]=(o[x.s]||0)+x.m);return o}
+function rStats(){const o=weekStats(),mx=Math.max(1,...Object.values(o)),d=today0();d.setDate(d.getDate()-((d.getDay()+6)%7));const m=iso(d);
+const bars=Object.entries(o).sort((a,b)=>b[1]-a[1]).map(([s,v])=>`<div style="margin-bottom:10px"><b>${esc(s)}</b> <span class="dim">${Math.floor(v/60)} Std. ${v%60} Min.</span><div class="bar" style="width:${v/mx*100}%"></div></div>`).join('')||'<p class="dim">Noch keine Lernzeit diese Woche.</p>';
+const ent=S.study.map((x,i)=>({...x,i})).filter(x=>x.d>=m).reverse();
+$('#tstats').innerHTML=bars+'<div style="margin:12px 0">'+bt('addStudy()','Lernzeit nachtragen','')+'</div>'+(ent.length?'<ul>'+ent.map(x=>`<li class="it"><div><b>${esc(x.s)}</b> <span class="dim">${fmtD(x.d)} · ${x.m} Min.</span></div><div class="acts">${bt('editStudy('+x.i+')','Bearbeiten')}${bt('delStudy('+x.i+')','Löschen','r')}</div></li>`).join('')+'</ul>':'')}
+function addStudy(){const m=parseInt(prompt('Minuten gelernt:','30'));if(!(m>0))return;const d=prompt('Datum (JJJJ-MM-TT):',iso(new Date()));if(!/^\d{4}-\d{2}-\d{2}$/.test(d||''))return alert('Ungültiges Datum.');S.study.push({d,s:$('#tsubj').value,m});save();render()}
+function editStudy(i){const x=S.study[i],m=parseInt(prompt('Minuten:',x.m));if(!(m>0))return;const s=prompt('Fach:',x.s);if(s===null)return;x.m=m;x.s=s.trim()||x.s;save();render()}
+function delStudy(i){if(confirm('Eintrag löschen?')){S.study.splice(i,1);save();render()}}
+/* KI-Prompts */
+/* ===== Dateien im Browser ansehen ===== */
+const MIME={pdf:'application/pdf',png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',gif:'image/gif',webp:'image/webp',svg:'image/svg+xml',txt:'text/plain',md:'text/plain'};
+const fExt=n=>(String(n).split('.').pop()||'').toLowerCase();
+const VW={url:null,name:'',data:''};
+async function docxText(blob){const buf=new Uint8Array(await blob.arrayBuffer()),dv=new DataView(buf.buffer);
+let e=buf.length-22;while(e>=0&&dv.getUint32(e,true)!==0x06054b50)e--;if(e<0)throw new Error('kein gültiges Word-Dokument');
+const n=dv.getUint16(e+10,true);let p=dv.getUint32(e+16,true);
+for(let i=0;i<n;i++){if(dv.getUint32(p,true)!==0x02014b50)break;
+const method=dv.getUint16(p+10,true),csize=dv.getUint32(p+20,true),nl=dv.getUint16(p+28,true),xl=dv.getUint16(p+30,true),cl=dv.getUint16(p+32,true),off=dv.getUint32(p+42,true),name=new TextDecoder().decode(buf.subarray(p+46,p+46+nl));
+if(name==='word/document.xml'){const ds=off+30+dv.getUint16(off+26,true)+dv.getUint16(off+28,true),data=buf.subarray(ds,ds+csize);let xml;
+if(method===0)xml=new TextDecoder().decode(data);else if(method===8)xml=await new Response(new Blob([data]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).text();else throw new Error('Kompression nicht unterstützt');
+return xml.replace(/<w:tab\/>/g,'\t').replace(/<w:br[^>]*\/>/g,'\n').replace(/<\/w:p>/g,'\n').replace(/<[^>]+>/g,'').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&amp;/g,'&').replace(/\n{3,}/g,'\n\n').trim()}
+p+=46+nl+xl+cl}
+throw new Error('kein Text gefunden')}
+function vwShow(node){const b=$('#vw-body');b.textContent='';b.appendChild(node)}
+function vwMsg(t){const p=document.createElement('p');p.className='dim';p.textContent=t;vwShow(p)}
+function vwPre(t){const pre=document.createElement('pre');pre.className='vw-pre';pre.textContent=t||'(leer)';vwShow(pre)}
+async function viewNote(id){const n=S.notes.find(x=>x.id==id);if(!n||!n.file||!n.file.data)return;const f=n.file,ext=fExt(f.name);
+if(VW.url){URL.revokeObjectURL(VW.url);VW.url=null}VW.name=f.name;VW.data=f.data;$('#vw-h').textContent=f.name;$('#vw-tab').style.display='none';vwMsg('Lade…');$('#view-dlg').showModal();
+try{const raw=await(await fetch(f.data)).blob();
+if(MIME[ext]){const b=new Blob([raw],{type:MIME[ext]});VW.url=URL.createObjectURL(b);
+if(ext=='pdf'){const fr=document.createElement('iframe');fr.title=f.name;fr.src=VW.url;vwShow(fr);$('#vw-tab').style.display=''}
+else if(MIME[ext].startsWith('image/')){const im=document.createElement('img');im.alt=f.name;im.src=VW.url;vwShow(im);$('#vw-tab').style.display=''}
+else vwPre(await b.text())}
+else if(ext=='docx')vwPre(await docxText(raw));
+else vwMsg('Dieses Format ('+ext+') kann der Browser nicht anzeigen. Bitte herunterladen.')}
+catch(e){vwMsg('Anzeige nicht möglich ('+e.message+'). Du kannst die Datei herunterladen.')}}
+function vwTab(){if(VW.url)window.open(VW.url,'_blank','noopener')}
+function vwDl(){const a=document.createElement('a');a.href=VW.data;a.download=VW.name;a.click()}
+/* ===== Noten ===== */
+const gRound=a=>a<=1.5?1:a<=2.5?2:a<=3.5?3:a<=4.5?4:5;
+const GN=['','Sehr gut','Gut','Befriedigend','Genügend','Nicht genügend'];
+const half=v=>String(Math.floor(v*2+1e-9)/2).replace('.',',');
+function rGrades(){fitUni();const subs=[...new Set([...S.subjects,...S.grades.map(g=>g.subj)])].map(s=>({s,...gStat(s)})).filter(x=>x.l.length);
+$('#grades').innerHTML=uniSum()+subs.map(x=>{const r=gRound(x.avg),c=x.avg<=2.5?'var(--grn)':x.avg<=3.5?'var(--yel)':'var(--red)';
+return `<div style="margin-bottom:16px"><b>${esc(x.s)}</b> <span class="bd" style="color:${c}">Schnitt ${x.avg.toFixed(2).replace('.',',')} → Note ${r} (${GN[r]})</span> <span class="dim">${x.l.length} ${x.l.length==1?'Note':'Noten'} · Gesamtgewicht ${x.W}</span><ul style="margin-top:8px">${x.l.map(g=>`<li class="it"><div><b>${esc(g.name)}</b> <span class="dim">Note ${g.g} · Gewicht ${g.w}</span></div><div class="acts">${bt('editGrade('+g.id+')','Bearbeiten')}${bt('delGrade('+g.id+')','Löschen','r')}</div></li>`).join('')}</ul></div>`}).join('')||'<p class="dim">Noch keine Noten – trage links die erste ein.</p>'}
+function calcWish(){const s=$('#w-subj').value,T=+$('#w-t').value,w=parseFloat($('#w-w').value)||1,x=gStat(s),r=$('#w-res');
+if(!x.W){r.innerHTML='<span class="dim">Trage zuerst mindestens eine Note für dieses Fach ein (Karte 1).</span>';return}
+const need=((T+0.5)*(x.W+w)-x.sum)/w,ziel=`„${GN[T]} (${T})“`,info=`<br><span class="dim">Genau gerechnet: ${need.toFixed(2).replace('.',',')} · aktueller Schnitt in ${esc(s)}: ${x.avg.toFixed(2).replace('.',',')} · bisheriges Gesamtgewicht: ${x.W}</span>`;
+if(need<1)r.innerHTML=`<span class="red">Das Ziel ${ziel} ist rechnerisch nicht mehr erreichbar – selbst mit einer 1 bei der nächsten Note nicht.</span>${info}`;
+else if(need>=5)r.innerHTML=`<span class="grn">Das Ziel ${ziel} ist sicher – selbst mit einer 5 bei der nächsten Note.</span>${info}`;
+else r.innerHTML=`Um am Ende ${ziel} zu erreichen, darf die nächste Note <b>höchstens eine ${half(need)}</b> sein (also ${half(need)} oder besser).${info}`}
+/* ===== Schularbeiten-Rechner ===== */
+let SAR=null;
+const saCur=()=>S.sa.tpl.find(t=>t.id==S.sa.sel)||S.sa.tpl[0];
+const fp=x=>(Math.round(x*10)/10).toString().replace('.',',');
+const saNote=(p,ns)=>p>=ns[0]?1:p>=ns[1]?2:p>=ns[2]?3:p>=ns[3]?4:5;
+function saFillTpl(){const s=$('#sa-tpl');s.innerHTML=S.sa.tpl.map(t=>`<option value="${esc(t.id)}">${esc(t.name)}</option>`).join('');s.value=saCur().id}
+function saSel(id){S.sa.sel=id;save();rSA()}
+function saNew(){const id='t'+uid();S.sa.tpl.push({id,name:'Neue Vorlage',ns:[90,80,70,60],gmin:0,areas:[{n:'Teil 1',g:'',w:50,max:20,p:''},{n:'Teil 2',g:'',w:50,max:20,p:''}]});S.sa.sel=id;save();rSA()}
+function saDup(){const t=saCur(),c=structuredClone(t);c.id='t'+uid();c.name=t.name+' (Kopie)';c.areas.forEach(a=>a.p='');S.sa.tpl.push(c);S.sa.sel=c.id;save();rSA()}
+function saDel(){if(S.sa.tpl.length<2)return alert('Mindestens eine Vorlage muss bleiben.');const t=saCur();if(confirm('Vorlage „'+t.name+'“ löschen?')){S.sa.tpl=S.sa.tpl.filter(x=>x.id!=t.id);S.sa.sel=S.sa.tpl[0].id;save();rSA()}}
+function saField(k,v){const t=saCur();if(k=='name'){t.name=v.trim()||t.name;saFillTpl()}else t.gmin=Math.max(0,Math.min(100,parseFloat(v)||0));save();calcSA()}
+function saNs(i,v){saCur().ns[i]=Math.max(0,Math.min(100,parseFloat(v)||0));save();calcSA()}
+function saArea(i,k,v){const a=saCur().areas[i];if(k=='n'||k=='g'||k=='p')a[k]=v;else a[k]=Math.max(0,parseFloat(String(v).replace(',','.'))||0);save();calcSA()}
+function saAdd(){saCur().areas.push({n:'Neuer Bereich',g:'',w:0,max:10,p:''});save();rSA()}
+function saRm(i){const t=saCur();if(t.areas.length<2)return alert('Mindestens ein Bereich muss bleiben.');t.areas.splice(i,1);save();rSA()}
+function saEval(){const t=saCur(),A=t.areas.map(a=>{const max=+a.max||0,w=+a.w||0,has=String(a.p).trim()!==''&&max>0,pc=has?Math.max(0,Math.min(100,100*(parseFloat(String(a.p).replace(',','.'))||0)/max)):0;return{n:a.n,g:(a.g||'').trim(),w,has,pc}});
+return{t,A,Wt:A.reduce((s,a)=>s+a.w,0),D:A.filter(a=>a.has&&a.w>0),P:A.filter(a=>!a.has&&a.w>0)}}
+function calcSA(){const r=$('#sa-res');if(!r)return;SAR=null;const{t,A,Wt,D,P}=saEval(),ns=t.ns;
+if(!Wt){r.innerHTML='<span class="dim">Gib mindestens einem Bereich ein Gewicht über 0.</span>';return}
+let h='';const known=D.reduce((s,a)=>s+a.w*a.pc,0),rows=D.map(a=>esc(a.n)+': '+fp(a.pc)+' %').join(' · ');
+if(rows)h+=`<div class="dim" style="margin-bottom:8px">${rows}</div>`;
+if(Math.abs(Wt-100)>.01)h+=`<div class="yel" style="margin-bottom:8px">Die Gewichte ergeben zusammen ${fp(Wt)} %. Gerechnet wird auf 100 % umgerechnet.</div>`;
+if(!D.length){r.innerHTML=h+'<span class="dim">Trage oben die erreichten Punkte ein, dann erscheint das Ergebnis.</span>';return}
+const gs=[...new Set(A.filter(a=>a.w>0&&a.g).map(a=>a.g))].map(g=>{const m=A.filter(a=>a.w>0&&a.g==g&&a.has),ws=m.reduce((s,a)=>s+a.w,0);return ws?{g,pc:m.reduce((s,a)=>s+a.w*a.pc,0)/ws}:null}).filter(Boolean);
+if(!P.length){const tot=known/Wt,bad=t.gmin>0?gs.filter(x=>x.pc<t.gmin):[],low=tot<ns[3],note=(low||bad.length)?5:saNote(tot,ns);
+h+=`<div style="font-size:var(--fs-lg)">Gesamt: <b>${fp(tot)} %</b> → Note <b>${note} (${GN[note]})</b></div>`;
+if(gs.length)h+=`<div class="dim" style="margin-top:6px">${gs.map(x=>esc(x.g)+': '+fp(x.pc)+' %').join(' · ')}</div>`;
+if(low)h+=`<div class="red" style="margin-top:6px">Unter der Bestehensgrenze von ${fp(ns[3])} %.</div>`;
+bad.forEach(x=>{h+=`<div class="red" style="margin-top:6px">Die Gruppe ${esc(x.g)} liegt mit ${fp(x.pc)} % unter der Mindestgrenze von ${fp(t.gmin)} %. Die Schularbeit ist damit negativ.</div>`});
+if(!low&&!bad.length)h+=`<div class="grn" style="margin-top:6px">Bestanden.</div>`;
+SAR={tot,note}}
+else{const Wp=P.reduce((s,a)=>s+a.w,0);h+=`<div>Eingetragen: ${D.length} von ${D.length+P.length} Bereichen. Offen: ${P.map(a=>esc(a.n)).join(', ')}.</div><div style="margin:6px 0">Das brauchst du noch:</div>`;
+h+=[[4,ns[3]],[3,ns[2]],[2,ns[1]],[1,ns[0]]].map(([n,th])=>{const need=(th*Wt-known)/Wp;return `<div class="dim">Note ${n} (${GN[n]}) ab ${fp(th)} %: ${need<=0?'schon sicher (ohne Gruppenregel)':need>100?'nicht mehr erreichbar':'im Schnitt '+fp(need)+' % in den offenen Bereichen'}</div>`}).join('');
+if(t.gmin>0)h+='<div class="dim" style="margin-top:6px">Die Mindestgrenze pro Gruppe ist hier nicht eingerechnet.</div>'}
+r.innerHTML=h}
+function rSA(){const t=saCur();if(!t||!$('#sa-box'))return;saFillTpl();
+$('#sa-box').innerHTML=`<label class="lbl" for="sa-name">Name der Vorlage</label><input id="sa-name" value="${esc(t.name)}" onchange="saField('name',this.value)">
+<span class="lbl">Notenschlüssel: ab wie viel Prozent gibt es welche Note?</span>
+<div class="row">${['Sehr gut (1)','Gut (2)','Befriedigend (3)','Genügend (4)'].map((n,i)=>`<div><label class="lbl">${n}</label><input type="number" min="0" max="100" step="0.5" value="${t.ns[i]}" onchange="saNs(${i},this.value)"></div>`).join('')}</div>
+<p class="dim" style="margin-bottom:10px">Die Grenze bei Genügend ist zugleich die Bestehensgrenze. Alles darunter ist Nicht genügend.</p>
+<label class="lbl" for="sa-gmin">Mindestprozent pro Gruppe (0 = ausgeschaltet)</label><input id="sa-gmin" type="number" min="0" max="100" step="0.5" value="${t.gmin}" onchange="saField('gmin',this.value)">
+<p class="dim" style="margin-bottom:10px">Greift nur, wenn du unten bei den Bereichen eine Gruppe einträgst, zum Beispiel Rezeptiv und Produktiv. Erreicht eine Gruppe die Mindestgrenze nicht, ist die Schularbeit negativ.</p>
+<span class="lbl">Bereiche der Schularbeit</span>
+${t.areas.map((a,i)=>`<div class="sa-r"><div><label class="lbl">Bereich</label><input value="${esc(a.n)}" onchange="saArea(${i},'n',this.value)"></div><div><label class="lbl">Gruppe</label><input value="${esc(a.g||'')}" placeholder="optional" onchange="saArea(${i},'g',this.value)"></div><div><label class="lbl">Gewicht %</label><input type="number" min="0" step="0.5" value="${a.w}" onchange="saArea(${i},'w',this.value)"></div><div><label class="lbl">Höchstpunkte</label><input type="number" min="0" step="0.5" value="${a.max}" onchange="saArea(${i},'max',this.value)"></div><div><label class="lbl">Erreicht</label><input type="text" inputmode="decimal" value="${esc(a.p)}" oninput="saArea(${i},'p',this.value)"></div><div><button class="btn r s" onclick="saRm(${i})">Entfernen</button></div></div>`).join('')}
+<button class="btn g s" onclick="saAdd()">Bereich hinzufügen</button>
+<div id="sa-res" class="res"></div>`;calcSA()}
+function saToGrade(){const m=$('#sa-msg');if(!SAR){m.textContent='Trage zuerst für alle Bereiche Punkte ein.';return}
+const t=saCur(),w=parseFloat($('#sa-w').value)||1;S.grades.push({id:uid(),subj:$('#sa-subj').value,name:t.name+' ('+fp(SAR.tot)+' %)',g:SAR.note,w});save();render();$('#sa-msg').textContent='Als Note '+SAR.note+' mit Gewicht '+fp(w)+' übernommen.'}
+/* ===== Links ===== */
+const lkHost=u=>{try{return new URL(u).hostname.replace(/^www\./,'')}catch(e){return u}};
+function rLinks(){const g={};(S.links||[]).forEach(l=>{const c=l.cat||'Sonstiges';(g[c]=g[c]||[]).push(l)});
+$('#lk-all').innerHTML=Object.keys(g).map(c=>`<div class="card"><h3>${esc(c)}</h3><ul>${g[c].map(l=>`<li class="it lk"><div class="nm">${/^https?:\/\//i.test(l.url)?`<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.name)}</a>`:esc(l.name)}<br><span class="dim">${esc(lkHost(l.url))}</span></div><div class="acts">${bt('lkDel('+l.id+')','Entfernen','r')}</div></li>`).join('')}</ul></div>`).join('')||'<p class="dim">Keine Links.</p>';
+$('#lk-cats').innerHTML=Object.keys(g).map(c=>`<option value="${esc(c)}">`).join('')}
+function lkAdd(){const n=$('#lk-name').value.trim();let u=$('#lk-url').value.trim();if(!n||!u)return alert('Bitte Name und Adresse eingeben.');if(!/^https?:\/\//i.test(u))u='https://'+u;try{new URL(u)}catch(e){return alert('Die Adresse ist ungültig.')}
+S.links.push({id:uid(),name:n,url:u,cat:$('#lk-cat').value.trim()||'Sonstiges'});$('#lk-name').value=$('#lk-url').value=$('#lk-cat').value='';save();render()}
+function lkDel(id){const l=S.links.find(x=>x.id==id);if(l&&confirm('„'+l.name+'“ entfernen?')){tomb(id);S.links=S.links.filter(x=>x.id!=id);save();render()}}
+function lkReset(){const have=new Set(S.links.map(l=>l.id));LKD().forEach(l=>{if(!have.has(l.id)){S.links.push(l);if(S.del)delete S.del[l.id]}});save();render()}
+/* ===== KI-Prompt-Generator ===== */
+const PG={when:''};
+const PG_T={
+ex:n=>`Erstelle ${n} Übungsaufgaben mit steigender Schwierigkeit zum Thema.`,
+exp:()=>'Erkläre das Thema Schritt für Schritt mit konkreten Beispielen. Beginne mit der Grundidee in 2 bis 3 Sätzen und schließe mit einer kurzen Merkliste.',
+sum:n=>`Fasse das Thema in prägnanten Stichpunkten zusammen und stelle danach ${n} Kontrollfragen.`,
+quiz:()=>'Erstelle einen Probetest (ca. 45 Minuten) mit Punkteverteilung.',
+plan:()=>'Erstelle einen realistischen Lernplan bis zum Test mit Tagesaufgaben von höchstens 45 Minuten. Frage mich zuerst nach dem Datum und meiner Zeit pro Tag, falls das hier nicht steht.',
+cards:n=>`Erstelle ${n*2} Karteikarten zum Thema. Gib sie als Liste im Format „Frage;Antwort“ aus, eine Karte pro Zeile, ohne Nummerierung, damit ich sie in Knowt importieren kann.`,
+tutor:()=>'Frage mich zum Thema ab: Stelle immer nur EINE Frage, warte auf meine Antwort und gib dann kurzes Feedback. Steigere die Schwierigkeit, wenn ich richtig antworte.',
+hint:()=>'Hilf mir, die Aufgabe selbst zu lösen: Erkläre, was verlangt ist, nenne das nötige Vorwissen und gib Hinweise oder Leitfragen in Schritten. Verrate die Lösung nicht und schreibe keinen abgabefertigen Text.',
+check:()=>'Prüfe meine Lösung (siehe unten) streng: Benenne Fehler und erkläre, wie ich sie selbst verbessern kann, ohne sie komplett neu zu schreiben.'};
+const PG_O={src:'Wenn du dir bei etwas nicht sicher bist, sag es offen, statt etwas zu erfinden.',end:'Gib die Lösungen erst ganz am Ende nach einem deutlichen Trenner, damit ich vorher selbst üben kann.',ask:'Wenn dir Informationen fehlen, stelle mir zuerst bis zu 3 Rückfragen, bevor du antwortest.',mnem:'Gib am Ende 2 bis 3 Eselsbrücken oder Merkhilfen.',real:'Nutze anschauliche Beispiele aus dem Alltag.',mist:'Weise auf typische Fehler hin, die in Tests oft passieren.',short:'Halte dich kurz und nutze Stichpunkte statt langer Absätze.',table:'Nutze, wo sinnvoll, Tabellen für Übersichten.'};
+const PG_D={ex:'Alle Aufgaben sind mit dem Stoff des Themas lösbar, steigen in der Schwierigkeit und haben eine nachvollziehbare Lösung.',exp:'Ich kann die Grundidee in eigenen Worten wiedergeben und habe mindestens ein durchgerechnetes Beispiel gesehen.',sum:'Die Zusammenfassung passt auf eine Seite und die Kontrollfragen decken alle Stichpunkte ab.',quiz:'Der Test ist in 45 Minuten lösbar, die Punkte ergeben zusammen 100 und es gibt einen Bewertungsschlüssel.',plan:'Jeder Tag hat ein eindeutiges Ziel und eine Aufgabe von höchstens 45 Minuten, der letzte Tag dient der Wiederholung.',cards:'Jede Karte prüft genau einen Fakt und lässt sich ohne Zusatzinfos beantworten.',tutor:'Du hast mindestens 5 Fragen gestellt, jeweils eine pro Nachricht, und am Ende meine Schwächen benannt.',hint:'Ich weiß, welcher erste Schritt zu tun ist, und kann die Lösung selbst schreiben.',check:'Jeder Fehler ist benannt, begründet und mit einem Hinweis zur Verbesserung versehen.'};
+const PG_L={de:'Antworte auf Deutsch.','de-x':'Erkläre auf Deutsch, verwende aber Beispiele und Fachbegriffe in der Zielsprache des Fachs.',en:'Antworte komplett auf Englisch.',fr:'Antworte komplett auf Französisch.'};
+function aiCount(){const v=$('#a-out').value;$('#a-cnt').textContent=v?`${v.length} Zeichen · ca. ${v.trim().split(/\s+/).length} Wörter`:''}
+function genPrompt(){const s=$('#a-subj').value,t=$('#a-topic').value.trim(),ty=$('#a-type').value,n=+$('#a-n').value||5,mat=$('#a-mat').value.trim(),lk=$('#a-link').value.trim(),tr=$('#a-tried').value.trim(),tool=$('#a-tool').value,on=$$('.a-opt').filter(x=>x.checked).map(x=>x.value),L=[];
+const sec=(k,ti,b)=>tool=='claude'?'<'+k+'>\n'+b+'\n</'+k+'>':ti+':\n'+b;
+L.push(sec('rolle','Rolle','Du bist ein geduldiger, präziser Lehrer und Lerncoach.'));
+L.push(sec('kontext','Kontext',`Ich besuche ${S.school.level||'eine Schule'}. Fach/Modul: ${s||'(Fach)'}. Thema: ${t||'(Thema einfügen)'}. Mein Stand: ${$('#a-lv').value}.${PG.when?' '+PG.when:''}`+(tr?'\nBisher versucht oder wo ich hänge: '+tr+'\nWiederhole nicht, was ich schon kann.':'')));
+L.push(sec('aufgabe','Aufgabe',PG_T[ty](n)));
+if(lk||mat){const M=[];if(lk)M.push('Link: '+lk);if(mat)M.push((ty=='check'?'Meine Lösung':'Text / Aufgabentext')+':\n"""\n'+mat+'\n"""');L.push(sec('material','Material',M.join('\n')))}
+const R=[PG_L[$('#a-lg').value]];on.forEach(k=>{if(k=='end'&&!['ex','sum','quiz'].includes(ty))return;if(PG_O[k])R.push(PG_O[k])});
+if(lk||mat)R.push('Stütze dich bei Inhalten auf das gelieferte Material. Was nicht darin steht, kennzeichne als Ergänzung aus deinem Allgemeinwissen.');
+if(lk&&!mat)R.push('Kannst du den Link nicht öffnen, sage das ausdrücklich, rate nicht und bitte mich, den Text einzufügen.');
+L.push(sec('anforderungen','Anforderungen',R.map(r=>'- '+r).join('\n')));
+L.push(sec('fertig_wenn','Fertig, wenn',PG_D[ty]));
+$('#a-out').value=L.join('\n\n');
+const w=$('#a-when');w.style.display=PG.when?'':'none';w.innerHTML=PG.when?esc(PG.when)+' <a href="#" onclick="PG.when=\'\';genPrompt();return false" style="color:var(--acc)">entfernen</a>':'';aiCount()}
+function nextTestPrompt(){const t=S.tests.filter(x=>dUntil(x.date)>=0).sort((a,b)=>a.date.localeCompare(b.date))[0];if(!t)return aiMsg('Kein kommender Test eingetragen.');
+$('#a-subj').value=t.subj;$('#a-topic').value=t.topic||t.type;PG.when=`Anstehender Test: ${t.type} ${dTxt(t.date)}.`;genPrompt();aiMsg('Nächster Test übernommen.')}
+function aiFromTodo(id){const t=S.todos.find(x=>x.id==id);$('#a-todo').value='';if(!t)return;if(S.subjects.includes(t.subj))$('#a-subj').value=t.subj;
+$('#a-topic').value=t.title;$('#a-mat').value=t.desc||'';$('#a-type').value='hint';PG.when=t.due?'Abgabe: '+fmtD(t.due)+'.':'';genPrompt();aiMsg('To-Do übernommen – Typ „Hilfe bei einer Aufgabe“ gewählt.')}
+function aiFromNote(id){const n=S.notes.find(x=>x.id==id);$('#a-note').value='';if(!n)return;if(S.subjects.includes(n.subj))$('#a-subj').value=n.subj;
+$('#a-topic').value=n.title;$('#a-mat').value=n.text||'';$('#a-type').value='tutor';PG.when='';genPrompt();aiMsg(n.text?'Zusammenfassung übernommen – die KI fragt dich dazu ab.':'Titel übernommen. Der Inhalt von Dateien lässt sich nicht automatisch einfügen – kopiere den Text bei „Eigenes Material“ hinein.')}
+let aiTimer;const aiMsg=m=>{$('#a-msg').textContent=m;clearTimeout(aiTimer);aiTimer=setTimeout(()=>{$('#a-msg').textContent=''},4000)};
+async function copyPrompt(url){if(!$('#a-out').value)genPrompt();try{await navigator.clipboard.writeText($('#a-out').value);aiMsg('Kopiert!'+(url?' Füge den Prompt im neuen Tab ein.':''))}catch(e){$('#a-out').select();aiMsg('Automatisches Kopieren nicht möglich – bitte Strg/Cmd+C drücken.')}if(url)window.open(url,'_blank','noopener')}
+function rAi(){$('#a-todo').innerHTML='<option value="">Aus offenem To-Do übernehmen …</option>'+S.todos.filter(t=>!t.done).map(t=>`<option value="${t.id}">${esc(t.title)}</option>`).join('');
+$('#a-note').innerHTML='<option value="">Aus Zusammenfassung übernehmen …</option>'+S.notes.map(n=>`<option value="${n.id}">${esc(n.title)}</option>`).join('');
+if(!$('#a-out').value)genPrompt();else aiCount()}
+/* Einstellungen */
+/* Kalender (iCal) */
+function icsDt(v){const m=(v||'').match(/^(\d{4})(\d\d)(\d\d)(?:T(\d\d)(\d\d)(\d\d)?(Z)?)?$/);if(!m)return null;const ad=m[4]===undefined;return{ad,d:m[7]?new Date(Date.UTC(+m[1],m[2]-1,+m[3],+m[4],+m[5],+(m[6]||0))):new Date(+m[1],m[2]-1,+m[3],+(m[4]||0),+(m[5]||0),+(m[6]||0))}}
+const hm=d=>String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+function parseICS(txt){const Ls=txt.replace(/\r?\n[ \t]/g,'').split(/\r?\n/),evs=[];let c=null;
+for(const l of Ls){if(l=='BEGIN:VEVENT')c={ex:[]};else if(l=='END:VEVENT'){if(c&&c.s)evs.push(c);c=null}else if(c){const i=l.indexOf(':');if(i<0)continue;const k=l.slice(0,i).split(';')[0].toUpperCase(),v=l.slice(i+1);
+if(k=='DTSTART')c.s=icsDt(v);else if(k=='DTEND')c.e=icsDt(v);else if(k=='SUMMARY')c.n=v.replace(/\\([,;nN\\])/g,(a,b)=>/n/i.test(b)?' ':b);else if(k=='LOCATION')c.l=v.replace(/\\([,;nN\\])/g,(a,b)=>/n/i.test(b)?' ':b);else if(k=='UID')c.u=v;else if(k=='DESCRIPTION')c.D=icsText(v);else if(k=='CATEGORIES')c.cat=icsText(v);else if(k=='RECURRENCE-ID')c.rid=icsDt(v);else if(k=='STATUS'&&v=='CANCELLED')c.x=1;
+else if(k=='RRULE')c.rr=Object.fromEntries(v.split(';').map(x=>x.split('=')));else if(k=='EXDATE')v.split(',').forEach(x=>{const q=icsDt(x);if(q)c.ex.push(iso(q.d))})}}
+evs.filter(e=>e.rid).forEach(o=>{const m=evs.find(e=>!e.rid&&e.u===o.u);if(m)m.ex.push(iso(o.rid.d))});
+const from=today0(),to=new Date(from);to.setDate(to.getDate()+180);const out=[];
+for(const e of evs){if(e.x)continue;const s=e.s.d,dur=e.e?e.e.d-s:0,ad=e.s.ad;
+const add=day=>{const os=new Date(day.getFullYear(),day.getMonth(),day.getDate(),s.getHours(),s.getMinutes());out.push({d:iso(day),t:ad?'':hm(os),e:ad||!dur?'':hm(new Date(+os+dur)),n:e.n||'(ohne Titel)',l:e.l||'',u:e.u||'',c:e.cat||'',D:HW.test(e.n||'')?(e.D||'').slice(0,1500):''})};
+if(!e.rr){const end=ad&&e.e?e.e.d:new Date(s.getFullYear(),s.getMonth(),s.getDate()+1);for(let day=new Date(s.getFullYear(),s.getMonth(),s.getDate());(ad?day<end:day<=day)&&day<=to&&(ad||1);day.setDate(day.getDate()+1)){if(day>=from)add(new Date(day));if(!ad)break}continue}
+const r=e.rr,iv=+(r.INTERVAL||1),cnt=+r.COUNT||1e9,un=r.UNTIL?icsDt(r.UNTIL):null,BD=r.BYDAY?r.BYDAY.split(',').map(x=>['SU','MO','TU','WE','TH','FR','SA'].indexOf(x.slice(-2))):[s.getDay()],d0=new Date(s.getFullYear(),s.getMonth(),s.getDate());let n=0;
+for(const day=new Date(d0);day<=to&&n<cnt&&!(un&&day>un.d);day.setDate(day.getDate()+1)){const k=Math.round((day-d0)/864e5);let ok=false;
+if(r.FREQ=='DAILY')ok=k%iv==0;
+else if(r.FREQ=='WEEKLY'){const w0=new Date(d0);w0.setDate(w0.getDate()-((d0.getDay()+6)%7));ok=Math.floor(Math.round((day-w0)/864e5)/7)%iv==0&&BD.includes(day.getDay())}
+else if(r.FREQ=='MONTHLY')ok=day.getDate()==d0.getDate()&&((day.getFullYear()-d0.getFullYear())*12+day.getMonth()-d0.getMonth())%iv==0;
+else if(r.FREQ=='YEARLY')ok=day.getDate()==d0.getDate()&&day.getMonth()==d0.getMonth()&&(day.getFullYear()-d0.getFullYear())%iv==0;
+if(ok){n++;if(day>=from&&!e.ex.includes(iso(day)))add(new Date(day))}}}
+return out.sort((a,b)=>a.d.localeCompare(b.d)||a.t.localeCompare(b.t))}
+/* ===== mehrere Kalender ===== */
+const CAL_COLORS=['#89b4fa','#a6e3a1','#fab387','#cba6f7','#f9e2af','#f38ba8','#94e2d5','#74c7ec'];
+const colOk=c=>/^#[0-9a-f]{6}$/i.test(c||'')?c:'#89b4fa';
+function migCal(){if(!Array.isArray(S.cals)){S.cals=[];const o=S.cal;if(o&&(o.url||(o.ev||[]).length))S.cals.push({id:uid(),name:'Kalender',url:o.url||'',color:CAL_COLORS[0],ev:o.ev||[],ts:o.ts||0,home:true})}delete S.cal}
+const calEv=f=>S.cals.filter(c=>!f||f(c)).flatMap(c=>c.ev.map(e=>({...e,_col:c.color,_nm:c.name}))).sort((a,b)=>a.d.localeCompare(b.d)||(a.t||'').localeCompare(b.t||''));
+let calNote='';const calBusy={},calErr={};
+const nextColor=()=>CAL_COLORS.find(c=>!S.cals.some(x=>x.color==c))||CAL_COLORS[S.cals.length%CAL_COLORS.length];
+const nwTxt=n=>n?n+(n==1?' neue Abgabe':' neue Abgaben')+' als To-Do übernommen.':'';
+async function calLoad(c){calBusy[c.id]=1;delete calErr[c.id];render();let nw=0;
+try{let t;if(!W)throw new Error('kein Worker eingetragen, bitte .ics-Datei importieren');try{const ct=new AbortController(),to=setTimeout(()=>ct.abort(),10000);try{const r=await fetch(W+'/cal',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url:c.url}),cache:'no-store',signal:ct.signal});if(!r.ok)throw new Error(r.status==429?'zu viele Anfragen':r.status==400?'Adresse ungültig':'HTTP '+r.status);t=await r.text()}finally{clearTimeout(to)}if(!/BEGIN:VCALENDAR/.test(t))throw new Error('kein gültiger Kalender')}catch(e){throw e.name=='AbortError'?new Error('Zeitüberschreitung'):e}
+c.ev=parseICS(t);c.ts=Date.now();nw=calToTodos(c);tstN+=calToTests(c);save()}
+catch(e){calErr[c.id]='nicht ladbar ('+e.message+')'}
+delete calBusy[c.id];return nw}
+async function calFetch(id){const L=S.cals.filter(c=>c.url&&(id==null||c.id==id));if(!L.length)return;let nw=0;for(const c of L)nw+=await calLoad(c);calNote=[nwTxt(nw),tstTxt()].filter(Boolean).join(' ');render()}
+function calConnect(){if(!W)return alert('Für Kalender-Links brauchst du die Worker-Adresse (Einstellungen, Schule und Unterrichtszeiten). Alternativ kannst du eine .ics-Datei importieren.');const u=$('#cal-url').value.trim().replace(/^webcal/i,'https');if(!/^https?:\/\//i.test(u))return alert('Bitte den iCal-Link einfügen (beginnt mit https:// oder webcal://).');
+const c={id:uid(),name:$('#cal-name').value.trim()||'Kalender '+(S.cals.length+1),url:u,color:nextColor(),ev:[],ts:0,home:true};S.cals.push(c);$('#cal-url').value=$('#cal-name').value='';save();calFetch(c.id)}
+function calFile(i){const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{if(!/BEGIN:VCALENDAR/.test(r.result))return alert('Das ist keine gültige .ics-Datei.');
+const c={id:uid(),name:$('#cal-name').value.trim()||f.name.replace(/\.ics$/i,'')||'Kalender '+(S.cals.length+1),url:'',color:nextColor(),ev:parseICS(r.result),ts:Date.now(),home:true};S.cals.push(c);$('#cal-name').value='';tstN+=calToTests(c);calNote=[nwTxt(calToTodos(c)),tstTxt()].filter(Boolean).join(' ');save();render()};r.readAsText(f);i.value=''}
+function calDel(id){const c=S.cals.find(x=>x.id==id);if(c&&confirm('Kalender „'+c.name+'“ entfernen?\n\nBereits übernommene To-Dos bleiben erhalten.')){S.cals=S.cals.filter(x=>x.id!=id);calNote='';save();render()}}
+function calColor(id,v){const c=S.cals.find(x=>x.id==id);if(c){c.color=colOk(v);save();render()}}
+function calRename(id){const c=S.cals.find(x=>x.id==id);if(!c)return;const n=(prompt('Neuer Name:',c.name)||'').trim();if(n){c.name=n;save();render()}}
+function calHome(id,on){const c=S.cals.find(x=>x.id==id);if(c){c.home=on;save();render()}}
+const calLi=a=>a.map(x=>`<div class="blk" style="border-color:${colOk(x._col)}"><div><b>${esc(x.n)}</b>${x.l?` <span class="dim">${esc(x.l)}</span>`:''}${S.cals.length>1&&x._nm?` <span class="bd">${esc(x._nm)}</span>`:''}</div><span class="dim" style="text-align:right">${fmtD(x.d)}<br>${x.t?x.t+(x.e?'–'+x.e:''):'ganztägig'}</span></div>`).join('');
+function rCal(){$('#cal-hw').checked=S.autoHw!==false;$('#cal-tst').checked=S.autoTest!==false;$('#cal-st').textContent=calNote||(S.cals.length?'':'Noch kein Kalender hinzugefügt.');
+$('#cal-all').innerHTML=S.cals.map(c=>{const col=colOk(c.color),st=calBusy[c.id]?'lädt…':calErr[c.id]||(c.ts?`${c.ev.length} Termine · zuletzt ${new Date(c.ts).toLocaleString('de-AT',{weekday:'short',hour:'2-digit',minute:'2-digit'})}${c.url?'':' · aus Datei'}`:'noch nicht geladen');
+return `<li class="it" style="border-color:${col}"><input type="color" value="${col}" title="Farbe" aria-label="Farbe von ${esc(c.name)}" onchange="calColor(${c.id},this.value)" style="width:34px;height:34px;padding:2px;margin:0;flex:none;cursor:pointer"><div><b>${esc(c.name)}</b><br><span class="${calErr[c.id]?'red':'dim'}">${esc(st)}</span><label class="dim" style="display:flex;gap:6px;align-items:center;margin-top:4px"><input type="checkbox" ${c.home!==false?'checked':''} onchange="calHome(${c.id},this.checked)"> Auf Start zeigen</label></div><div class="acts">${c.url?bt('calFetch('+c.id+')','Aktualisieren'):''}${bt('calRename('+c.id+')','Umbenennen')}${bt('calDel('+c.id+')','Entfernen','r')}</div></li>`}).join('');
+const up=calEv().filter(x=>dUntil(x.d)>=0&&dUntil(x.d)<=30);$('#cal-list').innerHTML=up.length?calLi(up):'<p class="dim">Keine Termine in den nächsten 30 Tagen.</p>'}
+/* ===== Startseite anpassen ===== */
+const TILES=[['now','Jetzt'],['day','Heute / Nächster Schultag'],['chg','Änderungen für dich'],['cal','Kalender'],['tests','Nächste Tests'],['todos','Offene To-Dos'],['study','Lernzeit diese Woche']];
+function dashOrder(){const d=S.dash=S.dash||{order:[],hide:{}};d.hide=d.hide||{};const o=(d.order||[]).filter(k=>TILES.some(t=>t[0]==k));TILES.forEach(t=>{if(!o.includes(t[0]))o.push(t[0])});d.order=o;return o}
+function applyDash(){const o=dashOrder();let vis=0;$$('.supb').forEach(b=>b.style.display=supOn()?'':'none');o.forEach((k,i)=>{const el=$('[data-t="'+k+'"]');if(!el)return;const h=!!S.dash.hide[k]||(k=='chg'&&!supOn());el.style.order=i;el.style.display=h?'none':'';if(!h)vis++});$('#dash-empty').style.display=vis?'none':''}
+function rDashCfg(){const o=dashOrder();$('#dashcfg').innerHTML=o.map(k=>`<li class="it"><label class="nm" style="display:flex;gap:8px;align-items:center;cursor:pointer"><input type="checkbox" ${S.dash.hide[k]?'':'checked'} onchange="dashTog('${k}',this.checked)">${esc(TILES.find(t=>t[0]==k)[1])}</label><div class="acts">${bt("dashMove('"+k+"',-1)",'↑')}${bt("dashMove('"+k+"',1)",'↓')}</div></li>`).join('')}
+function dashTog(k,on){dashOrder();S.dash.hide[k]=!on;save();rDashCfg()}
+function dashMove(k,dir){const o=dashOrder(),i=o.indexOf(k),j=i+dir;if(j<0||j>=o.length)return;[o[i],o[j]]=[o[j],o[i]];S.dash.order=o;save();rDashCfg()}
+function dashReset(){S.dash=structuredClone(DEF.dash);save();rDashCfg()}
+const goView=v=>$('nav button[data-v="'+v+'"]').click();
+/* ===== Abgaben aus dem Kalender -> To-Dos ===== */
+const HW=/f[äa]llig|\bdue\b|abgabe|haus[üu]bung|hausaufgabe|\bH[ÜU]\b/i;
+const icsText=v=>v.replace(/\\[nN]/g,'\n').replace(/\\([,;\\])/g,'$1');
+const esR=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+const SUBJ_KW={GPB:/geschichte|politisch/i,GWB:/geograf|geograph|wirtschaft/i,D:/deutsch/i,E:/englisch|english/i,INF:/informatik/i,F:/franz[öo]sisch|french/i,M:/mathe/i};
+function guessSubj(tx,fb){let s=S.subjects.find(n=>new RegExp('(^|[^A-Za-z0-9ÄÖÜäöü])'+esR(n)+'([^A-Za-z0-9ÄÖÜäöü]|$)','i').test(tx));if(s)return s;
+for(const k in SUBJ_KW)if(SUBJ_KW[k].test(tx)){s=S.subjects.find(n=>n.toUpperCase().startsWith(k));if(s)return s}
+return fb===false?'':S.cats.includes('Sonstiges')?'Sonstiges':''}
+function calToTodos(c){if(S.autoHw===false)return 0;S.imp=S.imp||{};const have=new Set(S.todos.map(t=>t.src).filter(Boolean)),ids=new Set(S.todos.map(t=>t.id));let n=0;
+for(const e of c.ev){if(!HW.test(e.n))continue;const key='c:'+(e.u||e.n)+'|'+e.d;if(S.imp[key]||have.has(key))continue;
+let id=uid();while(ids.has(id))id++;ids.add(id);
+S.todos.push({id,done:false,title:e.n.replace(/\s+(ist f[äa]llig|is due)\s*$/i,''),subj:guessSubj(e.n+' '+(e.c||'')+' '+(e.l||''),false)||guessSubj(e.D||'',false)||guessSubj(''),due:e.d,prio:'Mittel',desc:e.D||'',src:key});S.imp[key]=Date.now();n++}
+const cut=Date.now()-240*864e5;for(const k in S.imp)if(S.imp[k]<cut)delete S.imp[k];return n}
+/* ===== Tests und Schularbeiten aus dem Kalender ===== */
+let tstN=0;
+const tstTxt=()=>{const n=tstN;tstN=0;return n?n+(n==1?' Test/SA':' Tests/SAs')+' unter Tests eingetragen.':''};
+const TST=/^\s*([A-Za-zÄÖÜäöü][A-Za-zÄÖÜäöü0-9. ]{0,29}?)[\s\-–_]+(SA|Test|Schularbeit|Klausur|Prüfung|Pruefung|Exam)\b[\s:.\-–]*(.*)$/i;
+const subjByPrefix=p=>{const b=n=>n.replace(/\d.*$/,'').trim().toUpperCase(),u=b(p);return S.subjects.find(n=>b(n)==u)||(c=>c.length==1?c[0]:'')(S.subjects.filter(n=>b(n).startsWith(u)))};
+const hashId=s=>{let h=5381;for(let i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))>>>0;return 1e9+h%9e8};
+function calToTests(c){if(S.autoTest===false)return 0;S.imp=S.imp||{};const cnt={};c.ev.forEach(e=>{if(TST.test(e.n||''))cnt[e.u||e.n]=(cnt[e.u||e.n]||0)+1});let n=0;
+for(const e of c.ev){const m=TST.exec(e.n||'');if(!m)continue;
+const subj=subjByPrefix(m[1])||(m[1].trim().length<=4?m[1].trim().toUpperCase():m[1].trim()),type=/^t/i.test(m[2])?'Test':/^k/i.test(m[2])?'Klausur':/^(p|e)/i.test(m[2])?'Prüfung':'Schularbeit',topic=(m[3]||'').trim()||(e.D||'').split('\n')[0].slice(0,200),
+cu=(e.u||e.n)+'|'+subj+'|'+type+(cnt[e.u||e.n]>1?'|'+e.d:''),key='T:'+cu,ex=S.tests.find(t=>t.cu===cu);
+if(ex){if(ex.cal&&ex.date!==e.d)ex.date=e.d;continue}
+if(S.imp[key])continue;
+let id=hashId(key);while(S.tests.some(t=>t.id==id))id++;
+S.tests.push({id,type,subj,topic,date:e.d,cu,cal:true});S.imp[key]=Date.now();n++}
+return n}
+/* ===== KI-Einstieg (nur Einstieg, keine fertige Lösung) ===== */
+const AI={id:null,subj:'',out:''};
+const AI_SYS='Du bist eine geduldige Lernhilfe für Schülerinnen und Schüler. Gib NUR einen Einstieg in die Hausübung, keine fertige Lösung und keinen abgabefertigen Text. Antworte auf Deutsch, kurz und gegliedert: 1) Was verlangt die Aufgabe, in eigenen Worten? 2) Nötiges Vorwissen und wichtige Begriffe. 3) Lösungsweg in 3 bis 6 Schritten als Hinweise oder Leitfragen, ohne Ergebnisse vorwegzunehmen. 4) Typische Fehler. 5) Eine Kontrollfrage, mit der ich meine eigene Lösung prüfen kann.';
+const aiCfg=()=>{try{return JSON.parse(localStorage.getItem('schulhub_ai')||'{}')}catch(e){return{}}};
+const aiSt=m=>{$('#ai-st').textContent=m||''};
+const aiPrompt=()=>AI_SYS+'\n\nFach: '+(AI.subj||'unbekannt')+'\n\nAufgabe:\n'+$('#ai-task').value.trim();
+function aiTodo(id){const t=S.todos.find(x=>x.id==id);if(!t)return;AI.id=id;AI.subj=t.subj;AI.out='';const has=!!aiCfg().url;
+$('#ai-h').textContent='KI-Einstieg: '+t.title;$('#ai-task').value=t.title+(t.desc?'\n\n'+t.desc:'');$('#ai-out').textContent='';$('#ai-save').style.display='none';aiSt('');
+$('#ai-go').textContent=has?'KI-Einstieg erzeugen':'Prompt kopieren';$('#ai-cp').style.display=has?'':'none';$('#ai-dlg').showModal()}
+async function aiCopy(){try{await navigator.clipboard.writeText(aiPrompt());aiSt('Prompt kopiert – füge ihn im Chat deiner Wahl ein.')}catch(e){aiSt('Kopieren nicht möglich – bitte den Text von Hand markieren und kopieren.')}}
+async function aiRun(){if(!$('#ai-task').value.trim())return aiSt('Bitte zuerst den Aufgabentext eintragen.');const c=aiCfg();if(!c.url)return aiCopy();
+aiSt('KI arbeitet…');$('#ai-go').disabled=true;
+try{const r=await fetch(c.url+'/chat/completions',{method:'POST',headers:{'Content-Type':'application/json',...(c.key?{Authorization:'Bearer '+c.key}:{})},body:JSON.stringify({model:c.model||'auto',temperature:.3,messages:[{role:'system',content:AI_SYS},{role:'user',content:'Fach: '+(AI.subj||'unbekannt')+'\n\nAufgabe:\n'+$('#ai-task').value.trim()}]}),signal:AbortSignal.timeout(60000)});
+if(!r.ok)throw new Error('HTTP '+r.status);const j=await r.json(),t=j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content;if(!t)throw new Error('leere Antwort');
+AI.out=t;$('#ai-out').textContent=t;$('#ai-save').style.display='';aiSt('')}
+catch(e){aiSt('KI nicht erreichbar ('+(e.name=='TimeoutError'?'Zeitüberschreitung':e.message)+'). Läuft der Server, und erlaubt er Anfragen von dieser Seite (CORS)? Mit „Prompt kopieren" geht es auch im Chat.');$('#ai-cp').style.display=''}
+finally{$('#ai-go').disabled=false}}
+function aiToTodo(){const t=S.todos.find(x=>x.id==AI.id);if(!t||!AI.out)return;t.desc=(t.desc?t.desc+'\n\n':'')+'KI-Einstieg:\n'+AI.out;save();render();aiSt('Im To-Do gespeichert.')}
+async function aiCopyOut(){try{await navigator.clipboard.writeText(AI.out);aiSt('Antwort kopiert.')}catch(e){aiSt('Kopieren nicht möglich.')}}
+function aiFill(){const c=aiCfg();$('#ai-url').value=c.url||'';$('#ai-key').value=c.key||'';$('#ai-model').value=c.model||''}
+function aiSaveCfg(){const c={url:$('#ai-url').value.trim().replace(/\/+$/,''),key:$('#ai-key').value.trim(),model:$('#ai-model').value.trim()||'auto'};if(c.url&&!/^https?:\/\//i.test(c.url))return alert('Die URL muss mit http:// oder https:// beginnen.');
+try{localStorage.setItem('schulhub_ai',JSON.stringify(c));$('#ai-cfg-st').textContent=c.url?'Gespeichert.':'Gespeichert – ohne URL kopiert der Button nur den Prompt.'}catch(e){$('#ai-cfg-st').textContent='Speichern nicht möglich.'}}
+async function aiTest(){aiSaveCfg();const c=aiCfg();if(!c.url)return;$('#ai-cfg-st').textContent='Teste…';
+try{const r=await fetch(c.url+'/models',{headers:c.key?{Authorization:'Bearer '+c.key}:{},signal:AbortSignal.timeout(10000)});$('#ai-cfg-st').textContent=r.ok?'Verbindung klappt.':'Server antwortet mit HTTP '+r.status+'.'}
+catch(e){$('#ai-cfg-st').textContent='Nicht erreichbar – läuft der Server, und erlaubt er Anfragen von dieser Seite (CORS)?'}}
+function rSubj(){const L=k=>S[k].map((s,i)=>`<li class="it"><b class="nm">${esc(s)}</b><div class="acts eq">${bt("renameName('"+k+"',"+i+")",'Umbenennen')}${bt("delName('"+k+"',"+i+")",'Löschen','r')}</div></li>`).join('');$('#subjs').innerHTML=L('subjects');$('#cats').innerHTML=L('cats')}
+function addName(k,id){const v=$('#'+id).value.trim();if(!v||S.subjects.includes(v)||S.cats.includes(v))return;S[k].push(v);save();$('#'+id).value='';fillSubjects();render()}
+function renameName(k,i){const old=S[k][i],n=(prompt('Neuer Name:',old)||'').trim();if(!n||n===old)return;if(S.subjects.includes(n)||S.cats.includes(n))return alert('Name existiert bereits.');S[k][i]=n;
+[S.todos,S.tests,S.notes,S.grades].forEach(a=>a.forEach(x=>{if(x.subj===old)x.subj=n}));S.study.forEach(x=>{if(x.s===old)x.s=n});S.tt.flat().forEach(l=>{if(l&&l.s===old)l.s=n});save();fillSubjects();render()}
+function delName(k,i){if(confirm(S[k][i]+' aus der Liste entfernen? Bestehende Einträge bleiben erhalten.')){S[k].splice(i,1);save();fillSubjects();render()}}
+function exportData(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:'application/json'}));a.download='schul-hub-backup-'+iso(new Date())+'.json';a.click();try{localStorage.setItem('schulhub_backup',Date.now())}catch(e){}bkHint();bkStat()}
+function bkInfo(){let t=0,sn=0;try{t=+localStorage.getItem('schulhub_backup')||0;sn=+localStorage.getItem('schulhub_bk_snooze')||0}catch(e){}return{t,sn}}
+function bkHint(){const el=$('#bk-hint');if(!el)return;const{t,sn}=bkInfo(),has=['todos','tests','notes','grades','cards','study'].some(k=>(S[k]||[]).length),old=!t||Date.now()-t>30*864e5;el.style.display=has&&old&&!syncOn()&&Date.now()>sn?'':'none'}
+function bkLater(){try{localStorage.setItem('schulhub_bk_snooze',Date.now()+7*864e5)}catch(e){}bkHint()}
+function bkStat(){const el=$('#bk-st');if(!el)return;const{t}=bkInfo(),m=t?'Letztes Backup: '+new Date(t).toLocaleDateString('de-AT'):'Noch kein Backup erstellt.';el.textContent=m;try{navigator.storage.persisted().then(p=>{if(p)el.textContent=m+' · Browser-Speicher ist vor automatischem Löschen geschützt'}).catch(()=>{})}catch(e){}}
+function importData(i){const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!confirm('Aktuelle Daten durch Backup ersetzen?'))return;S={...structuredClone(DEF),...d,sync:S.sync,sup:S.sup,cals:S.cals};if(!d.school)S.school=structuredClone(LEGACY_SCHOOL);migCal();applySchool();save();fillSubjects();render()}catch(e){alert('Ungültige Datei.')}};r.readAsText(f);i.value=''}
+/* Render */
+function render(){const v=$('.view.on').id;({dash:rDash,plan:rPlan,todo:rTodos,test:rTests,note:rNotes,grade:()=>{rGrades();rSA()},links:rLinks,timer:rStats,cal:rCal,ai:rAi,set:rSet})[v]();setSync()}
+migCal();applySchool();try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}fillSubjects();tDraw();render();fetchSup();calFetch();acHash();syncNow();setInterval(()=>{fetchSup();calFetch()},30*60*1000);setInterval(syncNow,5*60*1000);setInterval(rNow,30000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)syncNow()});
+</script></body></html>
