@@ -10,7 +10,7 @@ nav{width:215px;background:var(--side);border-right:1px solid var(--bd);padding:
 nav h2{color:var(--acc);font-size:var(--fs-lg);padding:0 10px 12px;margin-bottom:6px;border-bottom:1px solid var(--bd)}
 nav button{background:none;border:0;color:var(--dim);padding:9px 12px;border-radius:8px;text-align:left;font-size:var(--fs-md);cursor:pointer}
 nav button:hover,nav button.on{background:#313244;color:var(--acc)}
-nav .sp{flex:1}nav a{color:var(--dim);padding:9px 12px;border-radius:8px;font-size:var(--fs-md);text-decoration:none}nav a:hover{background:#313244;color:var(--acc)}
+nav .sp{flex:1}nav a{white-space:nowrap;color:var(--dim);padding:9px 12px;border-radius:8px;font-size:var(--fs-md);text-decoration:none}nav a:hover{background:#313244;color:var(--acc)}
 main{flex:1;padding:26px;overflow-y:auto}
 .view{display:none}.view.on{display:block}
 h1{font-size:var(--fs-2xl);margin-bottom:20px;color:#fff}h3{color:var(--acc);margin-bottom:12px;font-size:var(--fs-lg)}
@@ -81,6 +81,25 @@ li.it>div>div.dim{white-space:pre-wrap;max-height:9em;overflow:auto}
 #auth .mid{display:flex;justify-content:space-between;align-items:center;margin:2px 0 8px;min-height:30px}
 #auth .msg{min-height:1.2em;margin:10px 0 0;font-size:var(--fs-md);line-height:1.5;text-align:center}
 #auth .foot{border-top:1px solid var(--bd);margin-top:18px;padding-top:12px;text-align:center}
+input[type=range]{padding:0;height:28px;accent-color:var(--acc);background:none;border:0;margin-bottom:6px}
+.pbar{height:8px;background:#313244;border-radius:4px;overflow:hidden;margin-top:6px}.pbar>i{display:block;height:100%;background:var(--acc);border-radius:4px;transition:width .3s}
+.qs{border-color:var(--acc);background:linear-gradient(135deg,#2b2b3d,#29304d)}
+.qs-h{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}.qs-h h3{margin:0;flex:1 1 9rem}
+.qs-i{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--side);border-radius:8px;padding:9px 12px;margin-bottom:var(--gap-s)}
+.qs-i label{flex:1 1 11rem;display:flex;gap:10px;align-items:center;cursor:pointer;min-width:0}.qs-i input{width:auto;margin:0;flex:none}
+.qs-i.ok label span{text-decoration:line-through;opacity:.6}
+.ex{background:var(--side);border-radius:8px;padding:11px 12px;margin-bottom:var(--gap-s);border-left:4px solid var(--grn)}
+.ex.m{border-color:var(--yel)}.ex.u{border-color:var(--red)}
+.ex-t{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:baseline}
+.ex p{margin-top:6px;line-height:1.45;font-size:var(--fs-sm)}
+.wk{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:12px 0 6px}
+.wk>div{text-align:center;font-size:var(--fs-xs);color:var(--dim)}
+.wk .col{height:64px;display:flex;align-items:flex-end;background:var(--side);border-radius:5px;overflow:hidden;margin-bottom:3px}
+.wk .col i{display:block;width:100%;background:var(--acc);min-height:0}
+.wk .now{color:var(--tx);font-weight:700}.wk .now .col{outline:1px solid var(--acc)}
+.stk{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}.stk .n{font-size:2.6rem;font-weight:700;color:var(--yel);line-height:1}
+#wel-dlg{width:min(520px,94vw);text-align:center}
+#tour-dlg{width:min(560px,94vw)}
 </style></head><body>
 <div id="auth" role="dialog" aria-modal="true" aria-label="Anmeldung"><div class="box">
 <h1 id="au-name">Schul-Hub</h1><p class="sub" id="au-sub">Melde dich an, um deine Daten auf allen Geräten zu haben.</p>
@@ -98,18 +117,21 @@ li.it>div>div.dim{white-space:pre-wrap;max-height:9em;overflow:auto}
 <nav>
 <h2>Schul-Hub</h2>
 <button data-v="dash" class="on">Start</button><button data-v="plan">Stundenplan</button><button data-v="todo">To-Dos</button><button data-v="test">Tests</button><button data-v="cal">Kalender</button><button data-v="grade">Noten</button><button data-v="note">Zusammenfassungen</button><button data-v="timer">Lerntimer</button><button data-v="ai">KI-Prompts</button><button data-v="links">Links</button>
-<div class="sp"></div><button data-v="set">Einstellungen</button><a href="#" id="nav-out" style="display:none" onclick="acOut();return false">Abmelden</a>
+<div class="sp"></div><button data-v="set">Einstellungen</button><a href="#" id="nav-help" onclick="tourStart();return false">Hilfe und Rundgang</a><a href="#" id="nav-out" style="display:none" onclick="acOut();return false">Abmelden</a>
 </nav>
 <main>
 <section id="dash" class="view on"><h1 id="hello">Start</h1>
 <div class="card row"><span class="dim" id="sync">…</span><button class="btn s supb" onclick="fetchSup()">Supplierplan aktualisieren</button><button class="btn s g supb" onclick="resetSup()">Zurücksetzen &amp; neu laden</button><button class="btn s g" onclick="goView('set')">Start anpassen</button></div>
 <div class="card row" id="bk-hint" style="display:none"><span class="dim">Deine Daten liegen nur in diesem Browser und sind länger nicht gesichert.</span><button class="btn s" onclick="exportData()">Backup erstellen</button><button class="btn s g" onclick="bkLater()">Später</button></div>
+<div class="card qs" id="qs" style="display:none"><div class="qs-h"><h3>Schnellstart</h3><span class="dim" id="qs-n"></span><button class="btn s g" onclick="tourStart()">Rundgang starten</button><button class="btn s g" id="qs-col" onclick="qsCol()">Einklappen</button><button class="btn s g" onclick="qsHide()">Ausblenden</button></div><div id="qs-body"></div></div>
 <div class="grid"><div class="card" data-t="now"><h3>Jetzt</h3><div id="d-now"></div></div>
 <div class="card" data-t="day"><h3 id="d-day">Nächster Schultag</h3><div id="d-lessons"></div></div>
 <div class="card" data-t="chg"><h3>Änderungen für dich</h3><div id="d-chg"></div></div>
 <div class="card" data-t="cal"><h3>Kalender</h3><div id="d-cal"></div></div>
 <div class="card" data-t="tests"><h3>Nächste Tests</h3><div id="d-tests"></div></div>
 <div class="card" data-t="todos"><h3>Offene To-Dos</h3><div id="d-todos"></div></div>
+<div class="card" data-t="exam"><h3>Prüfungs-Countdown</h3><div id="d-exam"></div></div>
+<div class="card" data-t="streak"><h3>Lern-Streak und Fokus</h3><div id="d-streak"></div></div>
 <div class="card" data-t="study"><h3>Lernzeit diese Woche</h3><div id="d-study"></div></div></div>
 <p class="dim" id="dash-empty" style="display:none;margin-top:var(--gap)">Alle Kacheln sind ausgeblendet. Unter Einstellungen → „Startseite anpassen“ kannst du sie wieder einschalten.</p></section>
 
@@ -137,6 +159,11 @@ li.it>div>div.dim{white-space:pre-wrap;max-height:9em;overflow:auto}
 <div class="card"><h3 id="t-h">Neue Aufgabe</h3><input id="t-title" placeholder="Titel (z. B. Mathe Übung S. 42 oder Wäsche waschen)"><select id="t-subj" class="ss" data-cat="1"></select>
 <div class="row"><input type="date" id="t-due"><select id="t-prio"><option>Hoch</option><option selected>Mittel</option><option>Niedrig</option></select></div>
 <textarea id="t-desc" placeholder="Beschreibung (optional)"></textarea><div class="row"><button class="btn" id="t-btn" onclick="saveTodo()">Hinzufügen</button><button class="btn g" id="t-cancel" style="display:none" onclick="cancelTodo()">Abbrechen</button></div></div>
+<div class="card"><h3>Hausübung einlesen</h3><p class="dim" style="margin-bottom:10px;line-height:1.5">Füge den Text der Aufgabenstellung ein oder lade ein Foto vom Zettel hoch. Titel, Fach, Frist und Beschreibung werden erkannt und als To-Do angelegt.</p>
+<textarea id="hw-text" placeholder="z. B. Mathematik Hausübung: Seite 42, Aufgaben 3 bis 7. Abgabe bis Freitag 13.11."></textarea>
+<label class="lbl" for="hw-img">Foto vom Zettel (optional, Texterkennung)</label><input type="file" id="hw-img" accept="image/*" onchange="hwOcr(this)">
+<div class="row"><button class="btn" onclick="hwAdd()">Als To-Do anlegen</button><button class="btn g" onclick="hwPrev()">Vorschau</button></div><div id="hw-res" class="res"></div>
+<p class="dim" style="margin-top:10px;line-height:1.5">Die Texterkennung für Fotos läuft im Browser und braucht beim ersten Mal eine Internetverbindung für die Sprachdaten. Das Foto selbst wird nicht gespeichert und nicht hochgeladen.</p></div>
 <div class="card"><h3>Aufgaben</h3><div class="row"><select id="f-st" onchange="rTodos()"><option value="open">Offen</option><option value="">Alle</option><option value="done">Erledigt</option></select><select id="f-sj" class="ss" data-all="1" data-cat="1" onchange="rTodos()"></select></div><ul id="todos"></ul>
 <button class="btn s g" onclick="clearDone()">Erledigte löschen</button></div></div></section>
 
@@ -171,6 +198,9 @@ li.it>div>div.dim{white-space:pre-wrap;max-height:9em;overflow:auto}
 <span class="lbl" style="margin-top:14px">Ergebnis als Note übernehmen</span>
 <div class="row"><div><label class="lbl" for="sa-subj">Fach</label><select id="sa-subj" class="ss"></select></div><div><label class="lbl" for="sa-w">Gewicht</label><input type="number" id="sa-w" min="0.1" step="0.1" value="2"></div><button class="btn" style="margin-bottom:10px" onclick="saToGrade()">In Noten übernehmen</button></div>
 <p class="dim" id="sa-msg"></p></div>
+<div class="card"><h3>4 · Was wäre wenn</h3><p class="dim" style="margin-bottom:10px;line-height:1.5">Spiele durch, wie sich dein Schnitt verändert, wenn du bei kommenden Prüfungen bestimmte Noten schreibst. Anstehende Tests und Schularbeiten des Fachs werden automatisch übernommen. Es wird nichts gespeichert.</p>
+<label class="lbl" for="wi-subj">Fach</label><select id="wi-subj" class="ss" onchange="rWI()"></select><div id="wi-rows"></div>
+<div class="row" style="margin-bottom:6px"><button class="btn g" onclick="wiAdd()">Weitere Prüfung</button><button class="btn g" onclick="wiReset()">Zurücksetzen</button></div><div id="wi-res" class="res"></div></div>
 <div class="card"><h3>Übersicht</h3><div id="grades"></div></div></section>
 
 <section id="links" class="view"><h1>Nützliche Links</h1>
@@ -253,10 +283,13 @@ create policy "hub_delete" on public.hub_data for delete to authenticated using 
 <input id="sy-code" placeholder="Sync-Code (auf allen Geräten gleich)"><div class="row"><button class="btn g" onclick="syncGen()">Neuen Code erzeugen</button><button class="btn" onclick="syncConnect()">Verbinden</button><button class="btn g" onclick="syncNow()">Jetzt abgleichen</button><button class="btn g" onclick="syncOff()">Trennen</button></div></details></div>
 <div class="card"><h3>Startseite anpassen</h3><p class="dim" style="margin-bottom:8px">Wähle, welche Kacheln auf der Startseite erscheinen, und bring sie mit ↑ ↓ in die gewünschte Reihenfolge.</p><ul id="dashcfg"></ul><div class="row"><button class="btn g" onclick="dashReset()">Zurücksetzen</button></div></div>
 <div class="card"><h3>KI-Einstieg (optional)</h3><p class="dim" style="margin-bottom:8px">OpenAI-kompatibler Endpunkt, z. B. dein lokales FreeLLMAPI. Wird nur auf diesem Gerät gespeichert, nicht im Sync und nicht im Backup. Ohne Eintrag kopiert der Button den fertigen Prompt für den Chat deiner Wahl.</p><input id="ai-url" placeholder="Basis-URL (z. B. http://localhost:3001/v1)"><input id="ai-key" type="password" placeholder="API-Key (z. B. freellmapi-…)" autocomplete="off"><input id="ai-model" placeholder="Modell (z. B. auto)"><div class="row"><button class="btn" onclick="aiSaveCfg()">Speichern</button><button class="btn g" onclick="aiTest()">Testen</button></div><p class="dim" id="ai-cfg-st" style="margin-top:8px"></p></div>
+<div class="card"><h3>Hilfe und Einstieg</h3><p class="dim" style="margin-bottom:10px;line-height:1.5">Rundgang, Willkommensfenster und Schnellstart lassen sich jederzeit wieder öffnen.</p><div class="row"><button class="btn" onclick="tourStart()">Rundgang starten</button><button class="btn g" onclick="$('#wel-dlg').showModal()">Willkommen anzeigen</button><button class="btn g" onclick="qsShow()">Schnellstart einblenden</button></div></div>
 <div class="card"><h3>Backup</h3><p class="dim" style="margin-bottom:10px">Alle Daten liegen nur in diesem Browser. Sichere sie regelmäßig.</p><p class="dim" id="bk-st" style="margin-bottom:10px"></p><div class="row"><button class="btn" onclick="exportData()">Exportieren</button><button class="btn g" onclick="$('#imp').click()">Importieren</button></div><input type="file" id="imp" accept=".json" style="display:none" onchange="importData(this)"></div></div></section>
 </main>
 <dialog id="view-dlg"><div class="row" style="align-items:center"><h3 id="vw-h" style="flex:1 1 12rem;margin:0;overflow-wrap:anywhere"></h3><button class="btn s g" id="vw-tab" onclick="vwTab()">In neuem Tab</button><button class="btn s g" onclick="vwDl()">Herunterladen</button><button class="btn s" onclick="$('#view-dlg').close()">Schließen</button></div><div id="vw-body"></div></dialog>
 <dialog id="ai-dlg"><h3 id="ai-h">KI-Einstieg</h3><p class="dim" style="margin-bottom:8px">Die KI gibt dir nur einen Einstieg (Ansatz, Begriffe, erste Schritte). Die Lösung schreibst du selbst.</p><textarea id="ai-task" style="min-height:140px" placeholder="Aufgabentext hier einfügen…"></textarea><div class="row"><button class="btn" id="ai-go" onclick="aiRun()">KI-Einstieg erzeugen</button><button class="btn g" id="ai-cp" onclick="aiCopy()">Prompt kopieren</button><button class="btn g" onclick="$('#ai-dlg').close()">Schließen</button></div><p class="dim" id="ai-st" style="margin:8px 0"></p><div id="ai-out" style="white-space:pre-wrap;line-height:1.5"></div><div class="row" id="ai-save" style="display:none;margin-top:10px"><button class="btn g" onclick="aiToTodo()">In To-Do speichern</button><button class="btn g" onclick="aiCopyOut()">Antwort kopieren</button></div></dialog>
+<dialog id="wel-dlg"><h2 style="color:var(--acc);font-size:var(--fs-xl);margin-bottom:10px">Willkommen im Schul-Hub</h2><p style="line-height:1.55;margin-bottom:18px">Dein zentraler Hub für Fächer, Noten, To-Dos und KI-Lernen.</p><div class="row" style="justify-content:center"><button class="btn" onclick="welGo(1)">Schnellstart-Tipps anzeigen</button><button class="btn g" onclick="welGo(0)">Direkt loslegen</button></div></dialog>
+<dialog id="tour-dlg"><div class="dim" id="tour-n" style="margin-bottom:4px"></div><h3 id="tour-h" style="font-size:var(--fs-xl)"></h3><p id="tour-p" style="line-height:1.6;margin-bottom:10px"></p><ul id="tour-l" class="dim" style="line-height:1.6;margin:0 0 14px 18px;list-style:disc"></ul><div class="pbar"><i id="tour-bar"></i></div><div class="row" style="margin-top:14px"><button class="btn g" id="tour-prev" onclick="tourGo(-1)">Zurück</button><button class="btn" id="tour-next" onclick="tourGo(1)">Weiter</button><button class="btn g" onclick="tourStop()">Beenden</button></div></dialog>
 <script>
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -281,7 +314,7 @@ tt:[[0,0,L('E3','SCH','301'),L('E3','SCH','301'),L('M6','EIB','205'),L('M6','EIB
 [0,0,L('GPB2','STE','403'),L('GPB2','STE','403'),0,0],
 [L('GPB2','STE','403'),L('GPB2','STE','403'),L('F4','EBN','403'),L('F4','EBN','403'),0,0],
 [L('D5f','LAS','208'),L('D5f','LAS','208'),L('M6','EIB','205'),L('M6','EIB','205'),0,0]],
-dash:{order:['now','day','chg','cal','tests','todos','study'],hide:{}},sync:{},del:{},imp:{},autoHw:true,todos:[],tests:[],notes:[],grades:[],cards:[],study:[],sa:{sel:'e-ob',tpl:SAD()},links:LKD(),school:{mode:'school',name:'',level:'',supUrl:'',worker:'',times:TM_TAG},lv:[],sup:{rows:[],ts:0}};
+dash:{order:['now','exam','day','chg','cal','tests','todos','streak','study'],hide:{}},guide:{chk:{},hide:false,col:false},sync:{},del:{},imp:{},autoHw:true,todos:[],tests:[],notes:[],grades:[],cards:[],study:[],sa:{sel:'e-ob',tpl:SAD()},links:LKD(),school:{mode:'school',name:'',level:'',supUrl:'',worker:'',times:TM_TAG},lv:[],sup:{rows:[],ts:0}};
 let S,RAW={};try{RAW=JSON.parse(localStorage.getItem('schulhub')||'{}')||{}}catch(e){}
 try{S={...structuredClone(DEF),...RAW}}catch(e){S=structuredClone(DEF)}
 /* Neue Nutzer starten neutral, bestehende Daten ohne Schuleinstellung behalten ihre bisherigen Werte */
@@ -470,7 +503,7 @@ function gateUpdate(){const g=$('#auth');if(!g)return;const show=auRec||(!sbIn()
 if($('#ac-url')&&!$('#ac-url').value)$('#ac-url').value=(S.sync.sb&&S.sync.sb.url)||'';if($('#ac-key')&&!$('#ac-key').value)$('#ac-key').value=(S.sync.sb&&S.sync.sb.key)||'';
 g.style.display=show?'flex':'none';$('#au-name').textContent=(S.school&&S.school.name)||'Schul-Hub';
 $('#au-form').style.display=(auRec||!cfg)?'none':'';$('#au-np').style.display=auRec?'':'none';$('#au-nocfg').style.display=(!cfg&&!auRec)?'':'none';
-const o=$('#nav-out');if(o){o.style.display=sbIn()?'':'none';o.textContent='Abmelden ('+((S.sync.sb&&S.sync.sb.email)||'')+')'}}
+const o=$('#nav-out');if(o){o.style.display=sbIn()?'':'none';o.textContent='Abmelden ('+((S.sync.sb&&S.sync.sb.email)||'')+')'}welCheck()}
 function auMode(m){auM=m;$('#au-t-in').className=m=='in'?'on':'';$('#au-t-reg').className=m=='reg'?'on':'';$('#au-go').textContent=m=='in'?'Anmelden':'Konto erstellen';$('#au-pw').autocomplete=m=='in'?'current-password':'new-password';$('#au-forgot').style.visibility=m=='in'?'':'hidden';acMsg('')}
 function auShow(){const i=$('#au-pw'),s=i.type=='password';i.type=s?'text':'password';$('#au-eye').textContent=s?'Verbergen':'Anzeigen'}
 async function auSubmit(ev){ev.preventDefault();$('#ac-mail').value=$('#au-mail').value;$('#ac-pw').value=$('#au-pw').value;if(auM=='in')await acLogin();else await acReg();if(sbIn())$('#au-pw').value=''}
@@ -522,7 +555,7 @@ $('#d-tests').innerHTML=ts.length?ts.map(t=>`<div class="blk"><div><b>${esc(t.ty
 const td=S.todos.filter(t=>!t.done).sort((a,b)=>(a.due||'9').localeCompare(b.due||'9')).slice(0,5);
 $('#d-todos').innerHTML=td.length?td.map(t=>`<div class="blk"><div><b>${esc(t.title)}</b> <span class="bd">${esc(t.subj)}</span></div><span class="${t.due&&dUntil(t.due)<0?'red':'dim'}">${t.due?dTxt(t.due):''}</span></div>`).join(''):'<p class="grn">Alles erledigt </p>';
 const ce=calEv(c=>c.home!==false).filter(x=>dUntil(x.d)>=0).slice(0,5);$('#d-cal').innerHTML=ce.length?calLi(ce):'<p class="dim">Keine Termine – unter „Kalender“ hinzufügen.</p>';
-const st=weekStats(),tot=Object.values(st).reduce((a,b)=>a+b,0);$('#d-study').innerHTML=`<p style="font-size:var(--fs-xl);font-weight:700">${Math.floor(tot/60)} Std. ${tot%60} Min.</p>`}
+const st=weekStats(),tot=Object.values(st).reduce((a,b)=>a+b,0);$('#d-study').innerHTML=`<p style="font-size:var(--fs-xl);font-weight:700">${Math.floor(tot/60)} Std. ${tot%60} Min.</p>`;rQS();rExam();rStreak()}
 /* To-Dos */
 const bt=(f,l,c)=>`<button class="btn s ${c||'g'}" onclick="${f}">${l}</button>`;
 function saveTodo(){const title=$('#t-title').value.trim();if(!title)return;const o={title,subj:$('#t-subj').value,due:$('#t-due').value,prio:$('#t-prio').value,desc:$('#t-desc').value};
@@ -765,7 +798,7 @@ $('#cal-all').innerHTML=S.cals.map(c=>{const col=colOk(c.color),st=calBusy[c.id]
 return `<li class="it" style="border-color:${col}"><input type="color" value="${col}" title="Farbe" aria-label="Farbe von ${esc(c.name)}" onchange="calColor(${c.id},this.value)" style="width:34px;height:34px;padding:2px;margin:0;flex:none;cursor:pointer"><div><b>${esc(c.name)}</b><br><span class="${calErr[c.id]?'red':'dim'}">${esc(st)}</span><label class="dim" style="display:flex;gap:6px;align-items:center;margin-top:4px"><input type="checkbox" ${c.home!==false?'checked':''} onchange="calHome(${c.id},this.checked)"> Auf Start zeigen</label></div><div class="acts">${c.url?bt('calFetch('+c.id+')','Aktualisieren'):''}${bt('calRename('+c.id+')','Umbenennen')}${bt('calDel('+c.id+')','Entfernen','r')}</div></li>`}).join('');
 const up=calEv().filter(x=>dUntil(x.d)>=0&&dUntil(x.d)<=30);$('#cal-list').innerHTML=up.length?calLi(up):'<p class="dim">Keine Termine in den nächsten 30 Tagen.</p>'}
 /* ===== Startseite anpassen ===== */
-const TILES=[['now','Jetzt'],['day','Heute / Nächster Schultag'],['chg','Änderungen für dich'],['cal','Kalender'],['tests','Nächste Tests'],['todos','Offene To-Dos'],['study','Lernzeit diese Woche']];
+const TILES=[['now','Jetzt'],['exam','Prüfungs-Countdown und Lernplan'],['day','Heute / Nächster Schultag'],['chg','Änderungen für dich'],['cal','Kalender'],['tests','Nächste Tests'],['todos','Offene To-Dos'],['streak','Lern-Streak und Fokus'],['study','Lernzeit diese Woche']];
 function dashOrder(){const d=S.dash=S.dash||{order:[],hide:{}};d.hide=d.hide||{};const o=(d.order||[]).filter(k=>TILES.some(t=>t[0]==k));TILES.forEach(t=>{if(!o.includes(t[0]))o.push(t[0])});d.order=o;return o}
 function applyDash(){const o=dashOrder();let vis=0;$$('.supb').forEach(b=>b.style.display=supOn()?'':'none');o.forEach((k,i)=>{const el=$('[data-t="'+k+'"]');if(!el)return;const h=!!S.dash.hide[k]||(k=='chg'&&!supOn());el.style.order=i;el.style.display=h?'none':'';if(!h)vis++});$('#dash-empty').style.display=vis?'none':''}
 function rDashCfg(){const o=dashOrder();$('#dashcfg').innerHTML=o.map(k=>`<li class="it"><label class="nm" style="display:flex;gap:8px;align-items:center;cursor:pointer"><input type="checkbox" ${S.dash.hide[k]?'':'checked'} onchange="dashTog('${k}',this.checked)">${esc(TILES.find(t=>t[0]==k)[1])}</label><div class="acts">${bt("dashMove('"+k+"',-1)",'↑')}${bt("dashMove('"+k+"',1)",'↓')}</div></li>`).join('')}
@@ -837,7 +870,128 @@ function bkHint(){const el=$('#bk-hint');if(!el)return;const{t,sn}=bkInfo(),has=
 function bkLater(){try{localStorage.setItem('schulhub_bk_snooze',Date.now()+7*864e5)}catch(e){}bkHint()}
 function bkStat(){const el=$('#bk-st');if(!el)return;const{t}=bkInfo(),m=t?'Letztes Backup: '+new Date(t).toLocaleDateString('de-AT'):'Noch kein Backup erstellt.';el.textContent=m;try{navigator.storage.persisted().then(p=>{if(p)el.textContent=m+' · Browser-Speicher ist vor automatischem Löschen geschützt'}).catch(()=>{})}catch(e){}}
 function importData(i){const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!confirm('Aktuelle Daten durch Backup ersetzen?'))return;S={...structuredClone(DEF),...d,sync:S.sync,sup:S.sup,cals:S.cals};if(!d.school)S.school=structuredClone(LEGACY_SCHOOL);migCal();applySchool();save();fillSubjects();render()}catch(e){alert('Ungültige Datei.')}};r.readAsText(f);i.value=''}
+
+/* ===== Onboarding: Willkommen, Schnellstart, Rundgang ===== */
+const guideS=()=>{const g=S.guide=S.guide&&typeof S.guide=='object'?S.guide:{};g.chk=g.chk||{};return g};
+function guideSeen(){try{return !!localStorage.getItem('guide_seen')}catch(e){return true}}
+function guideMark(){try{localStorage.setItem('guide_seen','1')}catch(e){}}
+function welCheck(){const d=$('#wel-dlg'),a=$('#auth');if(!d||d.open||guideSeen()||(a&&a.style.display!='none'))return;try{d.showModal()}catch(e){}}
+function welGo(tips){guideMark();$('#wel-dlg').close();if(tips){const g=guideS();g.hide=false;g.col=false;save();goView('dash');$('main').scrollTop=0}}
+$('#wel-dlg').addEventListener('close',guideMark);
+const QS=[['a','Stundenplan anpassen',[['Stundenplan','plan']],()=>S.tt.some(r=>(r||[]).some(Boolean))||(S.lv||[]).length>0],
+['b','Kalender oder To-Dos hinzufügen',[['To-Dos','todo'],['Kalender','cal']],()=>S.todos.length>0||(S.cals||[]).length>0],
+['c','KI-Prompt-Generator ausprobieren',[['KI-Prompts','ai']],()=>false]];
+const qsOn=q=>{const c=guideS().chk[q[0]];return c===undefined?q[3]():!!c};
+function qsTog(k,on){guideS().chk[k]=on;save();rQS()}
+function qsCol(){const g=guideS();g.col=!g.col;save();rQS()}
+function qsHide(){guideS().hide=true;save();rQS()}
+function qsShow(){const g=guideS();g.hide=false;g.col=false;save();goView('dash')}
+function rQS(){const el=$('#qs');if(!el)return;const g=guideS();el.style.display=g.hide?'none':'';if(g.hide)return;
+const n=QS.filter(qsOn).length;$('#qs-n').textContent=n+' von '+QS.length+' erledigt';$('#qs-col').textContent=g.col?'Aufklappen':'Einklappen';
+$('#qs-body').style.display=g.col?'none':'';
+$('#qs-body').innerHTML=QS.map(q=>{const on=qsOn(q);return `<div class="qs-i ${on?'ok':''}"><label><input type="checkbox" ${on?'checked':''} onchange="qsTog('${q[0]}',this.checked)"><span>${esc(q[1])}</span></label><div class="acts">${q[2].map(l=>bt("goView('"+l[1]+"')",esc(l[0]))).join('')}</div></div>`}).join('')+(n==QS.length?'<p class="grn" style="margin-top:4px">Alles erledigt. Du kannst die Karte jetzt ausblenden.</p>':'')}
+const TOUR=[
+{v:'dash',h:'Willkommen im Schul-Hub',p:'Der Hub bündelt Stundenplan, Termine, Noten, To-Dos und Lernhilfen an einem Ort. Die Startseite zeigt dir auf einen Blick, was heute und in den nächsten Tagen ansteht.',l:['Start: Jetzt, Prüfungs-Countdown, Streak und offene To-Dos','Ohne Konto bleiben die Daten in diesem Browser, mit Konto auf allen Geräten','Unter Einstellungen passt du Fächer, Zeiten und die Startseite an']},
+{v:'plan',h:'Stundenplan und Supplierplan',p:'Hier trägst du deine Fächer ein. Ausfälle und Vertretungen werden direkt im Plan und auf der Startseite farbig markiert.',l:['Mit „Plan bearbeiten“ Fächer, Lehrkräfte und Räume eintragen','Supplierplan: Adresse der Schulseite unter Einstellungen eintragen, dann erscheinen Änderungen automatisch','An der Uni nutzt du stattdessen Lehrveranstaltungen mit freien Zeiten']},
+{v:'ai',h:'KI-Prompts: dein Lernturbo',p:'Der Prompt-Generator baut dir in Sekunden einen starken Prompt für ChatGPT, Claude, Gemini oder Copilot. Ideal zur Prüfungsvorbereitung.',l:['Fach und Thema wählen, dann Übungsaufgaben, Probetest, Lernplan oder Tutor-Modus erzeugen','„Nächster Test“ übernimmt Fach und Thema aus deinem Kalender','Material per Link oder eingefügtem Text mitgeben und mit einem Klick kopieren']},
+{v:'cal',h:'Kalender-Import',p:'Verbinde deinen Schulkalender per iCal-Link oder .ics-Datei. Termine erscheinen auf der Startseite.',l:['Einträge wie „D-SA“ oder „INF-Test“ landen automatisch unter Tests','Abgaben und Hausübungen werden als To-Dos übernommen','Der Countdown auf der Startseite plant daraus deine Lernzeit']}];
+let tourI=0;
+function tourStart(){tourI=0;tourDraw();const d=$('#tour-dlg');if(!d.open)d.showModal()}
+function tourDraw(){const t=TOUR[tourI];$('#tour-n').textContent='Schritt '+(tourI+1)+' von '+TOUR.length;$('#tour-h').textContent=t.h;$('#tour-p').textContent=t.p;$('#tour-l').innerHTML=t.l.map(x=>'<li>'+esc(x)+'</li>').join('');
+$('#tour-bar').style.width=((tourI+1)/TOUR.length*100)+'%';$('#tour-prev').style.display=tourI?'':'none';$('#tour-next').textContent=tourI==TOUR.length-1?'Fertig':'Weiter';goView(t.v)}
+function tourGo(d){if(tourI+d>=TOUR.length)return tourStop();tourI=Math.max(0,tourI+d);tourDraw()}
+function tourStop(){guideMark();$('#tour-dlg').close();goView('dash')}
+/* ===== Prüfungs-Countdown und Lernplan ===== */
+const EXT={Schularbeit:300,Klausur:360,Test:150,'Mündliche Prüfung':180,'Präsentation':150,Abgabe:120};
+const addD=n=>{const d=today0();d.setDate(d.getDate()+n);return iso(d)};
+const studyMin=(sj,a,b)=>S.study.filter(x=>x.s==sj&&x.d>=a&&x.d<=b).reduce((t,x)=>t+(+x.m||0),0);
+function exAll(){const a=S.tests.filter(t=>t.date&&dUntil(t.date)>=0&&dUntil(t.date)<=60).map(t=>({...t}));
+try{calEv().forEach(e=>{const m=TST.exec(e.n||'');if(!m||dUntil(e.d)<0||dUntil(e.d)>60)return;const subj=subjByPrefix(m[1])||(m[1].trim().length<=4?m[1].trim().toUpperCase():m[1].trim()),type=/^t/i.test(m[2])?'Test':/^k/i.test(m[2])?'Klausur':/^(p|e)/i.test(m[2])?'Prüfung':'Schularbeit';
+if(!a.some(t=>t.date==e.d&&t.subj==subj))a.push({type,subj,topic:(m[3]||'').trim(),date:e.d})})}catch(x){}
+return a.sort((x,y)=>x.date.localeCompare(y.date))}
+function exPlan(t){const n=dUntil(t.date),tot=EXT[t.type]||150,T=iso(today0()),before=studyMin(t.subj,addD(-14),addD(-1)),today=studyMin(t.subj,T,T),done=before+today;
+let rec=0;if(n>=1){const left=Math.max(0,tot-before);rec=left?Math.min(120,Math.max(10,Math.ceil(left/n/5)*5)):10}else rec=15;
+return{n,tot,done,today,rec,pct:Math.min(100,Math.round(done/tot*100))}}
+function exStart(sj,min){goView('timer');setSel($('#tsubj'),sj);$('#tw').value=min;tReset()}
+function rExam(){const el=$('#d-exam');if(!el)return;const a=exAll().slice(0,4);
+if(!a.length){el.innerHTML='<p class="dim" style="line-height:1.5">Keine Prüfungen in den nächsten 60 Tagen. Trage Tests unter „Tests“ ein oder verbinde einen Kalender.</p>';return}
+let sum=0;const h=a.map(t=>{const p=exPlan(t);sum+=Math.max(0,p.rec-p.today);const cls=p.n<=2?'u':p.n<=7?'m':'',when=p.n==0?'heute':p.n==1?'morgen':'in '+p.n+' Tagen',
+msg=p.n==0?`Heute ist ${esc(t.type)} in ${esc(t.subj)}. Wiederhole nur kurz (${p.rec} Min.), iss etwas und schlaf gut.`:`Noch ${p.n} ${p.n==1?'Tag':'Tage'} bis ${esc(t.subj)} ${esc(t.type)}. Empfohlene Lerneinheit heute: <b>${p.rec} Min.</b>`;
+const act=p.today>=p.rec?`<span class="grn">Heute schon ${p.today} Min. gelernt, Ziel erreicht.</span>`:`${p.today?`<span class="dim">Heute schon ${p.today} von ${p.rec} Min. </span>`:''}<button class="btn s" style="margin-top:6px" onclick="exStart(${esc(JSON.stringify(t.subj))},${p.rec-p.today>=5?p.rec-p.today:p.rec})">Timer starten</button>`;
+return `<div class="ex ${cls}"><div class="ex-t"><b>${esc(t.type)} ${esc(t.subj)}</b><span class="${p.n<=2?'red':'dim'}">${fmtD(t.date)} · ${when}</span></div>${t.topic?`<div class="dim">${esc(t.topic)}</div>`:''}
+<div class="pbar" title="Vorbereitung"><i style="width:${p.pct}%"></i></div><div class="dim" style="font-size:var(--fs-xs);margin-top:3px">Vorbereitung: ${p.done} von ${p.tot} Min. (letzte 14 Tage)</div><p>${msg}</p><div>${act}</div></div>`}).join('');
+el.innerHTML=h+(sum>0?`<p class="dim">Heute insgesamt noch empfohlen: <b>${sum} Min.</b></p>`:'<p class="grn">Dein Lernpensum für heute ist geschafft.</p>')}
+/* ===== Lern-Streak und Fokus ===== */
+function streakInfo(){const dn=s=>Math.round(new Date(s+'T00:00')/864e5),set=new Set(S.study.filter(x=>x.m>0&&x.d).map(x=>x.d)),days=[...set].map(dn).sort((a,b)=>a-b);
+let best=0,run=0,prev=null;days.forEach(d=>{run=prev!==null&&d==prev+1?run+1:1;prev=d;if(run>best)best=run});
+const T=iso(today0()),has=set.has(T);let cur=0,c=has?dn(T):dn(T)-1;const ds=new Set(days);while(ds.has(c)){cur++;c--}
+return{cur,best,has}}
+function rStreak(){const el=$('#d-streak');if(!el)return;const k=streakInfo(),st=weekStats(),tot=Object.values(st).reduce((a,b)=>a+b,0),m=today0();m.setDate(m.getDate()-((m.getDay()+6)%7));
+const per=Array.from({length:7},(_,i)=>{const d=new Date(m);d.setDate(m.getDate()+i);const x=iso(d);return{x,v:S.study.filter(s=>s.d==x).reduce((a,s)=>a+(+s.m||0),0),now:x==iso(today0())}}),mx=Math.max(30,...per.map(p=>p.v));
+const hint=k.cur==0?'Starte heute deine Serie. Schon 10 Minuten zählen.':k.has?(k.cur>=7?'Starke Serie, weiter so.':'Heute ist geschafft. Morgen geht die Serie weiter.'):`Lerne heute noch, um deine Serie von ${k.cur} ${k.cur==1?'Tag':'Tagen'} zu halten.`;
+const ent=Object.entries(st).sort((a,b)=>b[1]-a[1]).slice(0,3),top=ent[0],
+miss=exAll().filter(t=>dUntil(t.date)<=14&&!st[t.subj]).map(t=>t.subj).filter((v,i,a)=>a.indexOf(v)==i).slice(0,2);
+el.innerHTML=`<div class="stk"><span class="n">${k.cur}</span><b>${k.cur==1?'Tag':'Tage'} in Folge</b><span class="dim">Rekord: ${k.best}</span></div><p class="dim" style="margin-top:6px">${hint}</p>
+<div class="wk">${per.map((p,i)=>`<div class="${p.now?'now':''}"><div class="col" title="${p.v} Min."><i style="height:${p.v?Math.max(8,Math.round(p.v/mx*100)):0}%"></i></div>${DS[i]}</div>`).join('')}</div>
+<h3 style="margin:14px 0 8px;font-size:var(--fs-md)">Fokus diese Woche</h3>`+
+(top?`<p class="dim" style="margin-bottom:6px">Fokusfach: <b style="color:var(--tx)">${esc(top[0])}</b> mit ${Math.round(top[1]/tot*100)} % deiner Lernzeit</p>`+ent.map(([s,v])=>`<div style="margin-bottom:8px"><span style="font-size:var(--fs-sm)"><b>${esc(s)}</b> <span class="dim">${v} Min.</span></span><div class="pbar"><i style="width:${Math.round(v/tot*100)}%"></i></div></div>`).join(''):'<p class="dim">Noch keine Lernzeit diese Woche.</p>')+
+(miss.length?`<p class="yel" style="font-size:var(--fs-sm);margin-top:6px">Diese Woche noch nicht gelernt, aber bald Prüfung: ${miss.map(esc).join(', ')}</p>`:'')}
+/* ===== Hausübung einlesen ===== */
+const WDX={mo:0,montag:0,di:1,dienstag:1,mi:2,mittwoch:2,do:3,donnerstag:3,fr:4,freitag:4,sa:5,samstag:5,so:6,sonntag:6};
+function hwDue(t){const T=today0(),okd=(d,m)=>d>=1&&d<=31&&m>=1&&m<=12,dm=(a,b,y)=>mkDate(+a,+b,y?(y.length==2?'20'+y:y):undefined);let m;
+if((m=t.match(/(\d{4})-(\d{2})-(\d{2})/))&&okd(+m[3],+m[2]))return m[0];
+if((m=t.match(/(?:bis|abgabe|f[äa]llig|frist|termin|deadline|due|spätestens)\D{0,30}?(\d{1,2})\.\s?(\d{1,2})\.?(?:\s?(\d{4}|\d{2})(?!\d))?/i))&&okd(+m[1],+m[2]))return dm(m[1],m[2],m[3]);
+if((m=t.match(/\b(?:bis|für|fuer|zum|auf)\s+(heute|[üu]bermorgen|uebermorgen|morgen)\b/i)))return addD(/^heute/i.test(m[1])?0:/^morgen/i.test(m[1])?1:2);
+if((m=t.match(/\b(?:bis|für|fuer|zum|am|auf)\s+(?:(?:den|dem)\s+)?(?:(?:nächsten?|naechsten?|kommenden)\s+)?(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag|mo|di|mi|do|fr|sa|so)\b/i))){const w=WDX[m[1].toLowerCase()],cur=(T.getDay()+6)%7;let df=(w-cur+7)%7;if(!df)df=7;return addD(df)}
+if(/\b(?:bis|für|fuer)\s+(?:nächste|naechste|kommende)\s+woche\b/i.test(t))return addD(7);
+if((m=t.match(/\bin\s+(\d{1,2})\s+tagen?\b/i)))return addD(+m[1]);
+const re=/(\d{1,2})\.\s?(\d{1,2})\.(?:\s?(\d{4}|\d{2})(?!\d))?/g;while((m=re.exec(t))){if(!okd(+m[1],+m[2]))continue;if(/(aufgaben?|seite|s\.|nr\.?|bsp\.?|beispiel|kapitel|kap\.?|übung|ü)\s*$/i.test(t.slice(Math.max(0,m.index-12),m.index)))continue;return dm(m[1],m[2],m[3])}
+return ''}
+function hwSubj(t){let s=guessSubj(t,false);if(s)return s;const words=(t.toLowerCase().match(/[a-zäöüß]{3,}/g)||[]);
+for(const n of S.subjects){const b=n.replace(/\d.*$/,'').trim().toLowerCase();if(b.length>=3&&words.some(w=>b.startsWith(w)||w.startsWith(b)))return n}
+return guessSubj('')||S.subjects[0]||S.cats[0]||''}
+function hwParse(raw){const text=String(raw||'').replace(/\r/g,'').trim(),lines=text.split('\n').map(x=>x.trim()).filter(Boolean),strip=x=>x.replace(/^[\-\*•\d.)\s]*(?:hausübung|hausaufgabe|hü|hue|aufgabe|titel)\s*[:\-–]\s*/i,'').trim();
+let title=strip(lines[0]||''),rest=lines.slice(1);
+if(title.length<=18&&rest.length){title=title+': '+strip(rest[0]);rest=rest.slice(1)}
+let desc=rest.join('\n'),cut=false;if(title.length>80){const k=title.lastIndexOf(' ',78);title=title.slice(0,k>30?k:78)+'…';cut=true}
+if(cut&&!desc)desc=text;
+const due=hwDue(text),subj=hwSubj(text),prio=(due&&dUntil(due)<=2)||/wichtig|dringend/i.test(text)?'Hoch':'Mittel';
+return{title:title||'Hausübung',subj,due,prio,desc}}
+const hwMsg=h=>{$('#hw-res').innerHTML=h};
+const hwSum=o=>`<b>${esc(o.title)}</b><br><span class="dim">Fach: ${esc(o.subj||'nicht erkannt')} · Frist: ${o.due?fmtD(o.due)+' ('+dTxt(o.due)+')':'keine erkannt'} · Priorität: ${o.prio}</span>${o.desc?`<div class="dim" style="white-space:pre-wrap;margin-top:4px">${esc(o.desc.slice(0,300))}${o.desc.length>300?'…':''}</div>`:''}`;
+function hwPrev(){const t=$('#hw-text').value.trim();if(!t)return hwMsg('<span class="dim">Bitte zuerst Text einfügen oder ein Foto hochladen.</span>');hwMsg(hwSum(hwParse(t)))}
+function hwAdd(){const t=$('#hw-text').value.trim();if(!t)return hwMsg('<span class="dim">Bitte zuerst Text einfügen oder ein Foto hochladen.</span>');const o=hwParse(t);
+if(S.todos.some(x=>!x.done&&x.title===o.title&&(x.due||'')===(o.due||'')))return hwMsg('<span class="yel">Dieses To-Do gibt es schon.</span>');
+const id=uid();S.todos.push({id,done:false,title:o.title,subj:o.subj,due:o.due,prio:o.prio,desc:o.desc});save();$('#hw-text').value='';$('#hw-img').value='';render();hwMsg('<span class="grn">To-Do angelegt.</span><br>'+hwSum(o)+'<div style="margin-top:8px">'+bt('editTodo('+id+')','Bearbeiten')+'</div>')}
+let tessP=null;
+const loadTess=()=>window.Tesseract?Promise.resolve():(tessP=tessP||new Promise((ok,no)=>{const sc=document.createElement('script');sc.src='https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';sc.onload=ok;sc.onerror=()=>{tessP=null;no(new Error('offline'))};document.head.appendChild(sc)}));
+async function hwOcr(inp){const f=inp.files[0];if(!f)return;hwMsg('<span class="dim">Text wird erkannt …</span>');let txt='';
+try{if('TextDetector' in window){const r=await new window.TextDetector().detect(await createImageBitmap(f));txt=r.map(x=>x.rawValue).join('\n')}}catch(e){}
+if(!txt.trim()){try{await loadTess();txt=(await window.Tesseract.recognize(f,'deu+eng')).data.text}catch(e){return hwMsg('<span class="red">Texterkennung nicht möglich. Sie braucht beim ersten Mal Internet. Tippe oder füge den Text stattdessen oben ein.</span>')}}
+if(!txt.trim())return hwMsg('<span class="yel">Auf dem Foto wurde kein Text erkannt. Versuche ein schärferes Bild oder füge den Text ein.</span>');
+$('#hw-text').value=txt.trim();hwMsg('<span class="dim">Erkannter Text steht oben. Prüfe ihn kurz und lege dann das To-Do an.</span><br>'+hwSum(hwParse(txt)))}
+/* ===== Noten: Was wäre wenn ===== */
+const WI={subj:null,rows:[],dirty:true},WIW={Schularbeit:2,Klausur:2,Test:1};
+const gf=v=>String(v).replace('.',','),aF=a=>a.toFixed(2).replace('.',','),aC=a=>a<=2.5?'var(--grn)':a<=3.5?'var(--yel)':'var(--red)';
+function wiDef(){const s=$('#wi-subj').value,t=S.tests.filter(x=>x.subj==s&&x.date&&dUntil(x.date)>=0).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,4).map(x=>({l:x.type+' '+fmtD(x.date),g:2,w:WIW[x.type]||1}));return t.length?t:[{l:'Nächste Prüfung',g:2,w:1}]}
+function rWI(){const sel=$('#wi-subj');if(!sel)return;const s=sel.value;if(WI.subj!==s){WI.subj=s;WI.rows=wiDef();WI.dirty=true}if(WI.dirty){drawWI();WI.dirty=false}calcWI()}
+function drawWI(){$('#wi-rows').innerHTML=WI.rows.map((r,i)=>`<div class="sa-r"><div><label class="lbl">${esc(r.l)}: Note <b id="wi-v${i}" style="color:var(--tx)">${gf(r.g)}</b></label><input type="range" min="1" max="5" step="0.5" value="${r.g}" aria-label="Note für ${esc(r.l)}" oninput="wiSet(${i},'g',this.value)"></div><div><label class="lbl">Gewicht</label><input type="number" min="0.1" step="0.1" value="${r.w}" aria-label="Gewicht für ${esc(r.l)}" oninput="wiSet(${i},'w',this.value)"></div>${WI.rows.length>1?`<button class="btn s r" style="margin-bottom:2px" onclick="wiDel(${i})">Entfernen</button>`:''}</div>`).join('')}
+function wiSet(i,k,v){const n=parseFloat(String(v).replace(',','.'));WI.rows[i][k]=isNaN(n)?(k=='w'?0:3):n;if(k=='g'){const e=$('#wi-v'+i);if(e)e.textContent=gf(WI.rows[i].g)}calcWI()}
+function wiAdd(){if(WI.rows.length>=8)return;WI.rows.push({l:'Zusätzliche Prüfung',g:2,w:1});drawWI();calcWI()}
+function wiDel(i){WI.rows.splice(i,1);drawWI();calcWI()}
+function wiReset(){WI.rows=wiDef();drawWI();calcWI()}
+function calcWI(){const el=$('#wi-res'),s=WI.subj;if(!s){el.innerHTML='<span class="dim">Lege zuerst ein Fach an.</span>';return}
+const x=gStat(s),rw=WI.rows.filter(r=>r.w>0);if(!rw.length){el.innerHTML='<span class="dim">Gib mindestens einer Prüfung ein Gewicht größer als 0.</span>';return}
+let W=x.W,sum=x.sum;rw.forEach(r=>{W+=r.w;sum+=r.g*r.w});const B=sum/W,A=x.avg;
+const what=rw.length==1?`als Nächstes eine <b>${gf(rw[0].g)}</b> mit Gewicht <b>${gf(rw[0].w)}</b>`:rw.map(r=>`bei ${esc(r.l)} eine <b>${gf(r.g)}</b> (Gewicht ${gf(r.w)})`).join(' und '),
+nb=B>=1?gRound(B):5;let t=`Wenn ich in <b>${esc(s)}</b> ${what} schreibe, `;
+if(A==null)t+=`liegt mein Schnitt bei <b style="color:${aC(B)}">${aF(B)}</b> (Note ${nb}, ${GN[nb]}). <span class="dim">Bisher gibt es in diesem Fach keine Note.</span>`;
+else{const d=B-A,v=Math.abs(d)<0.005?'bleibt mein Schnitt bei':d<0?'verbessert sich mein Schnitt von':'verschlechtert sich mein Schnitt von';
+t+=Math.abs(d)<0.005?`${v} <b>${aF(A)}</b>.`:`${v} <b style="color:${aC(A)}">${aF(A)}</b> auf <b style="color:${aC(B)}">${aF(B)}</b>.`;
+const ra=gRound(A);t+=`<br><span class="dim">Zeugnisnote: ${ra} (${GN[ra]}) ${ra==nb?'bleibt':'wird'} ${ra==nb?'gleich':'→ '+nb+' ('+GN[nb]+')'}</span>`}
+const tb=[1,2,3,4,5].map(n=>{let w2=x.W,s2=x.sum;rw.forEach(r=>{w2+=r.w;s2+=n*r.w});const a=s2/w2,z=gRound(a);return `<tr><td>${n}</td><td style="color:${aC(a)}">${aF(a)}</td><td>${z} (${GN[z]})</td></tr>`}).join('');
+el.innerHTML=t+`<details style="margin-top:10px"><summary class="dim" style="cursor:pointer">Was wäre bei jeder Note?</summary><p class="dim" style="margin:8px 0 6px">Alle Szenario-Prüfungen mit derselben Note:</p><table class="l"><tr><th>Note</th><th>Schnitt</th><th>Zeugnis</th></tr>${tb}</table></details>`}
 /* Render */
-function render(){const v=$('.view.on').id;({dash:rDash,plan:rPlan,todo:rTodos,test:rTests,note:rNotes,grade:()=>{rGrades();rSA()},links:rLinks,timer:rStats,cal:rCal,ai:rAi,set:rSet})[v]();setSync()}
+function render(){const v=$('.view.on').id;({dash:rDash,plan:rPlan,todo:rTodos,test:rTests,note:rNotes,grade:()=>{rGrades();rSA();rWI()},links:rLinks,timer:rStats,cal:rCal,ai:rAi,set:rSet})[v]();setSync()}
 migCal();applySchool();gateUpdate();try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}fillSubjects();tDraw();render();fetchSup();calFetch();acHash();syncNow();setInterval(()=>{fetchSup();calFetch()},30*60*1000);setInterval(syncNow,5*60*1000);setInterval(rNow,30000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)syncNow()});
 </script></body></html>
