@@ -1,19 +1,28 @@
 <!DOCTYPE html>
-<html lang="de"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Schul-Hub</title>
+<html lang="de"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Schul-Hub</title>
+<meta name="theme-color" content="#181825" media="(prefers-color-scheme: dark)"><meta name="theme-color" content="#e6e9ef" media="(prefers-color-scheme: light)">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Schul-Hub">
+<script>try{var t=localStorage.getItem('schulhub_theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
 <style>
 :root{--bg:#1e1e2e;--side:#181825;--card:#2b2b3d;--acc:#89b4fa;--tx:#cdd6f4;--dim:#a6adc8;--red:#f38ba8;--grn:#a6e3a1;--yel:#f9e2af;--org:#fab387;--pur:#cba6f7;--bd:#45475a;
+--hov:#313244;--head:#fff;--on-acc:#11111b;--mute:#7f849c;--cl:#2a2a40;--ce:#3e1f28;--cs:#3d2f22;--cv:#33283f;--cr:#22333f;--csa:#3d3a22;--help:#262637;--qs1:#2b2b3d;--qs2:#29304d;--shade:rgba(0,0,0,.6);--tagtx:#11111b;color-scheme:dark;
 --fs-xs:.72rem;--fs-sm:.8rem;--fs-md:.9rem;--fs-lg:1.05rem;--fs-xl:1.35rem;--fs-2xl:1.6rem;--fs-3xl:3.6rem;
 --gap:16px;--gap-s:8px;--pad:20px}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#eff1f5;--side:#e6e9ef;--card:#fff;--acc:#1e66f5;--tx:#4c4f69;--dim:#5c5f77;--red:#be0d33;--grn:#2f7d1f;--yel:#8c5208;--org:#c64a06;--pur:#8839ef;--bd:#ccd0da;
+--hov:#dce0e8;--head:#232634;--on-acc:#fff;--mute:#8c8fa1;--cl:#eef1fb;--ce:#fde2e7;--cs:#fdebdc;--cv:#efe4fb;--cr:#e1ecfd;--csa:#fbf1d9;--help:#f4f6fb;--qs1:#fff;--qs2:#e8efff;--shade:rgba(30,30,46,.35);--tagtx:#fff;color-scheme:light}}
+:root[data-theme="light"]{--bg:#eff1f5;--side:#e6e9ef;--card:#fff;--acc:#1e66f5;--tx:#4c4f69;--dim:#5c5f77;--red:#be0d33;--grn:#2f7d1f;--yel:#8c5208;--org:#c64a06;--pur:#8839ef;--bd:#ccd0da;
+--hov:#dce0e8;--head:#232634;--on-acc:#fff;--mute:#8c8fa1;--cl:#eef1fb;--ce:#fde2e7;--cs:#fdebdc;--cv:#efe4fb;--cr:#e1ecfd;--csa:#fbf1d9;--help:#f4f6fb;--qs1:#fff;--qs2:#e8efff;--shade:rgba(30,30,46,.35);--tagtx:#fff;color-scheme:light}
 *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif}
 body{background:var(--bg);color:var(--tx);display:flex;height:100vh;height:100dvh;overflow:hidden}
 nav{width:215px;background:var(--side);border-right:1px solid var(--bd);padding:18px 10px;display:flex;flex-direction:column;gap:3px;overflow-y:auto;flex-shrink:0}
 nav h2{color:var(--acc);font-size:var(--fs-lg);padding:0 10px 12px;margin-bottom:6px;border-bottom:1px solid var(--bd)}
 nav button{background:none;border:0;color:var(--dim);padding:9px 12px;border-radius:8px;text-align:left;font-size:var(--fs-md);cursor:pointer}
-nav button:hover,nav button.on{background:#313244;color:var(--acc)}
-nav .sp{flex:1}nav a{white-space:nowrap;color:var(--dim);padding:9px 12px;border-radius:8px;font-size:var(--fs-md);text-decoration:none}nav a:hover{background:#313244;color:var(--acc)}
+nav button:hover,nav button.on{background:var(--hov);color:var(--acc)}
+nav .sp{flex:1}nav a{white-space:nowrap;color:var(--dim);padding:9px 12px;border-radius:8px;font-size:var(--fs-md);text-decoration:none}nav a:hover{background:var(--hov);color:var(--acc)}
+#nav-more{display:none}
 main{flex:1;padding:26px;overflow-y:auto}
 .view{display:none}.view.on{display:block}
-h1{font-size:var(--fs-2xl);margin-bottom:20px;color:#fff}h3{color:var(--acc);margin-bottom:12px;font-size:var(--fs-lg)}
+h1{font-size:var(--fs-2xl);margin-bottom:20px;color:var(--head)}h3{color:var(--acc);margin-bottom:12px;font-size:var(--fs-lg)}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(290px,100%),1fr));gap:var(--gap);align-items:start;margin-bottom:var(--gap)}
 .grid:last-child{margin-bottom:0}
 .grid>*{min-width:0}
@@ -24,10 +33,11 @@ h1{font-size:var(--fs-2xl);margin-bottom:20px;color:#fff}h3{color:var(--acc);mar
 .card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:var(--pad);margin-bottom:var(--gap);overflow-wrap:break-word}
 .grid>.card{margin-bottom:0}
 input,select,textarea{width:100%;padding:9px;margin-bottom:10px;background:var(--side);border:1px solid var(--bd);border-radius:6px;color:var(--tx);font-size:var(--fs-md)}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
 textarea{min-height:80px;resize:vertical}
-.btn{background:var(--acc);color:#11111b;border:0;padding:9px 14px;border-radius:6px;font-weight:600;cursor:pointer;font-size:var(--fs-md)}
-.btn:hover{filter:brightness(1.1)}.btn.g{background:var(--bd);color:#fff}.btn.r{background:var(--red)}.btn.s{padding:4px 9px;font-size:var(--fs-sm)}
-.row{display:flex;gap:var(--gap-s);flex-wrap:wrap;align-items:center}.row>*{flex:1;min-width:110px}.row .btn{flex:0 0 auto}
+.btn{background:var(--acc);color:var(--on-acc);border:0;padding:9px 14px;border-radius:6px;font-weight:600;cursor:pointer;font-size:var(--fs-md)}
+.btn:hover{filter:brightness(1.1)}.btn:disabled{opacity:.5;cursor:default}.btn.g{background:var(--bd);color:var(--tx)}.btn.r{background:var(--red);color:var(--on-acc)}.btn.s{padding:4px 9px;font-size:var(--fs-sm)}
+.row{display:flex;gap:var(--gap-s);flex-wrap:wrap;align-items:center}.row>*{flex:1;min-width:110px}.row .btn{flex:0 0 auto;max-width:100%;white-space:normal;text-align:center}
 ul{list-style:none}
 li.it{background:var(--side);padding:11px 12px;border-radius:8px;margin-bottom:var(--gap-s);border-left:4px solid var(--acc);display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;justify-content:space-between;overflow-wrap:break-word}
 li.it>div{flex:1 1 9rem;min-width:0}
@@ -36,44 +46,43 @@ li.it>.dt{flex:0 0 auto;text-align:right}
 li.it>.acts{flex:0 0 auto;margin-left:auto}
 .acts{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px}
 .acts .btn{white-space:nowrap;text-align:center}
-.acts.eq{display:grid;grid-template-columns:1fr 1fr}li.it.done{opacity:.45}li.it.done b{text-decoration:line-through}
+.acts.eq{display:grid;grid-template-columns:1fr 1fr}li.it.done{opacity:.55}li.it.done b{text-decoration:line-through}
 li.it.Hoch{border-color:var(--red)}li.it.Mittel{border-color:var(--yel)}li.it.Niedrig{border-color:var(--grn)}
 li.it input[type=checkbox]{width:auto;margin:0;flex:none}
-.bd{font-size:var(--fs-xs);padding:2px 7px;border-radius:4px;background:#313244;color:var(--dim);margin-right:5px;display:inline-block}
+.bd{font-size:var(--fs-xs);padding:2px 7px;border-radius:4px;background:var(--hov);color:var(--dim);margin-right:5px;display:inline-block}
 .dim{color:var(--dim);font-size:var(--fs-sm)}.red{color:var(--red)}.yel{color:var(--yel)}.grn{color:var(--grn)}
 .tt{width:100%;min-width:560px;border-collapse:collapse;table-layout:fixed}
 .tt th,.tt td{border:1px solid var(--bd);padding:8px 5px;text-align:center;font-size:var(--fs-sm);vertical-align:top}
-.tt th{background:var(--side);color:var(--acc)}.tt th.today{background:#313244}
-.tt td.f{color:#585b70}.tt td.l{background:#2a2a40;font-weight:600}.tt.edit td{cursor:pointer;outline:1px dashed var(--bd)}
+.tt th{background:var(--side);color:var(--acc)}.tt th.today{background:var(--hov)}
+.tt td.f{color:var(--mute)}.tt td.l{background:var(--cl);font-weight:600}.tt.edit td.ed{cursor:pointer;outline:1px dashed var(--bd)}.tt.edit td.ed:hover{outline-color:var(--acc)}
 .tt td small{display:block;font-weight:400;color:var(--dim);margin-top:2px}
-.tt td.e{background:#3e1f28;color:var(--red)}.tt td.e b{text-decoration:line-through}
-.tt td.s{background:#3d2f22}.tt td.v{background:#33283f}.tt td.r{background:#22333f}.tt td.sa{background:#3d3a22}
-.tag{display:block;font-size:var(--fs-xs);border-radius:3px;margin-top:3px;padding:1px 3px;font-weight:700;color:#111;background:var(--dim)}
+.tt td.e{background:var(--ce);color:var(--red)}.tt td.e b{text-decoration:line-through}
+.tt td.s{background:var(--cs)}.tt td.v{background:var(--cv)}.tt td.r{background:var(--cr)}.tt td.sa{background:var(--csa)}
+.tag{display:block;font-size:var(--fs-xs);border-radius:3px;margin-top:3px;padding:1px 3px;font-weight:700;color:var(--tagtx);background:var(--dim)}
 .e .tag{background:var(--red)}.s .tag{background:var(--org)}.v .tag{background:var(--pur)}.r .tag{background:var(--acc)}.sa .tag{background:var(--yel)}
 .blk{display:flex;flex-wrap:wrap;gap:4px 12px;justify-content:space-between;align-items:center;overflow-wrap:break-word;background:var(--side);border-radius:8px;padding:10px 12px;margin-bottom:var(--gap-s);border-left:4px solid var(--acc)}
 .blk>div{flex:1 1 8rem;min-width:0}.blk>span{flex:0 0 auto;margin-left:auto}
-.blk.e{border-color:var(--red)}.blk.e b{text-decoration:line-through;color:var(--red)}.blk.s,.blk.v{border-color:var(--org)}.blk.r{border-color:var(--acc)}
+.blk.e{border-color:var(--red)}.blk.e b{text-decoration:line-through;color:var(--red)}.blk.s,.blk.v{border-color:var(--org)}.blk.r{border-color:var(--acc)}.blk.sa{border-color:var(--yel)}
+.blk .tag{display:inline-block;margin:4px 0 0}
 .big{font-size:var(--fs-3xl);font-weight:700;text-align:center;color:var(--acc);font-variant-numeric:tabular-nums;margin:10px 0}
 .bar{height:10px;background:var(--acc);border-radius:5px;margin-top:4px}
-.fc{background:var(--side);border-radius:12px;padding:30px;text-align:center;font-size:var(--fs-lg);min-height:130px;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-bottom:10px}
-table.l{width:100%;border-collapse:collapse;font-size:var(--fs-sm)}table.l td,table.l th{padding:5px 7px;border-bottom:1px solid var(--bd);text-align:left}table.l tr.me{background:#3d2f22}
+table.l{width:100%;border-collapse:collapse;font-size:var(--fs-sm)}table.l td,table.l th{padding:5px 7px;border-bottom:1px solid var(--bd);text-align:left}table.l tr.me{background:var(--cs)}
 dialog{background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:12px;padding:var(--pad);width:min(720px,94vw);max-height:90vh;margin:auto;overflow:auto}
-dialog::backdrop{background:rgba(0,0,0,.6)}
+dialog::backdrop{background:var(--shade)}
 li.it>div>div.dim{white-space:pre-wrap;max-height:9em;overflow:auto}
 .lbl{display:block;font-size:var(--fs-sm);color:var(--dim);margin:0 0 4px}
-.help{background:#262637}.help ol{margin:8px 0 8px 20px;line-height:1.6;font-size:var(--fs-md)}
-.chip{display:inline-flex;gap:6px;align-items:center;background:#313244;border-radius:999px;padding:5px 11px;margin:0 6px 6px 0;font-size:var(--fs-sm);cursor:pointer}.chip input{width:auto;margin:0}
+.help{background:var(--help)}.help ol{margin:8px 0 8px 20px;line-height:1.6;font-size:var(--fs-md)}
+.chip{display:inline-flex;gap:6px;align-items:center;background:var(--hov);border-radius:999px;padding:5px 11px;margin:0 6px 6px 0;font-size:var(--fs-sm);cursor:pointer}.chip input{width:auto;margin:0}
 .res{margin-top:12px;padding:12px;border-radius:8px;background:var(--side);line-height:1.5}.res:empty{display:none}
 #view-dlg[open]{display:flex;flex-direction:column;width:min(1000px,96vw);height:90vh}#vw-body{flex:1;min-height:0;overflow:auto;margin-top:10px}
 #vw-body iframe{width:100%;height:100%;border:0;background:#fff;border-radius:6px}#vw-body img{max-width:100%;display:block;margin:auto}.vw-pre{white-space:pre-wrap;line-height:1.55;font-size:var(--fs-md)}
-@media(max-width:760px){body{flex-direction:column-reverse}nav{width:100%;flex-direction:row;overflow-x:auto;padding:6px;border-right:0;border-top:1px solid var(--bd)}nav h2,nav .sp{display:none}nav button{white-space:nowrap;padding:8px 10px}main{padding:14px}.tt th,.tt td{font-size:var(--fs-xs);padding:5px 2px}}
 #auth{position:fixed;inset:0;z-index:1000;background:var(--bg);display:none;align-items:center;justify-content:center;padding:16px;overflow-y:auto}
 #auth .box{width:100%;max-width:400px;background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:28px 24px;margin:auto}
 #auth h1{color:var(--acc);font-size:var(--fs-2xl);text-align:center;margin-bottom:4px}
 #auth .sub{color:var(--dim);text-align:center;margin-bottom:20px;font-size:var(--fs-md)}
 #auth .tabs{display:flex;background:var(--side);border-radius:8px;padding:3px;margin-bottom:18px}
 #auth .tabs button{flex:1;background:none;border:0;color:var(--dim);padding:9px;border-radius:6px;font-size:var(--fs-md);font-weight:600;cursor:pointer}
-#auth .tabs button.on{background:#313244;color:var(--acc)}
+#auth .tabs button.on{background:var(--hov);color:var(--acc)}
 #auth .pw{position:relative}#auth .pw input{padding-right:78px}
 #auth .pw button{position:absolute;right:6px;top:5px;background:none;border:0;color:var(--dim);font-size:var(--fs-sm);padding:5px 8px;cursor:pointer}
 #auth .full{width:100%;padding:11px;margin-top:4px;font-size:var(--fs-lg)}
@@ -82,8 +91,8 @@ li.it>div>div.dim{white-space:pre-wrap;max-height:9em;overflow:auto}
 #auth .msg{min-height:1.2em;margin:10px 0 0;font-size:var(--fs-md);line-height:1.5;text-align:center}
 #auth .foot{border-top:1px solid var(--bd);margin-top:18px;padding-top:12px;text-align:center}
 input[type=range]{padding:0;height:28px;accent-color:var(--acc);background:none;border:0;margin-bottom:6px}
-.pbar{height:8px;background:#313244;border-radius:4px;overflow:hidden;margin-top:6px}.pbar>i{display:block;height:100%;background:var(--acc);border-radius:4px;transition:width .3s}
-.qs{border-color:var(--acc);background:linear-gradient(135deg,#2b2b3d,#29304d)}
+.pbar{height:8px;background:var(--hov);border-radius:4px;overflow:hidden;margin-top:6px}.pbar>i{display:block;height:100%;background:var(--acc);border-radius:4px;transition:width .3s}
+.qs{border-color:var(--acc);background:linear-gradient(135deg,var(--qs1),var(--qs2))}
 .qs-h{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}.qs-h h3{margin:0;flex:1 1 9rem}
 .qs-i{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--side);border-radius:8px;padding:9px 12px;margin-bottom:var(--gap-s)}
 .qs-i label{flex:1 1 11rem;display:flex;gap:10px;align-items:center;cursor:pointer;min-width:0}.qs-i input{width:auto;margin:0;flex:none}
@@ -100,6 +109,35 @@ input[type=range]{padding:0;height:28px;accent-color:var(--acc);background:none;
 .stk{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}.stk .n{font-size:2.6rem;font-weight:700;color:var(--yel);line-height:1}
 #wel-dlg{width:min(520px,94vw);text-align:center}
 #tour-dlg{width:min(560px,94vw)}
+/* Wochen-Umschaltung im Stundenplan */
+.wnav{display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:8px;margin-bottom:10px}.wnav b{text-align:center;min-width:0}
+.wnav .btn{min-width:2.6rem}
+.sm{display:none}
+.tm-r{display:grid;grid-template-columns:2rem minmax(0,1fr) minmax(0,1fr) auto;gap:8px;align-items:center;margin-bottom:6px}.tm-r input{margin:0}
+.new{display:inline-block;font-size:var(--fs-xs);font-weight:700;color:var(--on-acc);background:var(--acc);border-radius:4px;padding:1px 6px;margin-left:6px;vertical-align:middle}
+.day-h{font-size:var(--fs-sm);color:var(--dim);margin:12px 0 6px;font-weight:600}.day-h:first-child{margin-top:0}
+/* Eigene Dialoge und Hinweise */
+#ui-dlg{width:min(460px,94vw)}#ui-dlg h3{margin-bottom:8px}#ui-dlg p{line-height:1.5;margin-bottom:12px;white-space:pre-line}
+#ui-dlg .row{justify-content:flex-end;margin-top:6px}#ui-dlg .row .btn{min-width:6.5rem}
+#ui-dlg label.ck{display:flex;gap:8px;align-items:center;margin-bottom:10px;font-size:var(--fs-md)}#ui-dlg label.ck input{width:auto;margin:0}
+#toasts{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:2000;display:flex;flex-direction:column;gap:8px;align-items:center;width:min(480px,calc(100vw - 32px));pointer-events:none}
+.toast{pointer-events:auto;display:flex;gap:12px;align-items:center;background:var(--head);color:var(--bg);border-radius:10px;padding:10px 14px;box-shadow:0 6px 24px rgba(0,0,0,.3);font-size:var(--fs-md);line-height:1.4;width:100%;animation:tin .18s ease-out}
+.toast.err{background:var(--red);color:var(--on-acc)}.toast span{flex:1}
+.toast button{background:none;border:0;color:inherit;font-weight:700;cursor:pointer;text-decoration:underline;font-size:var(--fs-md);padding:2px 4px}
+@keyframes tin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+#more-dlg{width:min(420px,94vw)}#more-dlg .mgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#more-dlg .mgrid button{background:var(--side);border:1px solid var(--bd);color:var(--tx);border-radius:10px;padding:14px 10px;font-size:var(--fs-md);cursor:pointer;text-align:left}
+#more-dlg .mgrid button.on{border-color:var(--acc);color:var(--acc)}
+.seg{display:flex;background:var(--side);border-radius:8px;padding:3px;gap:3px;margin-bottom:10px}.seg button{flex:1;background:none;border:0;color:var(--dim);padding:8px;border-radius:6px;font-size:var(--fs-md);cursor:pointer}.seg button.on{background:var(--hov);color:var(--acc);font-weight:600}
+@media(max-width:760px){body{flex-direction:column-reverse}
+nav{width:100%;flex-direction:row;overflow:visible;padding:4px 4px calc(4px + env(safe-area-inset-bottom));border-right:0;border-top:1px solid var(--bd);gap:2px}
+nav h2,nav .sp,nav a,nav button:not(.pri){display:none}
+nav button.pri,#nav-more{display:block;flex:1 1 0;min-width:0;text-align:center;padding:10px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:var(--fs-sm)}
+main{padding:14px}#toasts{bottom:76px}
+nav .lg{display:none}nav .sm{display:inline}
+.wnav{grid-template-columns:auto 1fr auto}.wnav b{font-size:var(--fs-md)}.wnav .lg{display:none}#wk-now{grid-column:1/-1;justify-self:center;min-width:8rem}
+.tt th,.tt td{font-size:var(--fs-xs);padding:5px 2px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style></head><body>
 <div id="auth" role="dialog" aria-modal="true" aria-label="Anmeldung"><div class="box">
 <h1 id="au-name">Schul-Hub</h1><p class="sub" id="au-sub">Melde dich an, um deine Daten auf allen Geräten zu haben.</p>
@@ -109,15 +147,16 @@ input[type=range]{padding:0;height:28px;accent-color:var(--acc);background:none;
 <label class="lbl" for="au-pw">Passwort</label><div class="pw"><input id="au-pw" type="password" autocomplete="current-password" placeholder="mindestens 8 Zeichen" required><button type="button" onclick="auShow()" id="au-eye">Anzeigen</button></div>
 <div class="mid"><span></span><button type="button" class="lnk" id="au-forgot" onclick="auReset()">Passwort vergessen?</button></div>
 <button class="btn full" id="au-go" type="submit">Anmelden</button></form>
-<div id="au-np" style="display:none"><p class="sub">Wähle ein neues Passwort.</p><label class="lbl" for="au-np1">Neues Passwort</label><input id="au-np1" type="password" autocomplete="new-password" placeholder="mindestens 8 Zeichen"><button class="btn full" onclick="auNewPw()">Passwort speichern</button></div>
+<form id="au-np" style="display:none" onsubmit="event.preventDefault();auNewPw()"><p class="sub">Wähle ein neues Passwort.</p><label class="lbl" for="au-np1">Neues Passwort</label><input id="au-np1" type="password" autocomplete="new-password" placeholder="mindestens 8 Zeichen"><button class="btn full" type="submit">Passwort speichern</button></form>
 <div id="au-nocfg" style="display:none" class="dim"><p style="line-height:1.5;margin-bottom:10px">Die Anmeldung ist noch nicht eingerichtet. Wer den Hub betreibt, trägt in den Einstellungen unter „Konto und Sync“ die Supabase-Daten ein.</p><button class="btn g full" onclick="auGuest(true)">Zu den Einstellungen</button></div>
 <p class="msg dim" id="au-msg" aria-live="polite"></p>
 <div class="foot"><button class="lnk" onclick="auGuest()">Ohne Konto fortfahren</button><p class="dim" style="font-size:var(--fs-sm);margin-top:2px">Deine Daten bleiben dann nur auf diesem Gerät.</p></div>
 </div></div>
 <nav>
 <h2>Schul-Hub</h2>
-<button data-v="dash" class="on">Start</button><button data-v="plan">Stundenplan</button><button data-v="todo">To-Dos</button><button data-v="test">Tests</button><button data-v="cal">Kalender</button><button data-v="grade">Noten</button><button data-v="note">Zusammenfassungen</button><button data-v="timer">Lerntimer</button><button data-v="ai">KI-Prompts</button><button data-v="links">Links</button>
+<button data-v="dash" class="on pri" aria-current="page">Start</button><button data-v="plan" class="pri" aria-label="Stundenplan"><span class="lg">Stundenplan</span><span class="sm">Plan</span></button><button data-v="todo" class="pri">To-Dos</button><button data-v="test">Tests</button><button data-v="cal">Kalender</button><button data-v="grade" class="pri">Noten</button><button data-v="note">Zusammenfassungen</button><button data-v="timer">Lerntimer</button><button data-v="ai">KI-Prompts</button><button data-v="links">Links</button>
 <div class="sp"></div><button data-v="set">Einstellungen</button><a href="#" id="nav-help" onclick="tourStart();return false">Hilfe und Rundgang</a><a href="#" id="nav-out" style="display:none" onclick="acOut();return false">Abmelden</a>
+<button id="nav-more" type="button" onclick="moreOpen()" aria-haspopup="dialog">Mehr</button>
 </nav>
 <main>
 <section id="dash" class="view on"><h1 id="hello">Start</h1>
@@ -126,7 +165,7 @@ input[type=range]{padding:0;height:28px;accent-color:var(--acc);background:none;
 <div class="card qs" id="qs" style="display:none"><div class="qs-h"><h3>Schnellstart</h3><span class="dim" id="qs-n"></span><button class="btn s g" onclick="tourStart()">Rundgang starten</button><button class="btn s g" id="qs-col" onclick="qsCol()">Einklappen</button><button class="btn s g" onclick="qsHide()">Ausblenden</button></div><div id="qs-body"></div></div>
 <div class="grid"><div class="card" data-t="now"><h3>Jetzt</h3><div id="d-now"></div></div>
 <div class="card" data-t="day"><h3 id="d-day">Nächster Schultag</h3><div id="d-lessons"></div></div>
-<div class="card" data-t="chg"><h3>Änderungen für dich</h3><div id="d-chg"></div></div>
+<div class="card" data-t="chg"><h3>Änderungen für dich <span class="dim" style="font-weight:400">· nächste 14 Tage</span></h3><div id="d-chg"></div></div>
 <div class="card" data-t="cal"><h3>Kalender</h3><div id="d-cal"></div></div>
 <div class="card" data-t="tests"><h3>Nächste Tests</h3><div id="d-tests"></div></div>
 <div class="card" data-t="todos"><h3>Offene To-Dos</h3><div id="d-todos"></div></div>
@@ -136,7 +175,9 @@ input[type=range]{padding:0;height:28px;accent-color:var(--acc);background:none;
 <p class="dim" id="dash-empty" style="display:none;margin-top:var(--gap)">Alle Kacheln sind ausgeblendet. Unter Einstellungen → „Startseite anpassen“ kannst du sie wieder einschalten.</p></section>
 
 <section id="plan" class="view"><h1>Stundenplan</h1>
-<div class="card"><div class="row" style="margin-bottom:10px"><span class="dim" id="sync2"></span><button class="btn s g" id="editbtn" onclick="toggleEdit()">Plan bearbeiten</button></div><div style="overflow-x:auto" id="tt"></div></div>
+<div class="card"><div class="row" style="margin-bottom:10px"><span class="dim" id="sync2"></span><button class="btn s g" id="editbtn" onclick="toggleEdit()">Plan bearbeiten</button></div>
+<div class="wnav"><button class="btn s g" onclick="wkGo(-1)" aria-label="Vorige Woche">←<span class="lg"> Woche</span></button><b id="wk-lbl" aria-live="polite"></b><button class="btn s g" onclick="wkGo(1)" aria-label="Nächste Woche"><span class="lg">Woche </span>→</button><button class="btn s g" id="wk-now" onclick="wkGo(0)">Heute</button></div>
+<div style="overflow-x:auto" id="tt"></div></div>
 <div class="card" id="lv-card" style="display:none"><h3 id="lv-h">Lehrveranstaltung hinzufügen</h3>
 <input id="lv-name" placeholder="Name (z. B. Analysis 1 VO)">
 <div class="row"><select id="lv-day"><option value="0">Montag</option><option value="1">Dienstag</option><option value="2">Mittwoch</option><option value="3">Donnerstag</option><option value="4">Freitag</option><option value="5">Samstag</option><option value="6">Sonntag</option></select><input type="time" id="lv-st" aria-label="Beginn"><input type="time" id="lv-en" aria-label="Ende"></div>
@@ -211,7 +252,7 @@ input[type=range]{padding:0;height:28px;accent-color:var(--acc);background:none;
 <section id="timer" class="view"><h1>Lerntimer</h1><div class="grid">
 <div class="card"><select id="tsubj" class="ss"></select><div class="big" id="tdisp">25:00</div><p class="dim" id="tmode" style="text-align:center">Lernphase</p>
 <div class="row" style="margin:12px 0"><input type="number" id="tw" value="25" min="1" title="Lernen (Min)" onchange="tReset()"><input type="number" id="tb" value="5" min="1" title="Pause (Min)"></div>
-<div class="row"><button class="btn" onclick="tStart()">Start</button><button class="btn g" onclick="T.run=false">Pause</button><button class="btn r" onclick="tReset()">Reset</button></div></div>
+<div class="row"><button class="btn" onclick="tStart()">Start</button><button class="btn g" onclick="tPause()">Pause</button><button class="btn r" onclick="tReset()">Reset</button></div></div>
 <div class="card"><h3>Diese Woche</h3><div id="tstats"></div></div></div></section>
 
 
@@ -241,6 +282,13 @@ input[type=range]{padding:0;height:28px;accent-color:var(--acc);background:none;
 <p class="dim" id="a-msg" style="margin-top:8px"></p></div></section>
 
 <section id="set" class="view"><h1>Einstellungen</h1><div class="grid">
+<div class="card"><h3>Darstellung</h3>
+<label class="lbl" for="me-name">Dein Vorname (optional, für die Begrüßung)</label><input id="me-name" placeholder="z. B. Sebastian" autocomplete="given-name" onchange="S.me=this.value.trim();save();render()">
+<span class="lbl">Farbschema</span><div class="seg" id="th-seg" role="group" aria-label="Farbschema"><button type="button" data-th="auto" onclick="thSet('auto')">Automatisch</button><button type="button" data-th="dark" onclick="thSet('dark')">Dunkel</button><button type="button" data-th="light" onclick="thSet('light')">Hell</button></div>
+<p class="dim" style="line-height:1.5">„Automatisch“ folgt der Einstellung deines Geräts. Das Farbschema gilt nur für dieses Gerät.</p></div>
+<div class="card"><h3>Benachrichtigungen</h3><p class="dim" id="pu-st" style="margin-bottom:10px;line-height:1.5"></p>
+<div class="row"><button class="btn" id="pu-on" onclick="puOn()">Bei Änderungen benachrichtigen</button><button class="btn g" id="pu-off" onclick="puOff()" style="display:none">Ausschalten</button><button class="btn g" id="pu-test" onclick="puTest()" style="display:none">Test senden</button></div>
+<p class="dim" style="margin-top:10px;line-height:1.5">Du bekommst eine Meldung, sobald im Supplierplan ein Entfall, eine Supplierung oder eine Raumänderung für eines deiner Fächer auftaucht, auch wenn der Hub geschlossen ist. Dafür braucht es den Cloudflare-Worker mit eingerichteten Push-Schlüsseln. Übermittelt werden nur die Kürzel deiner Fächer, keine Noten oder sonstigen Daten. Auf dem iPhone geht das nur, wenn der Hub über „Zum Home-Bildschirm“ installiert ist.</p></div>
 <div class="card"><h3>Schule und Unterrichtszeiten</h3>
 <label class="lbl" for="sch-name">Name der Schule (optional)</label><input id="sch-name" placeholder="z. B. BG Musterstadt" onchange="schSet('name',this.value)">
 <label class="lbl" for="sch-mode">Art der Einrichtung</label><select id="sch-mode" onchange="schMode(this.value)"><option value="school">Schule (feste Unterrichtseinheiten)</option><option value="uni">Uni oder Hochschule (freie Zeiten, ECTS)</option></select>
@@ -255,11 +303,11 @@ input[type=range]{padding:0;height:28px;accent-color:var(--acc);background:none;
 <div class="card"><h3>Fächer / Module</h3><ul id="subjs"></ul><div class="row"><input id="s-new" placeholder="z. B. PH2g"><button class="btn" onclick="addName('subjects','s-new')">Hinzufügen</button></div></div>
 <div class="card"><h3>Kategorien (für To-Dos)</h3><ul id="cats"></ul><div class="row"><input id="c-new" placeholder="z. B. Sport"><button class="btn" onclick="addName('cats','c-new')">Hinzufügen</button></div></div>
 <div class="card"><h3>Konto und Sync</h3><p class="dim" id="sy-st" style="margin-bottom:10px"></p>
-<div id="ac-out"><label class="lbl" for="ac-mail">E-Mail</label><input id="ac-mail" type="email" autocomplete="username" placeholder="name@beispiel.at">
-<label class="lbl" for="ac-pw">Passwort</label><input id="ac-pw" type="password" autocomplete="current-password" placeholder="mindestens 8 Zeichen" onkeydown="if(event.key=='Enter')acLogin()">
-<div class="row"><button class="btn" onclick="acLogin()">Anmelden</button><button class="btn g" onclick="acReg()">Registrieren</button><button class="btn g" onclick="acReset()">Passwort vergessen</button></div></div>
+<form id="ac-out" onsubmit="event.preventDefault();acLogin()"><label class="lbl" for="ac-mail">E-Mail</label><input id="ac-mail" type="email" autocomplete="username" placeholder="name@beispiel.at">
+<label class="lbl" for="ac-pw">Passwort</label><input id="ac-pw" type="password" autocomplete="current-password" placeholder="mindestens 8 Zeichen">
+<div class="row"><button class="btn" type="submit">Anmelden</button><button class="btn g" type="button" onclick="acReg()">Registrieren</button><button class="btn g" type="button" onclick="acReset()">Passwort vergessen</button></div></form>
 <div id="ac-in" style="display:none"><p style="margin-bottom:10px">Angemeldet als <b id="ac-who"></b></p><div class="row"><button class="btn" onclick="syncNow()">Jetzt abgleichen</button><button class="btn g" onclick="acOut()">Abmelden</button><button class="btn r" onclick="acDelCloud()">Cloud-Daten löschen</button></div></div>
-<div id="ac-np" style="display:none;margin-top:10px"><label class="lbl" for="ac-np1">Neues Passwort</label><input id="ac-np1" type="password" autocomplete="new-password" placeholder="mindestens 8 Zeichen"><button class="btn" onclick="acNewPw()">Passwort speichern</button></div>
+<form id="ac-np" style="display:none;margin-top:10px" onsubmit="event.preventDefault();acNewPw()"><label class="lbl" for="ac-np1">Neues Passwort</label><input id="ac-np1" type="password" autocomplete="new-password" placeholder="mindestens 8 Zeichen"><button class="btn" type="submit">Passwort speichern</button></form>
 <p class="dim" id="ac-msg" style="margin-top:8px;line-height:1.5"></p>
 <p class="dim" style="margin-top:8px;line-height:1.5">Mit deinem Konto bleiben To-Dos, Tests, Noten, Zusammenfassungen und Einstellungen auf allen Geräten gleich. Änderungen von mehreren Geräten werden pro Eintrag zusammengeführt. Hochgeladene Dateien bleiben auf dem jeweiligen Gerät. Supplierplan und Kalender-Links gelten pro Gerät.</p>
 <details id="ac-cfg" style="margin-top:12px"><summary class="dim" style="cursor:pointer">Einrichtung (einmalig, für den Betreiber)</summary>
@@ -282,16 +330,53 @@ create policy "hub_delete" on public.hub_data for delete to authenticated using 
 <p class="dim" style="margin:10px 0 8px;line-height:1.5">Der Code ersetzt Anmeldung und Passwort. Er läuft über den Cloudflare-Worker aus den Einstellungen oben. Ersten Code auf Gerät 1 erzeugen, dann auf allen anderen Geräten denselben Code eintragen. Der Code ist dein Passwort, bitte gut aufbewahren. Mit einem Konto auf diesem Gerät ist der Code nicht nutzbar.</p>
 <input id="sy-code" placeholder="Sync-Code (auf allen Geräten gleich)"><div class="row"><button class="btn g" onclick="syncGen()">Neuen Code erzeugen</button><button class="btn" onclick="syncConnect()">Verbinden</button><button class="btn g" onclick="syncNow()">Jetzt abgleichen</button><button class="btn g" onclick="syncOff()">Trennen</button></div></details></div>
 <div class="card"><h3>Startseite anpassen</h3><p class="dim" style="margin-bottom:8px">Wähle, welche Kacheln auf der Startseite erscheinen, und bring sie mit ↑ ↓ in die gewünschte Reihenfolge.</p><ul id="dashcfg"></ul><div class="row"><button class="btn g" onclick="dashReset()">Zurücksetzen</button></div></div>
-<div class="card"><h3>KI-Einstieg (optional)</h3><p class="dim" style="margin-bottom:8px">OpenAI-kompatibler Endpunkt, z. B. dein lokales FreeLLMAPI. Wird nur auf diesem Gerät gespeichert, nicht im Sync und nicht im Backup. Ohne Eintrag kopiert der Button den fertigen Prompt für den Chat deiner Wahl.</p><input id="ai-url" placeholder="Basis-URL (z. B. http://localhost:3001/v1)"><input id="ai-key" type="password" placeholder="API-Key (z. B. freellmapi-…)" autocomplete="off"><input id="ai-model" placeholder="Modell (z. B. auto)"><div class="row"><button class="btn" onclick="aiSaveCfg()">Speichern</button><button class="btn g" onclick="aiTest()">Testen</button></div><p class="dim" id="ai-cfg-st" style="margin-top:8px"></p></div>
+<div class="card"><h3>KI-Einstieg (optional)</h3><p class="dim" style="margin-bottom:8px">OpenAI-kompatibler Endpunkt, z. B. dein lokales FreeLLMAPI. Wird nur auf diesem Gerät gespeichert, nicht im Sync und nicht im Backup. Ohne Eintrag kopiert der Button den fertigen Prompt für den Chat deiner Wahl.</p><form onsubmit="event.preventDefault();aiSaveCfg()"><input id="ai-url" placeholder="Basis-URL (z. B. http://localhost:3001/v1)" aria-label="Basis-URL"><input id="ai-key" type="password" placeholder="API-Key (z. B. freellmapi-…)" autocomplete="off" aria-label="API-Key"><input id="ai-model" placeholder="Modell (z. B. auto)" aria-label="Modell"><div class="row"><button class="btn" type="submit">Speichern</button><button class="btn g" type="button" onclick="aiTest()">Testen</button></div></form><p class="dim" id="ai-cfg-st" style="margin-top:8px"></p></div>
 <div class="card"><h3>Hilfe und Einstieg</h3><p class="dim" style="margin-bottom:10px;line-height:1.5">Rundgang, Willkommensfenster und Schnellstart lassen sich jederzeit wieder öffnen.</p><div class="row"><button class="btn" onclick="tourStart()">Rundgang starten</button><button class="btn g" onclick="$('#wel-dlg').showModal()">Willkommen anzeigen</button><button class="btn g" onclick="qsShow()">Schnellstart einblenden</button></div></div>
 <div class="card"><h3>Backup</h3><p class="dim" style="margin-bottom:10px">Alle Daten liegen nur in diesem Browser. Sichere sie regelmäßig.</p><p class="dim" id="bk-st" style="margin-bottom:10px"></p><div class="row"><button class="btn" onclick="exportData()">Exportieren</button><button class="btn g" onclick="$('#imp').click()">Importieren</button></div><input type="file" id="imp" accept=".json" style="display:none" onchange="importData(this)"></div></div></section>
 </main>
 <dialog id="view-dlg"><div class="row" style="align-items:center"><h3 id="vw-h" style="flex:1 1 12rem;margin:0;overflow-wrap:anywhere"></h3><button class="btn s g" id="vw-tab" onclick="vwTab()">In neuem Tab</button><button class="btn s g" onclick="vwDl()">Herunterladen</button><button class="btn s" onclick="$('#view-dlg').close()">Schließen</button></div><div id="vw-body"></div></dialog>
 <dialog id="ai-dlg"><h3 id="ai-h">KI-Einstieg</h3><p class="dim" style="margin-bottom:8px">Die KI gibt dir nur einen Einstieg (Ansatz, Begriffe, erste Schritte). Die Lösung schreibst du selbst.</p><textarea id="ai-task" style="min-height:140px" placeholder="Aufgabentext hier einfügen…"></textarea><div class="row"><button class="btn" id="ai-go" onclick="aiRun()">KI-Einstieg erzeugen</button><button class="btn g" id="ai-cp" onclick="aiCopy()">Prompt kopieren</button><button class="btn g" onclick="$('#ai-dlg').close()">Schließen</button></div><p class="dim" id="ai-st" style="margin:8px 0"></p><div id="ai-out" style="white-space:pre-wrap;line-height:1.5"></div><div class="row" id="ai-save" style="display:none;margin-top:10px"><button class="btn g" onclick="aiToTodo()">In To-Do speichern</button><button class="btn g" onclick="aiCopyOut()">Antwort kopieren</button></div></dialog>
-<dialog id="wel-dlg"><h2 style="color:var(--acc);font-size:var(--fs-xl);margin-bottom:10px">Willkommen im Schul-Hub</h2><p style="line-height:1.55;margin-bottom:18px">Dein zentraler Hub für Fächer, Noten, To-Dos und KI-Lernen.</p><div class="row" style="justify-content:center"><button class="btn" onclick="welGo(1)">Schnellstart-Tipps anzeigen</button><button class="btn g" onclick="welGo(0)">Direkt loslegen</button></div></dialog>
+<dialog id="wel-dlg"><h2 style="color:var(--acc);font-size:var(--fs-xl);margin-bottom:10px">Willkommen im Schul-Hub</h2><p style="line-height:1.55;margin-bottom:18px">Stundenplan, Supplierplan, Tests, Noten, To-Dos und Lernhilfen an einem Ort. Ein kurzer Rundgang dauert eine Minute. Die wichtigsten ersten Schritte findest du danach auch als Liste auf der Startseite.</p><div class="row" style="justify-content:center"><button class="btn" onclick="welGo(1)">Rundgang starten</button><button class="btn g" onclick="welGo(0)">Direkt loslegen</button></div></dialog>
+<dialog id="ui-dlg" aria-labelledby="ui-h"><form method="dialog" id="ui-form"><h3 id="ui-h"></h3><p id="ui-p"></p><div id="ui-f"></div><div class="row" id="ui-b"></div></form></dialog>
+<dialog id="more-dlg" aria-label="Weitere Bereiche"><div class="row" style="margin-bottom:12px"><h3 style="margin:0">Weitere Bereiche</h3><button class="btn s g" style="flex:0 0 auto" onclick="$('#more-dlg').close()">Schließen</button></div><div class="mgrid" id="more-g"></div></dialog>
+<div id="toasts" aria-live="polite"></div>
 <dialog id="tour-dlg"><div class="dim" id="tour-n" style="margin-bottom:4px"></div><h3 id="tour-h" style="font-size:var(--fs-xl)"></h3><p id="tour-p" style="line-height:1.6;margin-bottom:10px"></p><ul id="tour-l" class="dim" style="line-height:1.6;margin:0 0 14px 18px;list-style:disc"></ul><div class="pbar"><i id="tour-bar"></i></div><div class="row" style="margin-top:14px"><button class="btn g" id="tour-prev" onclick="tourGo(-1)">Zurück</button><button class="btn" id="tour-next" onclick="tourGo(1)">Weiter</button><button class="btn g" onclick="tourStop()">Beenden</button></div></dialog>
 <script>
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const warn=m=>{toast(m,{err:1})};
+/* ===== Hinweise (Toast) mit optionaler Aktion, z. B. Rückgängig ===== */
+function toast(msg,o={}){const box=$('#toasts');if(!box)return;const t=document.createElement('div');t.className='toast'+(o.err?' err':'');t.setAttribute('role',o.err?'alert':'status');
+const sp=document.createElement('span');sp.textContent=msg;t.appendChild(sp);let tm;const close=()=>{clearTimeout(tm);t.remove()};
+if(o.act){const b=document.createElement('button');b.type='button';b.textContent=o.act;b.onclick=()=>{close();o.fn&&o.fn()};t.appendChild(b)}
+const x=document.createElement('button');x.type='button';x.textContent='×';x.setAttribute('aria-label','Hinweis schließen');x.style.textDecoration='none';x.onclick=close;t.appendChild(x);
+box.appendChild(t);while(box.children.length>3)box.firstChild.remove();tm=setTimeout(close,o.ms||(o.act?7000:o.err?6000:3500));return close}
+/* Löschen mit Rückgängig statt Rückfrage: entfernt sofort, stellt bei Klick wieder her */
+function undoDel(key,item,label){const arr=S[key],i=arr.indexOf(item);if(i<0)return;arr.splice(i,1);if(item.id!=null)tomb(item.id);save();render();
+toast(label+' gelöscht.',{act:'Rückgängig',fn:()=>{arr.splice(Math.min(i,arr.length),0,item);if(item.id!=null&&S.del)delete S.del[item.id];save();render()}})}
+/* ===== Eigene Dialoge statt prompt() und confirm() ===== */
+let uiRes=null;
+function uiOpen(title,text,fields,buttons){return new Promise(res=>{const d=$('#ui-dlg');if(uiRes)uiRes(null);uiRes=res;$('#ui-h').textContent=title;$('#ui-p').textContent=text||'';$('#ui-p').style.display=text?'':'none';
+const f=$('#ui-f');f.innerHTML='';(fields||[]).forEach((x,i)=>{const id='ui-x'+i;if(x.type=='check'){const l=document.createElement('label');l.className='ck';l.innerHTML=`<input type="checkbox" id="${id}" ${x.value?'checked':''}> ${esc(x.label)}`;f.appendChild(l);return}
+const l=document.createElement('label');l.className='lbl';l.htmlFor=id;l.textContent=x.label;f.appendChild(l);let el;
+if(x.type=='select'){el=document.createElement('select');(x.options||[]).forEach(o=>{const op=document.createElement('option');op.textContent=o;el.appendChild(op)});el.value=x.value||''}
+else{el=document.createElement('input');el.type=x.type||'text';el.value=x.value??'';if(x.placeholder)el.placeholder=x.placeholder;if(x.min!=null)el.min=x.min;if(x.list){el.setAttribute('list',id+'-l');const dl=document.createElement('datalist');dl.id=id+'-l';dl.innerHTML=x.list.map(o=>`<option value="${esc(o)}">`).join('');f.appendChild(dl)}}
+el.id=id;f.appendChild(el)});
+const b=$('#ui-b');b.innerHTML='';buttons.forEach((x,i)=>{const bt=document.createElement('button');bt.type=x.submit?'submit':'button';bt.className='btn'+(x.cls?' '+x.cls:'');bt.textContent=x.label;bt.value=String(i);
+bt.onclick=ev=>{if(x.submit&&!$('#ui-form').reportValidity())return;ev.preventDefault();const v=(fields||[]).map((fx,j)=>{const e=$('#ui-x'+j);return fx.type=='check'?e.checked:e.value});uiRes=null;d.close();res({btn:x.key??i,v})};b.appendChild(bt)});
+d.onclose=()=>{if(uiRes){const r=uiRes;uiRes=null;r(null)}};d.showModal();const first=f.querySelector('input,select');(first||b.querySelector('.btn:not(.g)')||b.lastChild).focus()})}
+/* Ja/Nein-Frage, liefert true/false */
+async function ask(title,text,yes='OK',danger){const r=await uiOpen(title,text,[],[{label:'Abbrechen',cls:'g',key:0},{label:yes,cls:danger?'r':'',key:1}]);return !!(r&&r.btn===1)}
+/* Auswahl mit mehreren beschrifteten Antworten, liefert den key oder null */
+async function choose(title,text,opts){const r=await uiOpen(title,text,[],opts.map(o=>({label:o.label,cls:o.cls,key:o.key})));return r?r.btn:null}
+/* Formular, liefert Werte-Array oder null */
+async function form(title,fields,ok='Speichern',text){const r=await uiOpen(title,text,fields,[{label:'Abbrechen',cls:'g',key:0},{label:ok,key:1,submit:true}]);return r&&r.btn===1?r.v:null}
+/* ===== Menü „Mehr“ (Handy) ===== */
+function moreOpen(){const cur=($('.view.on')||{}).id,items=$$('nav button[data-v]').filter(b=>!b.classList.contains('pri'));
+$('#more-g').innerHTML=items.map(b=>`<button type="button" class="${b.dataset.v==cur?'on':''}" onclick="$('#more-dlg').close();goView('${b.dataset.v}')">${esc(b.textContent)}</button>`).join('')+`<button type="button" onclick="$('#more-dlg').close();tourStart()">Hilfe und Rundgang</button>`+(sbIn()?`<button type="button" onclick="$('#more-dlg').close();acOut()">Abmelden</button>`:'');$('#more-dlg').showModal()}
+/* ===== Farbschema (nur dieses Gerät) ===== */
+const thGet=()=>{try{return localStorage.getItem('schulhub_theme')||'auto'}catch(e){return 'auto'}};
+function thSet(t){try{localStorage.setItem('schulhub_theme',t)}catch(e){}if(t=='auto')delete document.documentElement.dataset.theme;else document.documentElement.dataset.theme=t;thDraw()}
+function thDraw(){const t=thGet();$$('#th-seg button').forEach(b=>{const on=b.dataset.th==t;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)})}
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const DN=['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag'],DS=['Mo','Di','Mi','Do','Fr','Sa','So'];
@@ -322,16 +407,18 @@ if(!Object.keys(RAW).length){S.subjects=['Deutsch','Englisch','Mathematik'];S.tt
 else if(!RAW.school)S.school=structuredClone(LEGACY_SCHOOL);
 if(!S.sync||typeof S.sync!=='object')S.sync={};
 let lastSnap=null,pt;const snap=()=>{const{sup,cal,cals,sync,_ts,...r}=S;return r};lastSnap=JSON.stringify(snap());
-const save=()=>{try{const j=JSON.stringify(snap());if(j!==lastSnap){lastSnap=j;S._ts=Date.now();schedPush()}localStorage.setItem('schulhub',JSON.stringify(S))}catch(e){alert('Speicher voll – bitte Dateien löschen oder Backup exportieren.')}};
+const save=()=>{try{const j=JSON.stringify(snap());if(j!==lastSnap){lastSnap=j;S._ts=Date.now();schedPush()}localStorage.setItem('schulhub',JSON.stringify(S))}catch(e){warn('Speicher voll – bitte Dateien löschen oder Backup exportieren.')}};
 const uid=()=>Date.now()+Math.floor(Math.random()*999);
 const tomb=id=>{S.del=S.del||{};S.del[id]=Date.now()};
 const today0=()=>{const d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate())};
 const dUntil=d=>Math.round((new Date(d+'T00:00')-today0())/864e5);
 const dTxt=d=>{const n=dUntil(d);return n<0?`seit ${-n} T. überfällig`:n==0?'heute':n==1?'morgen':`in ${n} Tagen`};
 const fmtD=d=>d?new Date(d+'T00:00').toLocaleDateString('de-AT',{weekday:'short',day:'2-digit',month:'2-digit'}):'ohne Datum';
-function weekDates(){let d=today0();const wd=(d.getDay()+6)%7,n=nDays();d.setDate(d.getDate()+(wd>n-1?7-wd:-wd));return Array.from({length:n},(_,i)=>i).map(i=>{const x=new Date(d);x.setDate(d.getDate()+i);return x})}
+let wkOff=0;
+function wkGo(n){wkOff=n?wkOff+n:0;rPlan()}
+function weekDates(off=0){let d=today0();const wd=(d.getDay()+6)%7,n=nDays();d.setDate(d.getDate()+(wd>n-1?7-wd:-wd)+7*off);return Array.from({length:n},(_,i)=>i).map(i=>{const x=new Date(d);x.setDate(d.getDate()+i);return x})}
 /* Navigation */
-$$('nav button').forEach(b=>b.onclick=()=>{$$('nav button').forEach(x=>x.classList.remove('on'));b.classList.add('on');$$('.view').forEach(v=>v.classList.remove('on'));$('#'+b.dataset.v).classList.add('on');$('main').scrollTop=0;render()});
+$$('nav button[data-v]').forEach(b=>b.onclick=()=>{$$('nav button[data-v]').forEach(x=>{x.classList.remove('on');x.removeAttribute('aria-current')});b.classList.add('on');b.setAttribute('aria-current','page');$('#nav-more').classList.toggle('on',!b.classList.contains('pri'));$$('.view').forEach(v=>v.classList.remove('on'));$('#'+b.dataset.v).classList.add('on');$('main').scrollTop=0;render()});
 const E={};
 function setSel(el,v){if(v&&![...el.options].some(o=>o.value===v)){const o=document.createElement('option');o.textContent=v;el.appendChild(o)}el.value=v}
 function fillSubjects(){$$('.ss').forEach(s=>{const v=s.value,o=x=>`<option>${esc(x)}</option>`;let h=s.dataset.all?`<option value="">${s.dataset.cat?'Alles':'Alle Fächer'}</option>`:'';
@@ -339,18 +426,24 @@ h+=s.dataset.cat?'<optgroup label="Fächer">'+S.subjects.map(o).join('')+'</optg
 /* Supplierplan */
 const CH={E:['Entfällt','e'],S:['Supplierung','s'],V:['Verschoben','v'],T:['Tausch','v'],R:['Raumänderung','r'],SA:['Schularbeit','sa']};
 const chTxt=c=>(CH[c.x]||[c.x])[0]+(c.n?' ('+c.n+')':'')+(c.r?' · Raum '+c.r:'');
+/* PARSER-START – dieser Block wird unverändert auch im Worker und im Test (test/parse.test.mjs) verwendet. Er braucht nur iso(). */
 const WD=/^(mo|di|mi|do|fr|sa|so|montag|dienstag|mittwoch|donnerstag|freitag)\.?$/i;
 const CW={entfall:'E',entfällt:'E',entfaellt:'E',supplierung:'S',verlegung:'V',verschoben:'V',tausch:'T',raumänderung:'R',raumaenderung:'R',schularbeit:'SA'};
 const TK=/(\d{1,2})\.(\d{1,2})\.?(\d{4})?(?!\d)|([A-Za-zÄÖÜäöü][\wäöüÄÖÜ]{0,9})[ \t]*\(([A-Za-zÄÖÜäöü][A-Za-zÄÖÜäöü\/,]{1,11})\)|\b(SA|S|E|V|T|R)\b(?:[ \t]*\(([^)]*)\))?|\b(Entfällt|Entfaellt|Entfall|Supplierung|Verlegung|Verschoben|Tausch|Raumänderung|Raumaenderung|Schularbeit)\b|([1-9](?!\d)\.?(?:\s*[+\-–,]\s*[1-9](?!\d)\.?)*)|(\S+)/g;
+const ENT={amp:'&',lt:'<',gt:'>',quot:'"',apos:"'",nbsp:' ',ndash:'–',mdash:'—',hellip:'…',raquo:'»',laquo:'«',bdquo:'„',ldquo:'“',rdquo:'”',lsquo:'‘',rsquo:'’',auml:'ä',ouml:'ö',uuml:'ü',Auml:'Ä',Ouml:'Ö',Uuml:'Ü',szlig:'ß',shy:''};
+/* HTML → Text ohne DOM: Zellenenden werden Tabs, Zeilen- und Absatzenden Zeilenumbrüche */
+function htmlText(h){return String(h).replace(/<head[\s\S]*?<\/head>|<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>|<!--[\s\S]*?-->/gi,' ').replace(/\s+/g,' ')
+.replace(/<\/(td|th)>/gi,'\t').replace(/<\/(tr|p|div|li|h\d|table)>|<br\s*\/?>/gi,'\n').replace(/<[^>]*>/g,'')
+.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi,(m,e)=>{if(e[0]=='#'){const n=e[1].toLowerCase()=='x'?parseInt(e.slice(2),16):+e.slice(1);try{return String.fromCodePoint(n)}catch(x){return m}}return ENT[e]??m}).replace(/\u00a0/g,' ')}
 function mkDate(d,m,y){const now=new Date();let Y=y?+y:now.getFullYear();if(!y){const t=new Date(Y,m-1,d);if(t-now>180*864e5)Y--;else if(now-t>180*864e5)Y++}return iso(new Date(Y,m-1,d))}
 function unitsOf(s){const o=[];s.replace(/(\d)\s*[-–]\s*(\d)/g,(a,x,y)=>{for(let i=+x;i<=+y;i++)o.push(i);return ' '});(s.match(/\d/g)||[]).forEach(x=>o.push(+x));return [...new Set(o)].sort()}
 /* Liest JEDES Format: HTML, Tabellen-Kopie, Markdown, reiner Text, auch ganze Seiten */
 function parseAny(raw){let t=String(raw||'').replace(/\u00a0/g,' ').replace(/\|/g,'\t');
-if(/<[a-z!][^>]*>/i.test(t)){t=t.replace(/<\/(td|th)>/gi,'\t').replace(/<\/(tr|p|div|li|h\d|table)>|<br\s*\/?>/gi,'\n');const doc=new DOMParser().parseFromString(t,'text/html');doc.querySelectorAll('script,style').forEach(x=>x.remove());t=doc.body.textContent}
+if(/<[a-z!][^>]*>/i.test(t))t=htmlText(t);
 /* „(auch gültig am 12.11. und 19.11.)“ → Marker, damit die Daten darin nicht als neue Zeile gelten */
 t=t.replace(/\(\s*auch\s+gültig\s+am\s+([^)]*)\)/gi,(a,b)=>' ALSO{'+(b.match(/\d{1,2}\.\d{1,2}\./g)||[]).join(',')+'} ');
-const rows=[];let d=null,u=[],mod=null,last=null,lr=null,m;TK.lastIndex=0;
-while((m=TK.exec(t))){
+const rows=[];let d=null,u=[],mod=null,last=null,lr=null,m,pe=0;TK.lastIndex=0;
+while((m=TK.exec(t))){if(t.slice(pe,m.index).includes('\n'))last=null;pe=TK.lastIndex;/* Raum nur aus derselben Tabellenzeile */
 if(m[4]&&/^(SA|S|E|V|T|R)$/.test(m[4])){m[6]=m[4];m[7]=m[5];m[4]=undefined}
 if(m[10]&&/^ALSO\{/.test(m[10])){if(lr)(m[10].match(/\d{1,2}\.\d{1,2}\./g)||[]).forEach(s=>{const p=s.split('.');rows.push({...lr,d:mkDate(+p[0],+p[1])})});last=null}
 else if(m[1]){d=mkDate(+m[1],+m[2],m[3]);u=[];mod=null;last=null;lr=null}
@@ -361,8 +454,9 @@ else if(m[10]&&last&&!WD.test(m[10])&&/^[\wÄÖÜäöü.\-\/]{1,10}$/.test(m[10]
 else last=null}
 const seen=new Set();return rows.filter(r=>{const k=JSON.stringify(r);return seen.has(k)?0:seen.add(k)})}
 const parseSup=parseAny;
+/* PARSER-END */
 let syncMsg='';
-const PX=[['https://api.allorigins.win/raw?url=',0],['https://corsproxy.io/?',0],['https://api.codetabs.com/v1/proxy?quest=',0],['https://api.allorigins.win/get?url=',1],['https://r.jina.ai/',2],['https://thingproxy.freeboard.io/fetch/',2]];
+const PX=[['https://api.allorigins.win/raw?url=',0],['https://corsproxy.io/?',0],['https://api.codetabs.com/v1/proxy?quest=',0],['https://api.allorigins.win/get?url=',1],['https://r.jina.ai/',2]];
 async function getVia(p,j,url){const c=new AbortController(),t=setTimeout(()=>c.abort(),9000);try{const r=await fetch(p+(j==2?url:encodeURIComponent(url)),{cache:'no-store',signal:c.signal});if(!r.ok)throw new Error('HTTP '+r.status);const x=await r.text();return j==1?(JSON.parse(x).contents||''):x}finally{clearTimeout(t)}}
 function viaProxy(url,ok){return Promise.any(PX.map(([p,j])=>getVia(p,j,url).then(h=>{if(!ok(h))throw new Error('leer');return h}))).catch(()=>{throw new Error('alle Übertragungswege blockiert')})}
 let W='';
@@ -371,13 +465,13 @@ const UNI=()=>!!(S.school&&S.school.mode==='uni'),nDays=()=>UNI()?7:5;
 function schMode(v){S.school.mode=v;if(v=='uni'&&!S.sa.tpl.some(t=>t.id=='u-kl'))S.sa.tpl.push({id:'u-kl',name:'Uni Klausur (Punkte)',ns:[87.5,75,62.5,50],gmin:0,areas:[{n:'Klausur',g:'',w:100,max:100,p:''}]});applySchool();save();render()}
 /* Lehrveranstaltungen (Uni-Stundenplan mit freien Zeiten) */
 function uniBlocks(di,date){return S.lv.filter(l=>l.day==di&&(!l.from||date>=l.from)&&(!l.to||date<=l.to)).sort((a,b)=>a.st.localeCompare(b.st)).map(l=>({l:{s:l.name,t:l.who||'',r:l.room||''},c:null,from:0,to:0,st:l.st,en:l.en,k:l.id}))}
-function saveLv(){const name=$('#lv-name').value.trim(),st=$('#lv-st').value,en=$('#lv-en').value;if(!name||!st||!en)return alert('Bitte Name, Beginn und Ende eingeben.');if(en<=st)return alert('Das Ende muss nach dem Beginn liegen.');
+function saveLv(){const name=$('#lv-name').value.trim(),st=$('#lv-st').value,en=$('#lv-en').value;if(!name||!st||!en)return warn('Bitte Name, Beginn und Ende eingeben.');if(en<=st)return warn('Das Ende muss nach dem Beginn liegen.');
 const o={name,day:+$('#lv-day').value,st,en,room:$('#lv-room').value.trim(),who:$('#lv-who').value.trim(),from:$('#lv-from').value,to:$('#lv-to').value};
 if(E.lv)Object.assign(S.lv.find(x=>x.id==E.lv),o);else S.lv.push({id:uid(),...o});save();cancelLv()}
 function cancelLv(){E.lv=null;['name','st','en','room','who','from','to'].forEach(k=>$('#lv-'+k).value='');$('#lv-btn').textContent='Hinzufügen';$('#lv-cancel').style.display='none';$('#lv-h').textContent='Lehrveranstaltung hinzufügen';render()}
 function editLv(id){const l=S.lv.find(x=>x.id==id);if(!l)return;E.lv=id;$('#lv-name').value=l.name;$('#lv-day').value=l.day;$('#lv-st').value=l.st;$('#lv-en').value=l.en;$('#lv-room').value=l.room||'';$('#lv-who').value=l.who||'';$('#lv-from').value=l.from||'';$('#lv-to').value=l.to||'';$('#lv-btn').textContent='Änderung speichern';$('#lv-cancel').style.display='';$('#lv-h').textContent='Lehrveranstaltung bearbeiten';$('main').scrollTop=0}
-const delLv=id=>{if(confirm('Lehrveranstaltung löschen?')){tomb(id);S.lv=S.lv.filter(x=>x.id!=id);if(E.lv==id)E.lv=null;save();render()}};
-function rPlanUni(){const wd=weekDates(),t=iso(new Date());
+const delLv=id=>{const l=S.lv.find(x=>x.id==id);if(!l)return;if(E.lv==id)cancelLv();undoDel('lv',l,'Lehrveranstaltung')};
+function rPlanUni(wd){const t=iso(new Date());
 $('#tt').innerHTML='<div class="grid">'+wd.map((d,di)=>{const b=blocks(di,iso(d));if(!b.length&&di>4)return'';
 return `<div class="card" style="${iso(d)==t?'border-color:var(--acc)':''}"><h3>${DN[di]} <span class="dim">${d.getDate()}.${d.getMonth()+1}.</span></h3>${b.map(x=>`<div class="blk"><div><b>${esc(x.l.s)}</b> <span class="dim">${esc(x.l.t)}${x.l.r?' · '+esc(x.l.r):''}</span></div><span class="dim" style="text-align:right">${x.st}–${x.en}</span><span class="acts" style="flex:0 0 100%">${bt('editLv('+x.k+')','Bearbeiten')}${bt('delLv('+x.k+')','Löschen','r')}</span></div>`).join('')||'<p class="dim">Frei</p>'}</div>`}).join('')+'</div>'}
 function fitUni(){const u=UNI();$('label[for="g-w"]').textContent=u?'ECTS-Punkte':'Gewicht';$('label[for="w-w"]').textContent=u?'ECTS-Punkte der nächsten Note':'Gewicht der nächsten Note';$('#g-val').step=u?'0.1':'0.5';$('#g-whelp').textContent=u?'ECTS-Punkte der Lehrveranstaltung: Je mehr ECTS, desto stärker zählt die Note im Schnitt. Nachkommastellen sind erlaubt, zum Beispiel 1,7.':'Gewicht = wie stark die Note zählt, z. B. Schularbeit 2, Test 1, Mitarbeit 0,5.'}
@@ -385,32 +479,54 @@ function uniSum(){if(!UNI()||!S.grades.length)return'';const tw=S.grades.reduce(
 const addMin=(t,m)=>{const[h,mi]=t.split(':').map(Number),x=(h*60+mi+m)%1440;return String(Math.floor(x/60)).padStart(2,'0')+':'+String(x%60).padStart(2,'0')};
 function applySchool(){const s=S.school=S.school||structuredClone(DEF.school);TM=s.times&&s.times.length?s.times:TM_TAG;W=(s.worker||'').replace(/\/+$/,'');
 S.tt=Array.from({length:5},(_,d)=>Array.from({length:TM.length},(_,e)=>(S.tt&&S.tt[d]&&S.tt[d][e])||0));const h=$('nav h2');if(h)h.textContent=s.name||'Schul-Hub'}
-function schSet(k,v){v=v.trim();if((k=='supUrl'||k=='worker')&&v&&!/^https?:\/\//i.test(v))return alert('Die Adresse muss mit https:// beginnen.');if(k=='worker')v=v.replace(/\/+$/,'');S.school[k]=v;applySchool();save();render()}
+function schSet(k,v){v=v.trim();if((k=='supUrl'||k=='worker')&&v&&!/^https?:\/\//i.test(v))return warn('Die Adresse muss mit https:// beginnen.');if(k=='worker')v=v.replace(/\/+$/,'');S.school[k]=v;applySchool();save();render()}
 function schTime(i,j,v){if(!v)return;S.school.times[i][j]=v;applySchool();save();render()}
 function schAdd(){const t=S.school.times,e=t.length?t[t.length-1][1]:'08:00';t.push([addMin(e,5),addMin(e,50)]);applySchool();save();render()}
-function schRm(i){const t=S.school.times;if(t.length<2)return alert('Mindestens eine Einheit muss bleiben.');if(!confirm('Einheit '+(i+1)+' entfernen? Die Einträge dieser Einheit im Stundenplan gehen verloren.'))return;t.splice(i,1);S.tt.forEach(r=>r.splice(i,1));applySchool();save();render()}
-function schPreset(k){if(!confirm('Unterrichtszeiten durch die Vorlage ersetzen? Eingetragene Fächer bleiben, soweit Platz ist.'))return;S.school.times=structuredClone(k=='abend'?TM_ABEND:TM_TAG);applySchool();save();render()}
-function schAbend(){if(!confirm('Schule auf Abendgymnasium einstellen? Zeiten, Supplierplan und Worker werden überschrieben, deine Einträge bleiben.'))return;S.school={...structuredClone(LEGACY_SCHOOL),mode:'school'};applySchool();save();render();fetchSup()}
+async function schRm(i){const t=S.school.times;if(t.length<2)return warn('Mindestens eine Einheit muss bleiben.');if(!await ask('Einheit '+(i+1)+' entfernen?','Die Einträge dieser Einheit im Stundenplan gehen verloren.','Entfernen',1))return;t.splice(i,1);S.tt.forEach(r=>r.splice(i,1));applySchool();save();render()}
+async function schPreset(k){if(!await ask('Unterrichtszeiten ersetzen?','Die Zeiten werden durch die Vorlage ersetzt. Eingetragene Fächer bleiben, soweit Platz ist.','Ersetzen'))return;S.school.times=structuredClone(k=='abend'?TM_ABEND:TM_TAG);applySchool();save();render()}
+async function schAbend(){if(!await ask('Auf Abendgymnasium einstellen?','Zeiten, Supplierplan und Worker werden überschrieben. Deine Einträge bleiben.','Einstellen'))return;S.school={...structuredClone(LEGACY_SCHOOL),mode:'school'};applySchool();save();render();fetchSup()}
 function rSchool(){const s=S.school;$('#sch-mode').value=s.mode||'school';$('#sch-sbox').style.display=s.mode=='uni'?'none':'';$('#sch-name').value=s.name||'';$('#sch-level').value=s.level||'';$('#sch-sup').value=s.supUrl||'';$('#sch-wk').value=s.worker||'';
-$('#sch-times').innerHTML=s.times.map((t,i)=>`<div class="row" style="margin-bottom:6px"><b style="flex:0 0 2.2rem">${i+1}.</b><input type="time" value="${esc(t[0])}" onchange="schTime(${i},0,this.value)" style="margin:0"><input type="time" value="${esc(t[1])}" onchange="schTime(${i},1,this.value)" style="margin:0">${bt('schRm('+i+')','Entfernen','r')}</div>`).join('')}
-async function getWorker(){const c=new AbortController(),t=setTimeout(()=>c.abort(),10000);try{const r=await fetch(W,{cache:'no-store',signal:c.signal});if(!r.ok)throw new Error('HTTP '+r.status);return await r.text()}finally{clearTimeout(t)}}
+$('#sch-times').innerHTML=s.times.map((t,i)=>`<div class="tm-r"><b>${i+1}.</b><input type="time" value="${esc(t[0])}" aria-label="${i+1}. Einheit Beginn" onchange="schTime(${i},0,this.value)"><input type="time" value="${esc(t[1])}" aria-label="${i+1}. Einheit Ende" onchange="schTime(${i},1,this.value)"><button class="btn s r" onclick="schRm(${i})" aria-label="${i+1}. Einheit entfernen">×</button></div>`).join('')}
+/* Seite über den eigenen Worker laden: Abendgymnasium über die Standardroute, andere Schulen über /page */
+async function getWorker(url){const c=new AbortController(),t=setTimeout(()=>c.abort(),12000);try{const r=url===LEG_SUP?await fetch(W,{cache:'no-store',signal:c.signal}):await fetch(W+'/page',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url}),cache:'no-store',signal:c.signal});
+if(!r.ok)throw new Error('HTTP '+r.status);return await r.text()}finally{clearTimeout(t)}}
+async function getPage(url,ok){if(W){try{const h=await getWorker(url);if(ok(h))return [h,'Cloudflare-Worker']}catch(e){}}return [await viaProxy(url,ok),'Proxy-Notweg']}
+const supKey=r=>[r.d,r.c,(r.u||[]).join('+'),r.x,r.n,r.r].join('|');
+const supNew=c=>{const t=((S.sup||{}).seen||{})[supKey(c)];return t>0&&Date.now()-t<36*36e5};
 async function fetchSup(){const U=(S.school&&S.school.supUrl)||'';if(!U){setSync();return}setSync('Prüfe Supplierplan…');
-try{let h,src='Cloudflare-Worker';try{if(U!==LEG_SUP||!W)throw 0;h=await getWorker();if(!/Einheit/i.test(h))throw 0}catch(e){src='Proxy-Notweg';h=await viaProxy(U,x=>/Einheit|\d{1,2}\.\d{1,2}\./.test(x))}let rows=parseAny(h);
-if(!rows.length)for(const f of [...h.matchAll(/<iframe[^>]+src=["']([^"']+)/gi)].map(m=>m[1]).filter(s=>/^https?:/.test(s)).slice(0,3)){try{rows=parseAny(await viaProxy(f,x=>x.length>50));if(rows.length)break}catch(e){}}
+try{let [h,src]=await getPage(U,x=>/Einheit|\d{1,2}\.\d{1,2}\./.test(x)),rows=parseAny(h);
+if(!rows.length)for(const f of [...h.matchAll(/<iframe[^>]+src=["']([^"']+)/gi)].map(m=>m[1]).filter(s=>/^https?:/.test(s)).slice(0,3)){try{rows=parseAny((await getPage(f,x=>x.length>50))[0]);if(rows.length)break}catch(e){}}
 if(!rows.length&&!/Einheit/i.test(h))throw new Error('keine Tabelle erkannt');
-S.sup={rows:rows.filter(r=>dUntil(r.d)>=0),ts:Date.now(),src};save();syncMsg='';setSync();render()}
+rows=rows.filter(r=>dUntil(r.d)>=0);const prev=S.sup.seen||{},first=!S.sup.ts,seen={};rows.forEach(r=>{const k=supKey(r);seen[k]=prev[k]??(first?0:Date.now())});
+S.sup={rows,ts:Date.now(),src,seen};save();syncMsg='';setSync();render()}
 catch(e){syncMsg='Supplierplan nicht automatisch ladbar ('+e.message+'). Letzter Stand: '+(S.sup.ts?new Date(S.sup.ts).toLocaleString('de-AT'):'keiner');setSync()}}
 /* Sync über Cloudflare */
 let syMsg='';
 function syncStat(m){if(m!==undefined)syMsg=m;const el=$('#sy-st');if(el)el.textContent=syMsg||(sbIn()?'Angemeldet: Daten werden automatisch abgeglichen.':S.sync.code?'Verbunden mit Sync-Code: Daten werden automatisch abgeglichen.':'Nicht verbunden.')}
 function schedPush(){clearTimeout(pt);if(syncOn())pt=setTimeout(syncNow,4000)}
 const syncOn=()=>sbIn()||!!(S.sync&&S.sync.code);
-async function workerReq(method,body){const r=await fetch(W+'/sync',{method,headers:{'X-Sync-Key':S.sync.code,...(body?{'Content-Type':'application/json'}:{})},body,cache:'no-store'});if(r.status==404)return null;if(!r.ok)throw new Error(r.status==400?'Sync-Code ungültig, bitte neuen Code erzeugen':r.status==429?'zu viele Anfragen':r.status==403?'Origin nicht erlaubt':'HTTP '+r.status);return method=='GET'?r.json():r.text()}
+/* ===== Ende-zu-Ende-Verschlüsselung für den Sync-Code =====
+   Schlüssel = PBKDF2(Code) → AES-GCM. Der Worker speichert nur { _ts, enc:{v,iv,ct} } und kann die Daten nicht lesen.
+   Unverschlüsselte Altdaten werden weiterhin gelesen und beim nächsten Speichern verschlüsselt. */
+const b64e=u=>{let s='';for(let i=0;i<u.length;i+=0x8000)s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(s)};
+const b64d=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+const SY_KEYS=new Map();
+function syKey(code){if(!SY_KEYS.has(code))SY_KEYS.set(code,(async()=>{const te=new TextEncoder(),base=await crypto.subtle.importKey('raw',te.encode(code),'PBKDF2',false,['deriveKey']);
+return crypto.subtle.deriveKey({name:'PBKDF2',hash:'SHA-256',salt:te.encode('schulhub-sync-v1'),iterations:200000},base,{name:'AES-GCM',length:256},false,['encrypt','decrypt'])})());return SY_KEYS.get(code)}
+async function syEnc(code,plain){const iv=crypto.getRandomValues(new Uint8Array(12)),ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv},await syKey(code),new TextEncoder().encode(plain)));return {v:1,iv:b64e(iv),ct:b64e(ct)}}
+async function syDec(code,e){if(!e||e.v!==1)throw new Error('unbekanntes Format');try{return new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:b64d(e.iv)},await syKey(code),b64d(e.ct)))}catch(x){throw new Error('Daten lassen sich mit diesem Code nicht entschlüsseln')}}
+async function workerReq(method,body){const code=S.sync.code;
+if(body){const j=JSON.parse(body);body=JSON.stringify({_ts:j._ts||Date.now(),enc:await syEnc(code,body)})}
+const r=await fetch(W+'/sync',{method,headers:{'X-Sync-Key':code,...(body?{'Content-Type':'application/json'}:{})},body,cache:'no-store'});if(r.status==404)return null;if(!r.ok)throw new Error(r.status==400?'Sync-Code ungültig, bitte neuen Code erzeugen':r.status==429?'zu viele Anfragen':r.status==403?'Origin nicht erlaubt':r.status==413?'Daten zu groß':'HTTP '+r.status);
+if(method!='GET')return r.text();const j=await r.json();syPlain=!!(j&&!j.enc);return j&&j.enc?JSON.parse(await syDec(code,j.enc)):j}
+let syPlain=false;/* true, wenn in der Cloud noch unverschlüsselte Altdaten liegen */
 const syncReq=(method,body)=>sbIn()?sbReq(method,body):workerReq(method,body);
 /* Dateien (Base64) bleiben auf dem Gerät und werden nicht in die Cloud geladen */
 const strip=o=>({...o,notes:(o.notes||[]).map(n=>n.file?{...n,file:{name:n.file.name}}:n)});
 const canon=o=>JSON.stringify(o,(k,v)=>v&&typeof v=='object'&&!Array.isArray(v)?Object.fromEntries(Object.entries(v).sort(([a],[b])=>a<b?-1:1)):v);
-const IDK=['todos','tests','notes','grades','links','lv'];
+const IDK=['todos','tests','notes','grades','links','lv','study'];
+/* Lernzeit-Einträge ohne ID (ältere Versionen) bekommen eine aus dem Inhalt berechnete ID, damit alle Geräte dieselbe vergeben */
+function migStudy(o){if(o&&Array.isArray(o.study))o.study.forEach((x,i)=>{if(x&&x.id==null)x.id=hashId('st:'+x.d+'|'+x.s+'|'+x.m+'|'+i)});return o}
 /* Zusammenführen: Listen mit ID werden pro Eintrag vereinigt, Löschungen über Grabsteine (S.del), alles andere übernimmt die neuere Seite */
 function mergeData(a,b){const aN=(a._ts||0)>=(b._ts||0),nw=aN?a:b,od=aN?b:a,r={...od,...nw},del={...(od.del||{})};
 for(const k in (nw.del||{}))del[k]=Math.max(del[k]||0,nw.del[k]);const cut=Date.now()-60*864e5;for(const k in del)if(del[k]<cut)delete del[k];
@@ -419,7 +535,7 @@ r.del=del;r.imp={...(od.imp||{}),...(nw.imp||{})};r._ts=Math.max(a._ts||0,b._ts|
 const putRemote=()=>syncReq('PUT',JSON.stringify({...strip(snap()),_ts:S._ts}));
 let syBusy=false;
 async function syncNow(){if(!syncOn()||syBusy)return;if(!sbIn()&&!W){syncStat('Kein Worker eingetragen (Einstellungen, Schule und Unterrichtszeiten).');return}syBusy=true;syncStat('Synchronisiere…');
-try{const rm=await syncReq('GET');
+try{const rm=migStudy(await syncReq('GET'));
 if(!rm){S._ts=S._ts||Date.now();await putRemote()}
 else if((rm._ts||0)!==(S._ts||0)){
 const lf=new Map(S.notes.filter(n=>n.file&&n.file.data).map(n=>[n.id,n.file])),m=mergeData({...snap(),_ts:S._ts||0},rm);
@@ -428,17 +544,18 @@ const a={...strip(m),_ts:0},b={...strip(rm),_ts:0},same=canon(a)===canon(b);
 S={...structuredClone(DEF),...m,sup:S.sup,cals:S.cals,sync:S.sync};S._ts=same?rm._ts:Date.now();lastSnap=JSON.stringify(snap());
 try{localStorage.setItem('schulhub',JSON.stringify(S))}catch(e){}fillSubjects();applySchool();render();
 if(!same)await putRemote()}
+if(syPlain&&!sbIn()){syPlain=false;await putRemote()}/* Altdaten sofort verschlüsselt neu ablegen */
 syncStat('Zuletzt abgeglichen: '+new Date().toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'}))}
 catch(e){syncStat(e.expired?e.message:'Sync-Fehler: '+(e.message||'Netzwerk'))}finally{syBusy=false}}
 /* ===== Sync-Code (ohne Konto) ===== */
 function syncGen(){const a=crypto.getRandomValues(new Uint8Array(20)),c='abcdefghjkmnpqrstuvwxyz23456789';$('#sy-code').value=[...a].map(x=>c[x%c.length]).join('').replace(/(.{5})(?=.)/g,'$1-')}
-async function syncConnect(){if(sbIn())return alert('Du bist mit einem Konto angemeldet. Melde dich zuerst ab, wenn du stattdessen einen Sync-Code nutzen willst.');const c=$('#sy-code').value.trim();
-if(!/^[a-hjkmnp-z2-9]{5}(-[a-hjkmnp-z2-9]{5}){3}$/.test(c))return alert('Der Code muss das Format xxxxx-xxxxx-xxxxx-xxxxx haben (Kleinbuchstaben und Ziffern). Am besten „Neuen Code erzeugen“.');
-if(!W)return alert('Trage zuerst unter Einstellungen bei „Schule und Unterrichtszeiten“ die Worker-Adresse ein.');S.sync.code=c;
-try{const rm=await workerReq('GET');if(rm){if(confirm('In der Cloud liegen schon Daten.\n\nOK = Cloud-Daten auf dieses Gerät laden (lokale Daten werden ersetzt)\nAbbrechen = beides zusammenführen (nichts geht verloren)'))loadCloud(rm);else S._ts=Date.now()}}
+async function syncConnect(){if(sbIn())return warn('Du bist mit einem Konto angemeldet. Melde dich zuerst ab, wenn du stattdessen einen Sync-Code nutzen willst.');const c=$('#sy-code').value.trim();
+if(!/^[a-hjkmnp-z2-9]{5}(-[a-hjkmnp-z2-9]{5}){3}$/.test(c))return warn('Der Code muss das Format xxxxx-xxxxx-xxxxx-xxxxx haben (Kleinbuchstaben und Ziffern). Am besten „Neuen Code erzeugen“.');
+if(!W)return warn('Trage zuerst unter Einstellungen bei „Schule und Unterrichtszeiten“ die Worker-Adresse ein.');S.sync.code=c;
+try{const rm=migStudy(await workerReq('GET'));if(rm){const k=await choose('In der Cloud liegen schon Daten','Willst du die Daten aus der Cloud auf dieses Gerät laden oder beides zusammenführen? Beim Zusammenführen geht nichts verloren.',[{label:'Abbrechen',cls:'g',key:0},{label:'Zusammenführen',cls:'g',key:2},{label:'Cloud-Daten laden',key:1}]);if(!k){S.sync.code='';return syncStat('')}if(k==1)loadCloud(rm);else S._ts=Date.now()}}
 catch(e){S.sync.code='';return syncStat('Sync-Fehler: '+(e.message||'Netzwerk'))}
 lsSave();syncNow()}
-function syncOff(){if(confirm('Sync mit Code auf diesem Gerät trennen? Die Daten bleiben hier erhalten.')){S.sync.code='';lsSave();$('#sy-code').value='';syncStat('')}}
+async function syncOff(){if(await ask('Sync trennen?','Der Sync mit Code wird auf diesem Gerät beendet. Die Daten bleiben hier erhalten.','Trennen')){S.sync.code='';lsSave();$('#sy-code').value='';syncStat('')}}
 /* ===== Konto und Sync (Supabase) ===== */
 const SB_DEFAULT={url:'',key:''}; /* Wer den Hub für eine Klasse oder Schule bereitstellt, trägt hier Projektadresse und öffentlichen Schlüssel ein. Dann müssen Nutzer nur registrieren. */
 const lsSave=()=>{try{localStorage.setItem('schulhub',JSON.stringify(S))}catch(e){}};
@@ -474,15 +591,15 @@ function acMsg(m,bad){const el=$('#ac-msg');el.textContent=m||'';el.className=ba
 function acCfg(){const u=$('#ac-url').value.trim().replace(/\/+$/,''),k=$('#ac-key').value.trim();if(u&&!/^(https:\/\/|http:\/\/(localhost|127\.0\.0\.1))\S+$/i.test(u)){acMsg('Die Projektadresse muss mit https:// beginnen.',1);return false}
 const b=S.sync.sb=S.sync.sb||{};if($('#ac-cfg').style.display!='none'){if(u)b.url=u;if(k)b.key=k}lsSave();return true}
 const redir=()=>/^https?:/i.test(location.protocol)?'?redirect_to='+encodeURIComponent(location.href.split('#')[0]):'';
-function loadCloud(rm){const lf=new Map(S.notes.filter(n=>n.file&&n.file.data).map(n=>[n.id,n.file]));S={...structuredClone(DEF),...rm,sup:S.sup,cals:S.cals,sync:S.sync};S.notes=S.notes.map(n=>{const f=lf.get(n.id);return n.file&&!n.file.data&&f&&f.name===n.file.name?{...n,file:f}:n});lastSnap=JSON.stringify(snap());fillSubjects();applySchool()}
+function loadCloud(rm){migStudy(rm);const lf=new Map(S.notes.filter(n=>n.file&&n.file.data).map(n=>[n.id,n.file])),sch=S.school;S={...structuredClone(DEF),...rm,sup:S.sup,cals:S.cals,sync:S.sync};if(!rm.school)S.school=sch;/* fehlt die Schuleinstellung in der Cloud, bleibt die des Geräts (samt Worker) */S.notes=S.notes.map(n=>{const f=lf.get(n.id);return n.file&&!n.file.data&&f&&f.name===n.file.name?{...n,file:f}:n});lastSnap=JSON.stringify(snap());fillSubjects();applySchool()}
 async function acFirstSync(){try{const rm=await syncReq('GET'),has=['todos','tests','notes','grades','cards','study'].some(k=>(S[k]||[]).length);
-if(rm){if(!has||confirm('In deinem Konto liegen schon Daten.\n\nOK = Konto-Daten auf dieses Gerät laden (lokale Daten werden ersetzt)\nAbbrechen = beides zusammenführen (nichts geht verloren)'))loadCloud(rm);else S._ts=Date.now()}}
+if(rm){const k=has?await choose('In deinem Konto liegen schon Daten','Willst du die Konto-Daten auf dieses Gerät laden (lokale Daten werden ersetzt) oder beides zusammenführen? Beim Zusammenführen geht nichts verloren.',[{label:'Zusammenführen',cls:'g',key:2},{label:'Konto-Daten laden',key:1}]):1;if(k==1)loadCloud(rm);else S._ts=Date.now()}}
 catch(e){acMsg('Angemeldet, aber der Abgleich ist fehlgeschlagen: '+e.message,1);rAcct();return}
 lsSave();rAcct();render();syncNow()}
-const acCodeAsk=()=>!(S.sync.code&&!confirm('Auf diesem Gerät ist ein Sync-Code aktiv. Er wird durch das Konto ersetzt. Fortfahren?'));
-async function acLogin(){if(!acCfg())return;const{e,p}=acVal();if(!e||!p)return acMsg('Bitte E-Mail und Passwort eingeben.',1);if(!acCodeAsk())return;acMsg('Melde an…');
+const acCodeAsk=async()=>!S.sync.code||await ask('Sync-Code ersetzen?','Auf diesem Gerät ist ein Sync-Code aktiv. Er wird durch das Konto ersetzt.','Fortfahren');
+async function acLogin(){if(!acCfg())return;const{e,p}=acVal();if(!e||!p)return acMsg('Bitte E-Mail und Passwort eingeben.',1);if(!await acCodeAsk())return;acMsg('Melde an…');
 try{const j=await sbCall('/auth/v1/token?grant_type=password',{method:'POST',body:{email:e,password:p}});sbSet(j,e);$('#ac-pw').value='';acMsg('');await acFirstSync()}catch(x){acMsg(x.message,1)}}
-async function acReg(){if(!acCfg())return;const{e,p}=acVal();if(!/^\S+@\S+\.\S+$/.test(e))return acMsg('Bitte eine gültige E-Mail-Adresse eingeben.',1);if(p.length<8)return acMsg('Das Passwort braucht mindestens 8 Zeichen.',1);if(!acCodeAsk())return;acMsg('Registriere…');
+async function acReg(){if(!acCfg())return;const{e,p}=acVal();if(!/^\S+@\S+\.\S+$/.test(e))return acMsg('Bitte eine gültige E-Mail-Adresse eingeben.',1);if(p.length<8)return acMsg('Das Passwort braucht mindestens 8 Zeichen.',1);if(!await acCodeAsk())return;acMsg('Registriere…');
 try{const j=await sbCall('/auth/v1/signup'+redir(),{method:'POST',body:{email:e,password:p}});
 if(j&&j.access_token){sbSet(j,e);$('#ac-pw').value='';await acFirstSync();acMsg('Konto angelegt. Du bist angemeldet.')}
 else acMsg('Fast geschafft: Wir haben dir eine Mail geschickt. Klicke dort auf den Bestätigungslink und melde dich danach hier an.')}catch(x){acMsg(x.message,1)}}
@@ -490,16 +607,16 @@ async function acReset(){if(!acCfg())return;const e=$('#ac-mail').value.trim().t
 try{await sbCall('/auth/v1/recover'+redir(),{method:'POST',body:{email:e}});acMsg('Wenn es ein Konto mit dieser Adresse gibt, ist eine Mail mit einem Link unterwegs.')}catch(x){acMsg(x.message,1)}}
 async function acNewPw(){const p=$('#ac-np1').value;if(p.length<8)return acMsg('Das Passwort braucht mindestens 8 Zeichen.',1);
 try{await sbCall('/auth/v1/user',{method:'PUT',token:await sbToken(),body:{password:p}});$('#ac-np1').value='';$('#ac-np').style.display='none';auRec=false;gateUpdate();acMsg('Neues Passwort gespeichert.')}catch(x){acMsg(x.message,1)}}
-async function acOut(){if(!confirm('Auf diesem Gerät abmelden? Die Daten bleiben hier erhalten.'))return;const b=S.sync.sb;try{await sbCall('/auth/v1/logout?scope=local',{method:'POST',token:b.access})}catch(e){}
+async function acOut(){if(!await ask('Abmelden?','Die Daten bleiben auf diesem Gerät erhalten.','Abmelden'))return;const b=S.sync.sb;try{await sbCall('/auth/v1/logout?scope=local',{method:'POST',token:b.access})}catch(e){}
 b.access='';b.refresh='';b.uid='';b.exp=0;lsSave();try{localStorage.removeItem('schulhub_guest')}catch(e){}acMsg('');syncStat('');rAcct()}
-async function acDelCloud(){if(!confirm('Alle in der Cloud gespeicherten Daten deines Kontos löschen? Die Daten auf diesem Gerät bleiben erhalten. Das Konto selbst kann nur der Betreiber des Projekts löschen.'))return;
+async function acDelCloud(){if(!await ask('Cloud-Daten löschen?','Alle in der Cloud gespeicherten Daten deines Kontos werden gelöscht. Die Daten auf diesem Gerät bleiben erhalten. Das Konto selbst kann nur der Betreiber des Projekts löschen.','Löschen',1))return;
 try{await sbCall('/rest/v1/hub_data?user_id=eq.'+S.sync.sb.uid,{method:'DELETE',token:await sbToken()});acMsg('Cloud-Daten gelöscht. Beim nächsten Abgleich werden die Daten dieses Geräts neu hochgeladen.')}catch(x){acMsg(x.message,1)}}
 async function acCopySql(){try{await navigator.clipboard.writeText($('#ac-sql').textContent);acMsg('SQL kopiert.')}catch(e){acMsg('Kopieren nicht möglich. Markiere den Text von Hand.',1)}}
 function rAcct(){gateUpdate();if(!$('#ac-out'))return;const b=S.sync.sb||{},on=sbIn();$('#ac-out').style.display=on?'none':'';$('#ac-in').style.display=on?'':'none';$('#ac-who').textContent=b.email||'';
 if(!$('#ac-mail').value)$('#ac-mail').value=b.email||'';$('#ac-url').value=b.url||'';$('#ac-key').value=b.key||'';$('#ac-cfg').style.display=SB_DEFAULT.url&&SB_DEFAULT.key?'none':'';syncStat()}
 let auRec=false,auM='in';
 const guestOK=()=>{try{return localStorage.getItem('schulhub_guest')=='1'}catch(e){return false}};
-function gateUpdate(){const g=$('#auth');if(!g)return;const show=auRec||(!sbIn()&&!guestOK()),c=sbC(),cfg=!!(c.url&&c.key);
+function gateUpdate(){const g=$('#auth');if(!g)return;const c=sbC(),cfg=!!(c.url&&c.key),show=auRec||(cfg&&!sbIn()&&!guestOK());/* Anmeldemaske nur, wenn ein Konto-Server eingerichtet ist */
 if($('#ac-url')&&!$('#ac-url').value)$('#ac-url').value=(S.sync.sb&&S.sync.sb.url)||'';if($('#ac-key')&&!$('#ac-key').value)$('#ac-key').value=(S.sync.sb&&S.sync.sb.key)||'';
 g.style.display=show?'flex':'none';$('#au-name').textContent=(S.school&&S.school.name)||'Schul-Hub';
 $('#au-form').style.display=(auRec||!cfg)?'none':'';$('#au-np').style.display=auRec?'':'none';$('#au-nocfg').style.display=(!cfg&&!auRec)?'':'none';
@@ -515,7 +632,7 @@ const nb=document.querySelector('nav button[data-v="set"]');if(nb)nb.click();
 if(p.get('error_description')){acMsg(p.get('error_description').replace(/\+/g,' '),1);return}
 try{const tok=p.get('access_token'),u=await sbCall('/auth/v1/user',{token:tok});sbSet({access_token:tok,refresh_token:p.get('refresh_token'),expires_in:+p.get('expires_in')||3600,user:u});rAcct();
 if(p.get('type')=='recovery'){auRec=true;gateUpdate();$('#ac-np').style.display='';acMsg('Gib ein neues Passwort ein.')}else{acMsg('E-Mail bestätigt. Du bist angemeldet.');await acFirstSync()}}catch(e){acMsg(e.message,1)}}
-function rSet(){rSchool();rSubj();rAcct();$('#sy-code').value=S.sync.code||'';syncStat();bkStat();aiFill();rDashCfg()}
+function rSet(){$('#me-name').value=S.me||'';thDraw();puDraw();rSchool();rSubj();rAcct();$('#sy-code').value=S.sync.code||'';syncStat();bkStat();aiFill();rDashCfg()}
 function resetSup(){S.sup={rows:[],ts:0};save();syncMsg='';render();fetchSup()}
 function setSync(m){if(!supOn()){const t='Supplierplan nicht eingerichtet. Adresse unter Einstellungen eintragen oder die Vorlage Abendgymnasium nutzen.';$('#sync').textContent=t;$('#sync2').textContent='';return}const old=S.sup.ts&&Date.now()-S.sup.ts>216e5?' – VERALTET, bitte aktualisieren':'',t=m||syncMsg||(S.sup.ts?`Supplierplan zuletzt geprüft: ${new Date(S.sup.ts).toLocaleString('de-AT',{weekday:'short',hour:'2-digit',minute:'2-digit'})} · ${S.sup.rows.length} Einträge · Quelle: ${S.sup.src||'alt/manuell'}${old}`:'Supplierplan noch nicht geladen');$('#sync').textContent=t;$('#sync2').textContent=t}
 const findChg=(date,eh,s)=>dUntil(date)<0?undefined:S.sup.rows.find(r=>r.d===date&&r.u.includes(eh)&&r.c.toUpperCase()===s.toUpperCase());
@@ -525,15 +642,25 @@ const blkHtml=b=>`<div class="blk ${b.c?(CH[b.c.x]||['','x'])[1]:''}"><div><b>${
 /* Stundenplan */
 let editMode=false;
 function toggleEdit(){editMode=!editMode;$('#editbtn').textContent=editMode?'Fertig':'Plan bearbeiten';rPlan()}
-function editCell(d,e){const l=S.tt[d][e],v=prompt('Fach, Lehrer, Raum – z. B. M6, EIB, 205 (leer = frei)',l?[l.s,l.t,l.r].join(', '):'');if(v===null)return;
-const p=v.split(',').map(x=>x.trim()),nl=p[0]?L(p[0],p[1]||'',p[2]||''):0;S.tt[d][e]=nl;
+async function editCell(d,e){const l=S.tt[d][e]||{s:'',t:'',r:''},teachers=[...new Set(S.tt.flat().filter(Boolean).map(x=>x.t).filter(Boolean))].sort(),
+next=e<TM.length-1,sameNext=next&&JSON.stringify(S.tt[d][e+1]||0)===JSON.stringify(S.tt[d][e]||0);
+const v=await form(`${DN[d]}, ${e+1}. Einheit (${TM[e][0]}–${TM[e][1]})`,[{label:'Fach / Modul (leer = frei)',value:l.s,list:S.subjects,placeholder:'z. B. M6'},{label:'Lehrkraft (Kürzel)',value:l.t,list:teachers,placeholder:'z. B. EIB'},{label:'Raum',value:l.r,placeholder:'z. B. 205'}].concat(next?[{type:'check',label:'Auch für die '+(e+2)+'. Einheit übernehmen (Doppelstunde)',value:sameNext||!S.tt[d][e]}]:[]));
+if(!v)return;const nl=v[0].trim()?L(v[0].trim(),v[1].trim(),v[2].trim()):0;S.tt[d][e]=nl;
 if(nl&&!S.subjects.includes(nl.s))S.subjects.push(nl.s);
-if(e<TM.length-1&&confirm('Auch auf die folgende Einheit anwenden?'))S.tt[d][e+1]=nl?{...nl}:0;save();fillSubjects();render()}
-function rPlan(){$('#editbtn').style.display=UNI()?'none':'';$('#lv-card').style.display=UNI()?'':'none';if(UNI())return rPlanUni();const wd=weekDates(),t=iso(new Date());
-let h=`<table class="tt ${editMode?'edit':''}"><tr><th style="width:80px">EH</th>${wd.map((d,i)=>`<th class="${iso(d)==t?'today':''}">${DS[i]}<br><small>${d.getDate()}.${d.getMonth()+1}.</small></th>`).join('')}</tr>`;
+if(next&&v[3])S.tt[d][e+1]=nl?{...nl}:0;save();fillSubjects();render();puSyncCodes()}
+const narrow=()=>matchMedia('(max-width:640px)').matches;
+function wkLabel(wd){const f=d=>d.getDate()+'.'+(d.getMonth()+1)+'.',n=wkOff;return (n==0?'Diese Woche':n==1?'Nächste Woche':n==-1?'Letzte Woche':n>0?'In '+n+' Wochen':'Vor '+(-n)+' Wochen')+' · '+f(wd[0])+'–'+f(wd[wd.length-1])}
+function rPlan(){const u=UNI(),wd=weekDates(wkOff),t=iso(new Date());$('#editbtn').style.display=u?'none':'';$('#lv-card').style.display=u?'':'none';
+$('#wk-lbl').textContent=wkLabel(wd);$('#wk-now').disabled=wkOff==0;
+if(u)return rPlanUni(wd);
+if(!editMode&&narrow())return rPlanList(wd);
+let h=`<table class="tt ${editMode?'edit':''}"><tr><th style="width:80px" scope="col">EH</th>${wd.map((d,i)=>`<th scope="col" class="${iso(d)==t?'today':''}">${DS[i]}<br><small>${d.getDate()}.${d.getMonth()+1}.</small></th>`).join('')}</tr>`;
 for(let e=0;e<TM.length;e++){h+=`<tr><td><b>${e+1}.</b><small style="display:block;color:var(--dim);font-size:var(--fs-xs);font-weight:400">${TM[e][0]}<br>${TM[e][1]}</small></td>`;for(let d=0;d<5;d++){const l=S.tt[d][e],c=l&&findChg(iso(wd[d]),e+1,l.s),cl=l?(c?(CH[c.x]||['','l'])[1]:'l'):'f';
-h+=`<td class="${cl}" ${editMode?`onclick="editCell(${d},${e})"`:''}>${l?`<b>${esc(l.s)}</b><small>${esc(l.t)} / ${esc(c&&c.r?c.r:l.r)}</small>${c?`<span class="tag">${esc(chTxt(c))}</span>`:''}`:'–'}</td>`}h+='</tr>';if(e<TM.length-1&&TM[e+1][0]>TM[e][1]){const a=[TM[e][1],TM[e+1][0]];h+=`<tr><td colspan="6" class="dim" style="padding:3px">Pause ${a[0]}–${a[1]}</td></tr>`}}
+h+=`<td class="${cl}${editMode?' ed':''}" ${editMode?`onclick="editCell(${d},${e})" onkeydown="if(event.key=='Enter'||event.key==' '){event.preventDefault();editCell(${d},${e})}" tabindex="0" role="button" aria-label="${DN[d]}, ${e+1}. Einheit bearbeiten"`:''}>${l?`<b>${esc(l.s)}</b><small>${esc(l.t)} / ${esc(c&&c.r?c.r:l.r)}</small>${c?`<span class="tag">${esc(chTxt(c))}</span>`:''}`:(editMode?'+':'–')}</td>`}h+='</tr>';if(e<TM.length-1&&TM[e+1][0]>TM[e][1]){const a=[TM[e][1],TM[e+1][0]];h+=`<tr><td colspan="6" class="dim" style="padding:3px">Pause ${a[0]}–${a[1]}</td></tr>`}}
 $('#tt').innerHTML=h+'</table>';}
+/* Schmale Bildschirme: Tagesliste statt Tabelle, Änderungen ausgeschrieben */
+function rPlanList(wd){const t=iso(new Date());$('#tt').innerHTML=wd.map((d,di)=>{const b=blocks(di,iso(d)),today=iso(d)==t;
+return `<div class="day-h" ${today?'style="color:var(--acc)"':''}>${DN[di]}, ${d.getDate()}.${d.getMonth()+1}.${today?' · heute':''}</div>`+(b.length?b.map(blkHtml).join(''):'<p class="dim" style="margin-bottom:6px">Kein Unterricht</p>')}).join('')}
 /* Dashboard */
 /* Jetzt / als Nächstes */
 function rNow(){const el=$('#d-now');if(!el)return;const n=new Date(),wd=(n.getDay()+6)%7,mins=n.getHours()*60+n.getMinutes(),tm=s=>{const p=s.split(':');return +p[0]*60+ +p[1]};
@@ -544,16 +671,16 @@ else if(nxt)t+=`<p class="dim" style="margin-bottom:6px">${b.some(x=>x.e<=mins)?
 if(nxt)t+=`<p class="dim" style="margin:8px 0 6px">${cur?'Danach':'Als Nächstes'}</p>`+blkHtml(nxt);
 if(!cur&&!nxt)t=`<p class="grn">${wd>=nDays()?'Wochenende – kein Unterricht':b.length?'Für heute ist Schluss':'Heute kein Unterricht'}</p>`;
 el.innerHTML=t}
-function rDash(){rNow();const h=new Date().getHours();$('#hello').textContent=(h<11?'Guten Morgen':h<18?'Hallo':'Guten Abend')+' ';bkHint();applyDash();
+function rDash(){rNow();const h=new Date().getHours();$('#hello').textContent=(h<11?'Guten Morgen':h<18?'Hallo':'Guten Abend')+(S.me?', '+S.me:'');bkHint();applyDash();
 let found=0;for(let i=0;i<8&&!found;i++){const d=new Date(today0());d.setDate(d.getDate()+i);const wd=(d.getDay()+6)%7;if(wd>=nDays())continue;const b=blocks(wd,iso(d));
 if(b.length){found=1;$('#d-day').textContent=(i==0?'Heute':i==1?'Morgen':DN[wd])+' · '+d.getDate()+'.'+(d.getMonth()+1)+'.';$('#d-lessons').innerHTML=b.map(blkHtml).join('')}}
 if(!found){$('#d-day').textContent='Nächster Schultag';$('#d-lessons').innerHTML='<p class="dim">Kein Unterricht eingetragen.</p>'}
-const wd=weekDates(),ch=[];wd.forEach((d,di)=>blocks(di,iso(d)).forEach(b=>{if(b.c&&dUntil(iso(d))>=0)ch.push(`<div class="blk ${(CH[b.c.x]||['','x'])[1]}"><div><b>${esc(b.l.s)}</b> <span class="dim">${DS[di]} ${b.from}.${b.to>b.from?'–'+b.to+'.':''} EH, ${TM[b.from-1][0]}–${TM[b.to-1][1]}</span><div class="${b.c.x=='E'?'red':'yel'}" style="font-size:var(--fs-sm)">${esc(chTxt(b.c))}</div></div></div>`)}));
-$('#d-chg').innerHTML=ch.length?ch.join(''):'<p class="grn">Keine Ausfälle oder Änderungen in dieser Woche </p>';
+const ch=[];for(let i=0;i<14;i++){const d=new Date(today0());d.setDate(d.getDate()+i);const di=(d.getDay()+6)%7;if(di>4)continue;blocks(di,iso(d)).forEach(b=>{if(b.c)ch.push(`<div class="blk ${(CH[b.c.x]||['','x'])[1]}"><div><b>${esc(b.l.s)}</b>${supNew(b.c)?'<span class="new">neu</span>':''} <span class="dim">${i==0?'heute':i==1?'morgen':fmtD(iso(d))} · ${b.from}.${b.to>b.from?'–'+b.to+'.':''} EH, ${TM[b.from-1][0]}–${TM[b.to-1][1]}</span><div class="${b.c.x=='E'?'red':'yel'}" style="font-size:var(--fs-sm)">${esc(chTxt(b.c))}</div></div></div>`)})}
+$('#d-chg').innerHTML=ch.length?ch.join(''):'<p class="grn">Keine Ausfälle oder Änderungen in den nächsten 14 Tagen.</p>';
 const ts=S.tests.filter(t=>dUntil(t.date)>=0).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,3);
 $('#d-tests').innerHTML=ts.length?ts.map(t=>`<div class="blk"><div><b>${esc(t.type)} ${esc(t.subj)}</b><div class="dim">${esc(t.topic)}</div></div><span class="${dUntil(t.date)<=3?'red':'dim'}">${dTxt(t.date)}</span></div>`).join(''):'<p class="dim">Keine Termine.</p>';
 const td=S.todos.filter(t=>!t.done).sort((a,b)=>(a.due||'9').localeCompare(b.due||'9')).slice(0,5);
-$('#d-todos').innerHTML=td.length?td.map(t=>`<div class="blk"><div><b>${esc(t.title)}</b> <span class="bd">${esc(t.subj)}</span></div><span class="${t.due&&dUntil(t.due)<0?'red':'dim'}">${t.due?dTxt(t.due):''}</span></div>`).join(''):'<p class="grn">Alles erledigt </p>';
+$('#d-todos').innerHTML=td.length?td.map(t=>`<div class="blk"><div><b>${esc(t.title)}</b> <span class="bd">${esc(t.subj)}</span></div><span class="${t.due&&dUntil(t.due)<0?'red':'dim'}">${t.due?dTxt(t.due):''}</span></div>`).join(''):'<p class="grn">Alles erledigt.</p>';
 const ce=calEv(c=>c.home!==false).filter(x=>dUntil(x.d)>=0).slice(0,5);$('#d-cal').innerHTML=ce.length?calLi(ce):'<p class="dim">Keine Termine – unter „Kalender“ hinzufügen.</p>';
 const st=weekStats(),tot=Object.values(st).reduce((a,b)=>a+b,0);$('#d-study').innerHTML=`<p style="font-size:var(--fs-xl);font-weight:700">${Math.floor(tot/60)} Std. ${tot%60} Min.</p>`;rQS();rExam();rStreak()}
 /* To-Dos */
@@ -565,50 +692,71 @@ function editTodo(id){const t=S.todos.find(x=>x.id==id);E.todo=id;$('#t-title').
 function rTodos(){const st=$('#f-st').value,sj=$('#f-sj').value,P={Hoch:0,Mittel:1,Niedrig:2};
 const l=S.todos.filter(t=>(!st||(st=='open')==!t.done)&&(!sj||t.subj==sj)).sort((a,b)=>(a.done-b.done)||(a.due||'9').localeCompare(b.due||'9')||P[a.prio]-P[b.prio]);
 $('#todos').innerHTML=l.map(t=>`<li class="it ${t.prio} ${t.done?'done':''}"><input type="checkbox" ${t.done?'checked':''} onchange="togTodo(${t.id})"><div><b>${esc(t.title)}</b><br><span class="bd">${esc(t.subj)}</span><span class="bd">${t.prio}</span><span class="${!t.done&&t.due&&dUntil(t.due)<0?'red':'dim'}">${t.due?fmtD(t.due)+' · '+dTxt(t.due):''}</span>${t.desc?`<div class="dim">${esc(t.desc)}</div>`:''}</div><div class="acts">${S.subjects.includes(t.subj)?bt('aiTodo('+t.id+')','KI-Einstieg','a'):''}${bt('editTodo('+t.id+')','Bearbeiten')}${bt('delTodo('+t.id+')','Löschen','r')}</div></li>`).join('')||'<p class="dim">Nichts gefunden.</p>'}
-const togTodo=id=>{const t=S.todos.find(x=>x.id==id);t.done=!t.done;save();render()},delTodo=id=>{if(confirm('Aufgabe löschen?')){tomb(id);S.todos=S.todos.filter(x=>x.id!=id);if(E.todo==id)E.todo=null;save();render()}},clearDone=()=>{if(confirm('Alle erledigten Aufgaben löschen?')){S.todos.filter(t=>t.done).forEach(t=>tomb(t.id));S.todos=S.todos.filter(t=>!t.done);save();render()}};
+const togTodo=id=>{const t=S.todos.find(x=>x.id==id);t.done=!t.done;save();render()},delTodo=id=>{const t=S.todos.find(x=>x.id==id);if(!t)return;if(E.todo==id)cancelTodo();undoDel('todos',t,'Aufgabe')},
+clearDone=()=>{const old=S.todos.filter(t=>t.done);if(!old.length)return toast('Keine erledigten Aufgaben.');old.forEach(t=>tomb(t.id));S.todos=S.todos.filter(t=>!t.done);save();render();
+toast(old.length+(old.length==1?' erledigte Aufgabe':' erledigte Aufgaben')+' gelöscht.',{act:'Rückgängig',fn:()=>{old.forEach(t=>{if(S.del)delete S.del[t.id]});S.todos.push(...old);save();render()}})};
 /* Tests */
-function saveTest(){const date=$('#x-date').value;if(!date)return alert('Bitte Datum wählen.');const o={type:$('#x-type').value,subj:$('#x-subj').value,topic:$('#x-topic').value,date};
+function saveTest(){const date=$('#x-date').value;if(!date)return warn('Bitte Datum wählen.');const o={type:$('#x-type').value,subj:$('#x-subj').value,topic:$('#x-topic').value,date};
 if(E.test)Object.assign(S.tests.find(x=>x.id==E.test),o);else S.tests.push({id:uid(),...o});save();cancelTest()}
 function cancelTest(){E.test=null;$('#x-topic').value=$('#x-date').value='';$('#x-btn').textContent='Speichern';$('#x-cancel').style.display='none';$('#x-h').textContent='Neuer Termin';render()}
 function editTest(id){const t=S.tests.find(x=>x.id==id);E.test=id;setSel($('#x-type'),t.type);setSel($('#x-subj'),t.subj);$('#x-topic').value=t.topic||'';$('#x-date').value=t.date;$('#x-btn').textContent='Änderung speichern';$('#x-cancel').style.display='';$('#x-h').textContent='Termin bearbeiten';$('main').scrollTop=0}
 function rTests(){const li=t=>`<li class="it"><div><b>${esc(t.type)} · ${esc(t.subj)}</b><br><span class="dim">${esc(t.topic)}</span></div><div class="dt"><span class="${dUntil(t.date)>=0&&dUntil(t.date)<=3?'red':'dim'}">${fmtD(t.date)}<br>${dTxt(t.date)}</span></div><div class="acts">${bt('editTest('+t.id+')','Bearbeiten')}${bt('delTest('+t.id+')','Löschen','r')}</div></li>`;
 const a=[...S.tests].sort((x,y)=>x.date.localeCompare(y.date));$('#tests').innerHTML=a.filter(t=>dUntil(t.date)>=0).map(li).join('')||'<p class="dim">Keine Termine</p>';$('#tests-old').innerHTML=a.filter(t=>dUntil(t.date)<0).reverse().slice(0,10).map(li).join('')}
-const delTest=id=>{if(confirm('Termin löschen?')){tomb(id);S.tests=S.tests.filter(x=>x.id!=id);if(E.test==id)E.test=null;save();render()}};
+const delTest=id=>{const t=S.tests.find(x=>x.id==id);if(!t)return;if(E.test==id)cancelTest();undoDel('tests',t,'Termin')};
 /* Zusammenfassungen */
-function saveNote(){const title=$('#n-title').value.trim(),f=$('#n-file').files[0];if(!title)return alert('Bitte Titel eingeben.');
+function saveNote(){const title=$('#n-title').value.trim(),f=$('#n-file').files[0];if(!title)return warn('Bitte Titel eingeben.');
 const done=file=>{const o={title,subj:$('#n-subj').value,text:$('#n-text').value};if(E.note){const n=S.notes.find(x=>x.id==E.note);Object.assign(n,o);if(file)n.file=file}else S.notes.push({id:uid(),file:file||null,d:iso(new Date()),...o});save();cancelNote()};
-if(!f)return done(null);if(f.size>1.5e6)return alert('Datei ist größer als 1,5 MB.');const r=new FileReader();r.onload=()=>done({name:f.name,data:r.result});r.readAsDataURL(f)}
+if(!f)return done(null);if(f.size>1.5e6)return warn('Datei ist größer als 1,5 MB.');const r=new FileReader();r.onload=()=>done({name:f.name,data:r.result});r.readAsDataURL(f)}
 function cancelNote(){E.note=null;$('#n-title').value=$('#n-text').value=$('#n-file').value='';$('#n-btn').textContent='Speichern';$('#n-cancel').style.display='none';$('#n-h').textContent='Neu ablegen';render()}
 function editNote(id){const n=S.notes.find(x=>x.id==id);E.note=id;$('#n-title').value=n.title;setSel($('#n-subj'),n.subj);$('#n-text').value=n.text||'';$('#n-file').value='';$('#n-btn').textContent='Änderung speichern';$('#n-cancel').style.display='';$('#n-h').textContent='Zusammenfassung bearbeiten (neue Datei wählen = ersetzen)';$('main').scrollTop=0}
 function rNotes(){const q=$('#n-q').value.toLowerCase(),sj=$('#n-f').value;
 $('#notes').innerHTML=S.notes.filter(n=>(!sj||n.subj==sj)&&(n.title+n.text+n.subj).toLowerCase().includes(q)).reverse().map(n=>`<li class="it"><div><b>${esc(n.title)}</b> <span class="bd">${esc(n.subj)}</span>${n.text?`<details><summary class="dim">Text anzeigen</summary><div style="white-space:pre-wrap;margin-top:6px">${esc(n.text)}</div></details>`:''}${n.file?(n.file.data?`<br><b>${esc(n.file.name)}</b> ${bt('viewNote('+n.id+')','Ansehen','a')} <a style="color:var(--acc);font-size:var(--fs-sm)" href="${n.file.data}" download="${esc(n.file.name)}">Herunterladen</a> ${bt('rmFile('+n.id+')','Datei entfernen')}`:`<br><span class="dim">${esc(n.file.name)} – Datei liegt nur auf dem Gerät, auf dem sie hochgeladen wurde</span> ${bt('rmFile('+n.id+')','Verweis entfernen')}`):''}</div><div class="acts">${bt('editNote('+n.id+')','Bearbeiten')}${bt('delNote('+n.id+')','Löschen','r')}</div></li>`).join('')||'<p class="dim">Nichts gefunden.</p>'}
-const delNote=id=>{if(confirm('Zusammenfassung löschen?')){tomb(id);S.notes=S.notes.filter(x=>x.id!=id);if(E.note==id)E.note=null;save();render()}},rmFile=id=>{if(confirm('Datei entfernen?')){S.notes.find(x=>x.id==id).file=null;save();render()}};
+const delNote=id=>{const n=S.notes.find(x=>x.id==id);if(!n)return;if(E.note==id)cancelNote();undoDel('notes',n,'Zusammenfassung')},rmFile=id=>{const n=S.notes.find(x=>x.id==id);if(!n||!n.file)return;const f=n.file;n.file=null;save();render();toast('Datei entfernt.',{act:'Rückgängig',fn:()=>{n.file=f;save();render()}})};
 /* Noten */
-function saveGrade(){const g=parseFloat($('#g-val').value),w=parseFloat($('#g-w').value)||1;if(!(g>=1&&g<=5))return alert('Note zwischen 1 und 5.');const o={subj:$('#g-subj').value,name:$('#g-name').value||'Note',g,w};
+function saveGrade(){const g=parseFloat($('#g-val').value),w=parseFloat($('#g-w').value)||1;if(!(g>=1&&g<=5))return warn('Note zwischen 1 und 5.');const o={subj:$('#g-subj').value,name:$('#g-name').value||'Note',g,w};
 if(E.grade)Object.assign(S.grades.find(x=>x.id==E.grade),o);else S.grades.push({id:uid(),...o});save();cancelGrade()}
 function cancelGrade(){E.grade=null;$('#g-name').value=$('#g-val').value='';$('#g-w').value=1;$('#g-btn').textContent='Speichern';$('#g-cancel').style.display='none';$('#g-h').textContent='Note eintragen';render()}
 function editGrade(id){const x=S.grades.find(y=>y.id==id);E.grade=id;setSel($('#g-subj'),x.subj);$('#g-name').value=x.name;$('#g-val').value=x.g;$('#g-w').value=x.w;$('#g-btn').textContent='Änderung speichern';$('#g-cancel').style.display='';$('#g-h').textContent='Note bearbeiten';$('main').scrollTop=0}
 const gStat=s=>{const l=S.grades.filter(x=>x.subj==s),W=l.reduce((a,x)=>a+x.w,0),sum=l.reduce((a,x)=>a+x.g*x.w,0);return{l,W,sum,avg:W?sum/W:null}};
 
-const delGrade=id=>{if(confirm('Note löschen?')){tomb(id);S.grades=S.grades.filter(x=>x.id!=id);if(E.grade==id)E.grade=null;save();render()}};
+const delGrade=id=>{const g=S.grades.find(x=>x.id==id);if(!g)return;if(E.grade==id)cancelGrade();undoDel('grades',g,'Note')};
 /* Timer */
 const T={mode:'work',left:1500,run:false,last:0,acc:0};
-function logStudy(){const m=Math.round(T.acc/60);if(m>=1){S.study.push({d:iso(new Date()),s:$('#tsubj').value,m});save()}T.acc=0}
-function tStart(){if(!T.run){T.run=true;T.last=Date.now()}}
-function tReset(){if(T.mode=='work')logStudy();T.run=false;T.mode='work';T.left=(+$('#tw').value||25)*60;tDraw();rStats()}
+function logStudy(){const m=Math.round(T.acc/60);if(m>=1){S.study.push({id:uid(),d:iso(new Date()),s:$('#tsubj').value,m});save()}T.acc=0}
+function tStart(){if(!T.run){T.run=true;T.last=Date.now();tSave(1)}tAskNotify()}
+function tPause(){if(T.run){tTick();T.run=false;tSave(1);tDraw()}}
+function tReset(){if(T.mode=='work')logStudy();T.run=false;T.mode='work';T.left=(+$('#tw').value||25)*60;tSave(1);tDraw();rStats()}
 function beep(){try{const a=new AudioContext(),o=a.createOscillator();o.connect(a.destination);o.frequency.value=880;o.start();o.stop(a.currentTime+.4)}catch(e){}}
-function tTick(){if(!T.run)return;const n=Date.now(),dt=(n-T.last)/1000;T.last=n;T.left-=dt;if(T.mode=='work')T.acc+=dt;
-if(T.left<=0){beep();if(T.mode=='work'){logStudy();T.mode='break';T.left=(+$('#tb').value||5)*60}else{T.mode='work';T.left=(+$('#tw').value||25)*60}T.run=false;rStats()}tDraw()}
-function tDraw(){const s=Math.max(0,Math.round(T.left));$('#tdisp').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');$('#tmode').textContent=T.mode=='work'?'Lernphase ':'Pause ';if(T.run)document.title=$('#tdisp').textContent+' · Schul-Hub'; else document.title='Schul-Hub'}
+/* Benachrichtigung am Phasenende, falls erlaubt (über den Service Worker, sonst direkt) */
+function tAskNotify(){try{if('Notification' in window&&Notification.permission=='default'&&!localStorage.getItem('schulhub_np'))
+{localStorage.setItem('schulhub_np','1');Notification.requestPermission()}}catch(e){}}
+async function notify(title,body,tag){try{if(!('Notification' in window)||Notification.permission!='granted')return;const reg=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration();
+if(reg)await reg.showNotification(title,{body,tag,icon:'icon-192.png',badge:'icon-192.png'});else new Notification(title,{body,tag})}catch(e){}}
+function tPhaseEnd(){beep();if(T.mode=='work'){logStudy();T.mode='break';T.left=(+$('#tb').value||5)*60;notify('Lernphase geschafft','Zeit für '+(+$('#tb').value||5)+' Minuten Pause.','timer')}
+else{T.mode='work';T.left=(+$('#tw').value||25)*60;notify('Pause vorbei','Weiter geht es mit der nächsten Lernphase.','timer')}T.run=false;tSave(1);rStats()}
+function tTick(){if(!T.run)return;const n=Date.now(),dt=(n-T.last)/1000;T.last=n;if(T.mode=='work')T.acc+=Math.min(dt,Math.max(0,T.left));T.left-=dt;if(T.left<=0)tPhaseEnd();tDraw();tSave()}
+function tDraw(){const s=Math.max(0,Math.round(T.left));$('#tdisp').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');$('#tmode').textContent=(T.mode=='work'?'Lernphase':'Pause')+(T.run?'':' · angehalten');if(T.run)document.title=$('#tdisp').textContent+' · Schul-Hub'; else document.title='Schul-Hub'}
+/* Laufende Sitzung sichern, damit Lernzeit beim Schließen des Tabs nicht verloren geht */
+let tSaved=0;
+function tSave(force){const n=Date.now();if(!force&&n-tSaved<5000)return;tSaved=n;try{localStorage.setItem('schulhub_timer',JSON.stringify({mode:T.mode,left:T.left,run:T.run,last:T.run?T.last:n,acc:T.acc,s:$('#tsubj').value,tw:$('#tw').value,tb:$('#tb').value}))}catch(e){}}
+function tRestore(){let o;try{o=JSON.parse(localStorage.getItem('schulhub_timer')||'null')}catch(e){}if(!o)return;
+if(o.tw)$('#tw').value=o.tw;if(o.tb)$('#tb').value=o.tb;if(o.s)setSel($('#tsubj'),o.s);T.mode=o.mode=='break'?'break':'work';T.left=+o.left||(+$('#tw').value||25)*60;T.acc=+o.acc||0;T.run=false;
+if(o.run){const dt=Math.max(0,(Date.now()-(+o.last||Date.now()))/1000);
+if(dt<T.left){if(T.mode=='work')T.acc+=dt;T.left-=dt;T.run=true;T.last=Date.now()}
+else{if(T.mode=='work'){T.acc+=Math.max(0,T.left);const m=Math.round(T.acc/60);logStudy();if(m>=1)toast(m+' Min. Lernzeit aus der letzten Sitzung gespeichert.')}T.mode='work';T.left=(+$('#tw').value||25)*60}}
+tDraw()}
+window.addEventListener('pagehide',()=>{if(T.run)tTick();tSave(1)});
 setInterval(tTick,500);
 function weekStats(){const d=today0();d.setDate(d.getDate()-((d.getDay()+6)%7));const m=iso(d),o={};S.study.filter(x=>x.d>=m).forEach(x=>o[x.s]=(o[x.s]||0)+x.m);return o}
 function rStats(){const o=weekStats(),mx=Math.max(1,...Object.values(o)),d=today0();d.setDate(d.getDate()-((d.getDay()+6)%7));const m=iso(d);
 const bars=Object.entries(o).sort((a,b)=>b[1]-a[1]).map(([s,v])=>`<div style="margin-bottom:10px"><b>${esc(s)}</b> <span class="dim">${Math.floor(v/60)} Std. ${v%60} Min.</span><div class="bar" style="width:${v/mx*100}%"></div></div>`).join('')||'<p class="dim">Noch keine Lernzeit diese Woche.</p>';
-const ent=S.study.map((x,i)=>({...x,i})).filter(x=>x.d>=m).reverse();
-$('#tstats').innerHTML=bars+'<div style="margin:12px 0">'+bt('addStudy()','Lernzeit nachtragen','')+'</div>'+(ent.length?'<ul>'+ent.map(x=>`<li class="it"><div><b>${esc(x.s)}</b> <span class="dim">${fmtD(x.d)} · ${x.m} Min.</span></div><div class="acts">${bt('editStudy('+x.i+')','Bearbeiten')}${bt('delStudy('+x.i+')','Löschen','r')}</div></li>`).join('')+'</ul>':'')}
-function addStudy(){const m=parseInt(prompt('Minuten gelernt:','30'));if(!(m>0))return;const d=prompt('Datum (JJJJ-MM-TT):',iso(new Date()));if(!/^\d{4}-\d{2}-\d{2}$/.test(d||''))return alert('Ungültiges Datum.');S.study.push({d,s:$('#tsubj').value,m});save();render()}
-function editStudy(i){const x=S.study[i],m=parseInt(prompt('Minuten:',x.m));if(!(m>0))return;const s=prompt('Fach:',x.s);if(s===null)return;x.m=m;x.s=s.trim()||x.s;save();render()}
-function delStudy(i){if(confirm('Eintrag löschen?')){S.study.splice(i,1);save();render()}}
+const ent=S.study.filter(x=>x.d>=m).reverse();
+$('#tstats').innerHTML=bars+'<div style="margin:12px 0">'+bt('addStudy()','Lernzeit nachtragen','')+'</div>'+(ent.length?'<ul>'+ent.map(x=>`<li class="it"><div><b>${esc(x.s)}</b> <span class="dim">${fmtD(x.d)} · ${x.m} Min.</span></div><div class="acts">${bt('editStudy('+x.id+')','Bearbeiten')}${bt('delStudy('+x.id+')','Löschen','r')}</div></li>`).join('')+'</ul>':'')}
+async function addStudy(){const v=await form('Lernzeit nachtragen',[{label:'Fach',type:'select',options:S.subjects,value:$('#tsubj').value},{label:'Minuten',type:'number',min:1,value:'30'},{label:'Datum',type:'date',value:iso(new Date())}],'Eintragen');if(!v)return;
+const m=parseInt(v[1]);if(!(m>0)||!/^\d{4}-\d{2}-\d{2}$/.test(v[2]))return toast('Bitte Minuten und Datum angeben.',{err:1});S.study.push({id:uid(),d:v[2],s:v[0],m});save();render()}
+async function editStudy(id){const x=S.study.find(y=>y.id==id);if(!x)return;const v=await form('Lernzeit bearbeiten',[{label:'Fach',type:'select',options:[...new Set([...S.subjects,x.s])],value:x.s},{label:'Minuten',type:'number',min:1,value:String(x.m)},{label:'Datum',type:'date',value:x.d}]);if(!v)return;
+const m=parseInt(v[1]);if(!(m>0)||!/^\d{4}-\d{2}-\d{2}$/.test(v[2]))return toast('Bitte Minuten und Datum angeben.',{err:1});x.m=m;x.s=v[0]||x.s;x.d=v[2];save();render()}
+function delStudy(id){const x=S.study.find(y=>y.id==id);if(x)undoDel('study',x,'Eintrag')}
 /* KI-Prompts */
 /* ===== Dateien im Browser ansehen ===== */
 const MIME={pdf:'application/pdf',png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',gif:'image/gif',webp:'image/webp',svg:'image/svg+xml',txt:'text/plain',md:'text/plain'};
@@ -661,12 +809,13 @@ function saFillTpl(){const s=$('#sa-tpl');s.innerHTML=S.sa.tpl.map(t=>`<option v
 function saSel(id){S.sa.sel=id;save();rSA()}
 function saNew(){const id='t'+uid();S.sa.tpl.push({id,name:'Neue Vorlage',ns:[90,80,70,60],gmin:0,areas:[{n:'Teil 1',g:'',w:50,max:20,p:''},{n:'Teil 2',g:'',w:50,max:20,p:''}]});S.sa.sel=id;save();rSA()}
 function saDup(){const t=saCur(),c=structuredClone(t);c.id='t'+uid();c.name=t.name+' (Kopie)';c.areas.forEach(a=>a.p='');S.sa.tpl.push(c);S.sa.sel=c.id;save();rSA()}
-function saDel(){if(S.sa.tpl.length<2)return alert('Mindestens eine Vorlage muss bleiben.');const t=saCur();if(confirm('Vorlage „'+t.name+'“ löschen?')){S.sa.tpl=S.sa.tpl.filter(x=>x.id!=t.id);S.sa.sel=S.sa.tpl[0].id;save();rSA()}}
+function saDel(){if(S.sa.tpl.length<2)return warn('Mindestens eine Vorlage muss bleiben.');const t=saCur(),i=S.sa.tpl.indexOf(t);S.sa.tpl.splice(i,1);S.sa.sel=S.sa.tpl[0].id;save();rSA();
+toast('Vorlage „'+t.name+'“ gelöscht.',{act:'Rückgängig',fn:()=>{S.sa.tpl.splice(i,0,t);S.sa.sel=t.id;save();rSA()}})}
 function saField(k,v){const t=saCur();if(k=='name'){t.name=v.trim()||t.name;saFillTpl()}else t.gmin=Math.max(0,Math.min(100,parseFloat(v)||0));save();calcSA()}
 function saNs(i,v){saCur().ns[i]=Math.max(0,Math.min(100,parseFloat(v)||0));save();calcSA()}
 function saArea(i,k,v){const a=saCur().areas[i];if(k=='n'||k=='g'||k=='p')a[k]=v;else a[k]=Math.max(0,parseFloat(String(v).replace(',','.'))||0);save();calcSA()}
 function saAdd(){saCur().areas.push({n:'Neuer Bereich',g:'',w:0,max:10,p:''});save();rSA()}
-function saRm(i){const t=saCur();if(t.areas.length<2)return alert('Mindestens ein Bereich muss bleiben.');t.areas.splice(i,1);save();rSA()}
+function saRm(i){const t=saCur();if(t.areas.length<2)return warn('Mindestens ein Bereich muss bleiben.');t.areas.splice(i,1);save();rSA()}
 function saEval(){const t=saCur(),A=t.areas.map(a=>{const max=+a.max||0,w=+a.w||0,has=String(a.p).trim()!==''&&max>0,pc=has?Math.max(0,Math.min(100,100*(parseFloat(String(a.p).replace(',','.'))||0)/max)):0;return{n:a.n,g:(a.g||'').trim(),w,has,pc}});
 return{t,A,Wt:A.reduce((s,a)=>s+a.w,0),D:A.filter(a=>a.has&&a.w>0),P:A.filter(a=>!a.has&&a.w>0)}}
 function calcSA(){const r=$('#sa-res');if(!r)return;SAR=null;const{t,A,Wt,D,P}=saEval(),ns=t.ns;
@@ -705,9 +854,9 @@ const lkHost=u=>{try{return new URL(u).hostname.replace(/^www\./,'')}catch(e){re
 function rLinks(){const g={};(S.links||[]).forEach(l=>{const c=l.cat||'Sonstiges';(g[c]=g[c]||[]).push(l)});
 $('#lk-all').innerHTML=Object.keys(g).map(c=>`<div class="card"><h3>${esc(c)}</h3><ul>${g[c].map(l=>`<li class="it lk"><div class="nm">${/^https?:\/\//i.test(l.url)?`<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.name)}</a>`:esc(l.name)}<br><span class="dim">${esc(lkHost(l.url))}</span></div><div class="acts">${bt('lkDel('+l.id+')','Entfernen','r')}</div></li>`).join('')}</ul></div>`).join('')||'<p class="dim">Keine Links.</p>';
 $('#lk-cats').innerHTML=Object.keys(g).map(c=>`<option value="${esc(c)}">`).join('')}
-function lkAdd(){const n=$('#lk-name').value.trim();let u=$('#lk-url').value.trim();if(!n||!u)return alert('Bitte Name und Adresse eingeben.');if(!/^https?:\/\//i.test(u))u='https://'+u;try{new URL(u)}catch(e){return alert('Die Adresse ist ungültig.')}
+function lkAdd(){const n=$('#lk-name').value.trim();let u=$('#lk-url').value.trim();if(!n||!u)return warn('Bitte Name und Adresse eingeben.');if(!/^https?:\/\//i.test(u))u='https://'+u;try{new URL(u)}catch(e){return warn('Die Adresse ist ungültig.')}
 S.links.push({id:uid(),name:n,url:u,cat:$('#lk-cat').value.trim()||'Sonstiges'});$('#lk-name').value=$('#lk-url').value=$('#lk-cat').value='';save();render()}
-function lkDel(id){const l=S.links.find(x=>x.id==id);if(l&&confirm('„'+l.name+'“ entfernen?')){tomb(id);S.links=S.links.filter(x=>x.id!=id);save();render()}}
+function lkDel(id){const l=S.links.find(x=>x.id==id);if(l)undoDel('links',l,'Link „'+l.name+'“')}
 function lkReset(){const have=new Set(S.links.map(l=>l.id));LKD().forEach(l=>{if(!have.has(l.id)){S.links.push(l);if(S.del)delete S.del[l.id]}});save();render()}
 /* ===== KI-Prompt-Generator ===== */
 const PG={when:''};
@@ -784,13 +933,13 @@ c.ev=parseICS(t);c.ts=Date.now();nw=calToTodos(c);tstN+=calToTests(c);save()}
 catch(e){calErr[c.id]='nicht ladbar ('+e.message+')'}
 delete calBusy[c.id];return nw}
 async function calFetch(id){const L=S.cals.filter(c=>c.url&&(id==null||c.id==id));if(!L.length)return;let nw=0;for(const c of L)nw+=await calLoad(c);calNote=[nwTxt(nw),tstTxt()].filter(Boolean).join(' ');render()}
-function calConnect(){if(!W)return alert('Für Kalender-Links brauchst du die Worker-Adresse (Einstellungen, Schule und Unterrichtszeiten). Alternativ kannst du eine .ics-Datei importieren.');const u=$('#cal-url').value.trim().replace(/^webcal/i,'https');if(!/^https?:\/\//i.test(u))return alert('Bitte den iCal-Link einfügen (beginnt mit https:// oder webcal://).');
+function calConnect(){if(!W)return warn('Für Kalender-Links brauchst du die Worker-Adresse (Einstellungen, Schule und Unterrichtszeiten). Alternativ kannst du eine .ics-Datei importieren.');const u=$('#cal-url').value.trim().replace(/^webcal/i,'https');if(!/^https?:\/\//i.test(u))return warn('Bitte den iCal-Link einfügen (beginnt mit https:// oder webcal://).');
 const c={id:uid(),name:$('#cal-name').value.trim()||'Kalender '+(S.cals.length+1),url:u,color:nextColor(),ev:[],ts:0,home:true};S.cals.push(c);$('#cal-url').value=$('#cal-name').value='';save();calFetch(c.id)}
-function calFile(i){const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{if(!/BEGIN:VCALENDAR/.test(r.result))return alert('Das ist keine gültige .ics-Datei.');
+function calFile(i){const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{if(!/BEGIN:VCALENDAR/.test(r.result))return warn('Das ist keine gültige .ics-Datei.');
 const c={id:uid(),name:$('#cal-name').value.trim()||f.name.replace(/\.ics$/i,'')||'Kalender '+(S.cals.length+1),url:'',color:nextColor(),ev:parseICS(r.result),ts:Date.now(),home:true};S.cals.push(c);$('#cal-name').value='';tstN+=calToTests(c);calNote=[nwTxt(calToTodos(c)),tstTxt()].filter(Boolean).join(' ');save();render()};r.readAsText(f);i.value=''}
-function calDel(id){const c=S.cals.find(x=>x.id==id);if(c&&confirm('Kalender „'+c.name+'“ entfernen?\n\nBereits übernommene To-Dos bleiben erhalten.')){S.cals=S.cals.filter(x=>x.id!=id);calNote='';save();render()}}
+function calDel(id){const c=S.cals.find(x=>x.id==id);if(!c)return;calNote='';undoDel('cals',c,'Kalender „'+c.name+'“')}
 function calColor(id,v){const c=S.cals.find(x=>x.id==id);if(c){c.color=colOk(v);save();render()}}
-function calRename(id){const c=S.cals.find(x=>x.id==id);if(!c)return;const n=(prompt('Neuer Name:',c.name)||'').trim();if(n){c.name=n;save();render()}}
+async function calRename(id){const c=S.cals.find(x=>x.id==id);if(!c)return;const v=await form('Kalender umbenennen',[{label:'Name',value:c.name}]);const n=v&&v[0].trim();if(n){c.name=n;save();render()}}
 function calHome(id,on){const c=S.cals.find(x=>x.id==id);if(c){c.home=on;save();render()}}
 const calLi=a=>a.map(x=>`<div class="blk" style="border-color:${colOk(x._col)}"><div><b>${esc(x.n)}</b>${x.l?` <span class="dim">${esc(x.l)}</span>`:''}${S.cals.length>1&&x._nm?` <span class="bd">${esc(x._nm)}</span>`:''}</div><span class="dim" style="text-align:right">${fmtD(x.d)}<br>${x.t?x.t+(x.e?'–'+x.e:''):'ganztägig'}</span></div>`).join('');
 function rCal(){$('#cal-hw').checked=S.autoHw!==false;$('#cal-tst').checked=S.autoTest!==false;$('#cal-st').textContent=calNote||(S.cals.length?'':'Noch kein Kalender hinzugefügt.');
@@ -854,29 +1003,29 @@ finally{$('#ai-go').disabled=false}}
 function aiToTodo(){const t=S.todos.find(x=>x.id==AI.id);if(!t||!AI.out)return;t.desc=(t.desc?t.desc+'\n\n':'')+'KI-Einstieg:\n'+AI.out;save();render();aiSt('Im To-Do gespeichert.')}
 async function aiCopyOut(){try{await navigator.clipboard.writeText(AI.out);aiSt('Antwort kopiert.')}catch(e){aiSt('Kopieren nicht möglich.')}}
 function aiFill(){const c=aiCfg();$('#ai-url').value=c.url||'';$('#ai-key').value=c.key||'';$('#ai-model').value=c.model||''}
-function aiSaveCfg(){const c={url:$('#ai-url').value.trim().replace(/\/+$/,''),key:$('#ai-key').value.trim(),model:$('#ai-model').value.trim()||'auto'};if(c.url&&!/^https?:\/\//i.test(c.url))return alert('Die URL muss mit http:// oder https:// beginnen.');
+function aiSaveCfg(){const c={url:$('#ai-url').value.trim().replace(/\/+$/,''),key:$('#ai-key').value.trim(),model:$('#ai-model').value.trim()||'auto'};if(c.url&&!/^https?:\/\//i.test(c.url))return warn('Die URL muss mit http:// oder https:// beginnen.');
 try{localStorage.setItem('schulhub_ai',JSON.stringify(c));$('#ai-cfg-st').textContent=c.url?'Gespeichert.':'Gespeichert – ohne URL kopiert der Button nur den Prompt.'}catch(e){$('#ai-cfg-st').textContent='Speichern nicht möglich.'}}
 async function aiTest(){aiSaveCfg();const c=aiCfg();if(!c.url)return;$('#ai-cfg-st').textContent='Teste…';
 try{const r=await fetch(c.url+'/models',{headers:c.key?{Authorization:'Bearer '+c.key}:{},signal:AbortSignal.timeout(10000)});$('#ai-cfg-st').textContent=r.ok?'Verbindung klappt.':'Server antwortet mit HTTP '+r.status+'.'}
 catch(e){$('#ai-cfg-st').textContent='Nicht erreichbar – läuft der Server, und erlaubt er Anfragen von dieser Seite (CORS)?'}}
 function rSubj(){const L=k=>S[k].map((s,i)=>`<li class="it"><b class="nm">${esc(s)}</b><div class="acts eq">${bt("renameName('"+k+"',"+i+")",'Umbenennen')}${bt("delName('"+k+"',"+i+")",'Löschen','r')}</div></li>`).join('');$('#subjs').innerHTML=L('subjects');$('#cats').innerHTML=L('cats')}
 function addName(k,id){const v=$('#'+id).value.trim();if(!v||S.subjects.includes(v)||S.cats.includes(v))return;S[k].push(v);save();$('#'+id).value='';fillSubjects();render()}
-function renameName(k,i){const old=S[k][i],n=(prompt('Neuer Name:',old)||'').trim();if(!n||n===old)return;if(S.subjects.includes(n)||S.cats.includes(n))return alert('Name existiert bereits.');S[k][i]=n;
+async function renameName(k,i){const old=S[k][i],v=await form('„'+old+'“ umbenennen',[{label:'Neuer Name',value:old}],'Umbenennen','Einträge mit diesem Namen werden mit umbenannt.'),n=v&&v[0].trim();if(!n||n===old)return;if(S.subjects.includes(n)||S.cats.includes(n))return warn('Name existiert bereits.');S[k][i]=n;
 [S.todos,S.tests,S.notes,S.grades].forEach(a=>a.forEach(x=>{if(x.subj===old)x.subj=n}));S.study.forEach(x=>{if(x.s===old)x.s=n});S.tt.flat().forEach(l=>{if(l&&l.s===old)l.s=n});save();fillSubjects();render()}
-function delName(k,i){if(confirm(S[k][i]+' aus der Liste entfernen? Bestehende Einträge bleiben erhalten.')){S[k].splice(i,1);save();fillSubjects();render()}}
+function delName(k,i){const n=S[k].splice(i,1)[0];save();fillSubjects();render();toast('„'+n+'“ entfernt. Bestehende Einträge bleiben erhalten.',{act:'Rückgängig',fn:()=>{S[k].splice(i,0,n);save();fillSubjects();render()}})}
 function exportData(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:'application/json'}));a.download='schul-hub-backup-'+iso(new Date())+'.json';a.click();try{localStorage.setItem('schulhub_backup',Date.now())}catch(e){}bkHint();bkStat()}
 function bkInfo(){let t=0,sn=0;try{t=+localStorage.getItem('schulhub_backup')||0;sn=+localStorage.getItem('schulhub_bk_snooze')||0}catch(e){}return{t,sn}}
 function bkHint(){const el=$('#bk-hint');if(!el)return;const{t,sn}=bkInfo(),has=['todos','tests','notes','grades','cards','study'].some(k=>(S[k]||[]).length),old=!t||Date.now()-t>30*864e5;el.style.display=has&&old&&!syncOn()&&Date.now()>sn?'':'none'}
 function bkLater(){try{localStorage.setItem('schulhub_bk_snooze',Date.now()+7*864e5)}catch(e){}bkHint()}
 function bkStat(){const el=$('#bk-st');if(!el)return;const{t}=bkInfo(),m=t?'Letztes Backup: '+new Date(t).toLocaleDateString('de-AT'):'Noch kein Backup erstellt.';el.textContent=m;try{navigator.storage.persisted().then(p=>{if(p)el.textContent=m+' · Browser-Speicher ist vor automatischem Löschen geschützt'}).catch(()=>{})}catch(e){}}
-function importData(i){const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!confirm('Aktuelle Daten durch Backup ersetzen?'))return;S={...structuredClone(DEF),...d,sync:S.sync,sup:S.sup,cals:S.cals};if(!d.school)S.school=structuredClone(LEGACY_SCHOOL);migCal();applySchool();save();fillSubjects();render()}catch(e){alert('Ungültige Datei.')}};r.readAsText(f);i.value=''}
+function importData(i){const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=async()=>{let d;try{d=migStudy(JSON.parse(r.result))}catch(e){return warn('Ungültige Datei.')}if(!d||typeof d!='object')return warn('Ungültige Datei.');if(!await ask('Backup einspielen?','Die aktuellen Daten auf diesem Gerät werden durch das Backup ersetzt.','Ersetzen',1))return;try{S={...structuredClone(DEF),...d,sync:S.sync,sup:S.sup,cals:S.cals};if(!d.school)S.school=structuredClone(LEGACY_SCHOOL);migCal();applySchool();save();fillSubjects();render();toast('Backup eingespielt.')}catch(e){warn('Ungültige Datei.')}};r.readAsText(f);i.value=''}
 
 /* ===== Onboarding: Willkommen, Schnellstart, Rundgang ===== */
 const guideS=()=>{const g=S.guide=S.guide&&typeof S.guide=='object'?S.guide:{};g.chk=g.chk||{};return g};
 function guideSeen(){try{return !!localStorage.getItem('guide_seen')}catch(e){return true}}
 function guideMark(){try{localStorage.setItem('guide_seen','1')}catch(e){}}
 function welCheck(){const d=$('#wel-dlg'),a=$('#auth');if(!d||d.open||guideSeen()||(a&&a.style.display!='none'))return;try{d.showModal()}catch(e){}}
-function welGo(tips){guideMark();$('#wel-dlg').close();if(tips){const g=guideS();g.hide=false;g.col=false;save();goView('dash');$('main').scrollTop=0}}
+function welGo(tour){guideMark();$('#wel-dlg').close();const g=guideS();g.hide=false;g.col=false;save();if(tour)tourStart();else{goView('dash');$('main').scrollTop=0}}
 $('#wel-dlg').addEventListener('close',guideMark);
 const QS=[['a','Stundenplan anpassen',[['Stundenplan','plan']],()=>S.tt.some(r=>(r||[]).some(Boolean))||(S.lv||[]).length>0],
 ['b','Kalender oder To-Dos hinzufügen',[['To-Dos','todo'],['Kalender','cal']],()=>S.todos.length>0||(S.cals||[]).length>0],
@@ -991,7 +1140,36 @@ t+=Math.abs(d)<0.005?`${v} <b>${aF(A)}</b>.`:`${v} <b style="color:${aC(A)}">${a
 const ra=gRound(A);t+=`<br><span class="dim">Zeugnisnote: ${ra} (${GN[ra]}) ${ra==nb?'bleibt':'wird'} ${ra==nb?'gleich':'→ '+nb+' ('+GN[nb]+')'}</span>`}
 const tb=[1,2,3,4,5].map(n=>{let w2=x.W,s2=x.sum;rw.forEach(r=>{w2+=r.w;s2+=n*r.w});const a=s2/w2,z=gRound(a);return `<tr><td>${n}</td><td style="color:${aC(a)}">${aF(a)}</td><td>${z} (${GN[z]})</td></tr>`}).join('');
 el.innerHTML=t+`<details style="margin-top:10px"><summary class="dim" style="cursor:pointer">Was wäre bei jeder Note?</summary><p class="dim" style="margin:8px 0 6px">Alle Szenario-Prüfungen mit derselben Note:</p><table class="l"><tr><th>Note</th><th>Schnitt</th><th>Zeugnis</th></tr>${tb}</table></details>`}
+/* ===== Push bei Änderungen im Supplierplan =====
+   Der Worker prüft den Plan regelmäßig und schickt eine Meldung, wenn für eines der übermittelten Fachkürzel etwas Neues auftaucht. */
+const puOk=()=>'serviceWorker' in navigator&&'PushManager' in window&&'Notification' in window&&(location.protocol=='https:'||/^(localhost|127\.0\.0\.1)$/.test(location.hostname));
+const puCodes=()=>[...new Set(S.tt.flat().filter(Boolean).map(l=>String(l.s).trim().toUpperCase()).filter(Boolean))].sort();
+const b64u=s=>Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/')+'='.repeat((4-s.length%4)%4)),c=>c.charCodeAt(0));
+async function puSub(){try{const reg=await navigator.serviceWorker.getRegistration();return reg&&await reg.pushManager.getSubscription()}catch(e){return null}}
+async function puPost(path,body){const r=await fetch(W+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),cache:'no-store'});if(r.status==404)throw new Error('Der Worker kennt die Push-Funktion noch nicht. Bitte die neue worker.js einspielen.');if(r.status==503)throw new Error(await r.text()||'Push ist im Worker nicht eingerichtet.');if(!r.ok)throw new Error('Worker antwortet mit HTTP '+r.status);return r}
+async function puOn(){if(!puOk())return warn('Dieser Browser kann hier keine Push-Meldungen empfangen. Der Hub muss über https laufen (auf dem iPhone: zum Home-Bildschirm hinzufügen).');
+if(!W)return warn('Trage zuerst unter „Schule und Unterrichtszeiten“ die Worker-Adresse ein.');if(!supOn())return warn('Trage zuerst die Adresse des Supplierplans ein.');if(!puCodes().length)return warn('Trage zuerst Fächer in deinen Stundenplan ein.');
+const btn=$('#pu-on');btn.disabled=true;try{if(await Notification.requestPermission()!='granted')throw new Error('Benachrichtigungen sind für diese Seite blockiert. Erlaube sie in den Browser-Einstellungen.');
+const reg=await navigator.serviceWorker.register('sw.js'),ready=await navigator.serviceWorker.ready,kr=await fetch(W+'/push/key',{cache:'no-store'});
+if(kr.status==404)throw new Error('Der Worker kennt die Push-Funktion noch nicht. Bitte die neue worker.js einspielen.');if(!kr.ok)throw new Error(kr.status==503?'Im Worker fehlen die Push-Schlüssel (siehe Anleitung).':'HTTP '+kr.status);
+const key=(await kr.text()).trim();let sub=await ready.pushManager.getSubscription();if(sub){const k=sub.options&&sub.options.applicationServerKey;if(k&&b64e(new Uint8Array(k))!==b64e(b64u(key))){await sub.unsubscribe();sub=null}}
+sub=sub||await ready.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64u(key)});await puSend(sub,true);toast('Benachrichtigungen sind eingeschaltet.')}
+catch(e){warn(/^(Der Worker|Benachrichtigungen|Im Worker|HTTP|Worker)/.test(e.message||'')?e.message:'Einschalten nicht möglich ('+(e.message||e)+').')}finally{btn.disabled=false;puDraw()}}
+async function puSend(sub,force){const body={sub:sub.toJSON(),codes:puCodes(),url:S.school.supUrl},sig=JSON.stringify([body.sub.endpoint,body.codes,body.url]);
+if(!force&&localStorage.getItem('schulhub_push_sig')===sig)return;await puPost('/push/sub',body);try{localStorage.setItem('schulhub_push_sig',sig)}catch(e){}}
+async function puOff(){const sub=await puSub();try{if(sub){if(W)await puPost('/push/unsub',{endpoint:sub.endpoint}).catch(()=>{});await sub.unsubscribe()}localStorage.removeItem('schulhub_push_sig');toast('Benachrichtigungen sind ausgeschaltet.')}catch(e){warn(e.message)}puDraw()}
+async function puTest(){const sub=await puSub();if(!sub)return puDraw();try{await puPost('/push/test',{endpoint:sub.endpoint});toast('Test gesendet. Die Meldung sollte gleich erscheinen.')}catch(e){warn(e.message)}}
+let puT;function puSyncCodes(){clearTimeout(puT);puT=setTimeout(async()=>{if(!W||!puOk())return;const sub=await puSub();if(sub)puSend(sub).catch(()=>{})},3000)}
+async function puDraw(){const st=$('#pu-st');if(!st)return;const on=$('#pu-on'),off=$('#pu-off'),te=$('#pu-test');let sub=null,m;
+if(!puOk())m=location.protocol=='file:'?'Push-Meldungen gehen nur, wenn der Hub über eine https-Adresse geöffnet wird, nicht als lokale Datei.':'Dieser Browser unterstützt hier keine Push-Meldungen. Auf dem iPhone den Hub zuerst zum Home-Bildschirm hinzufügen.';
+else if(Notification.permission=='denied')m='Benachrichtigungen sind für diese Seite blockiert. Du kannst sie in den Browser-Einstellungen erlauben.';
+else{sub=await puSub();m=sub?'Eingeschaltet für: '+(puCodes().join(', ')||'keine Fächer'):'Ausgeschaltet.'}
+st.textContent=m;on.style.display=sub?'none':'';on.disabled=!puOk();off.style.display=sub?'':'none';te.style.display=sub?'':'none'}
 /* Render */
-function render(){const v=$('.view.on').id;({dash:rDash,plan:rPlan,todo:rTodos,test:rTests,note:rNotes,grade:()=>{rGrades();rSA();rWI()},links:rLinks,timer:rStats,cal:rCal,ai:rAi,set:rSet})[v]();setSync()}
-migCal();applySchool();gateUpdate();try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}fillSubjects();tDraw();render();fetchSup();calFetch();acHash();syncNow();setInterval(()=>{fetchSup();calFetch()},30*60*1000);setInterval(syncNow,5*60*1000);setInterval(rNow,30000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)syncNow()});
+function render(){const v=$('.view.on').id;({dash:rDash,plan:rPlan,todo:rTodos,test:rTests,note:rNotes,grade:()=>{rGrades();rSA();rWI()},links:rLinks,timer:rStats,cal:rCal,ai:rAi,set:rSet})[v]();setSync();puSyncCodes()}
+migCal();migStudy(S);applySchool();gateUpdate();try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}fillSubjects();tRestore();render();
+/* Installierbar und offline nutzbar, sobald der Hub über https läuft */
+if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{});
+let rzT;window.addEventListener('resize',()=>{clearTimeout(rzT);rzT=setTimeout(()=>{if($('#plan').classList.contains('on'))rPlan()},200)});
+fetchSup();calFetch();acHash();syncNow();setInterval(()=>{fetchSup();calFetch()},30*60*1000);setInterval(syncNow,5*60*1000);setInterval(rNow,30000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)syncNow()});
 </script></body></html>
